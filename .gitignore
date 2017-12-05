@@ -1,14 +1,14 @@
 
 node_modules
 dist
+back/extra_env/
 npm-debug.log
 yarn-debug.log
 yarn-error.log
 
-.idea
+
+.idea/
 .suo
 .ntvs
 .njsproj
 .sln
-
-extra_env
