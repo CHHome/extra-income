@@ -2,6 +2,7 @@
 node_modules
 dist
 back/extra_env/
+back/.idea/
 npm-debug.log
 yarn-debug.log
 yarn-error.log
