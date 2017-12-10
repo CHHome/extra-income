@@ -1,6 +1,6 @@
 # front
 
-> Outsourced project website
+> A Vue.js project
 
 ## Build Setup
 
