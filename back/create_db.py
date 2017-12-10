@@ -1,2 +1,2 @@
-from  server import db
+from server import db
 db.create_all()

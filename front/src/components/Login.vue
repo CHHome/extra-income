@@ -51,7 +51,7 @@
     methods: {
       ...mapMutations(['changeSinger']),
       cancel () {
-        this.$emit('login')
+        this.$emit('next', 'showLogin')
       },
       submit () {
         this.$http.post(baseUrl + 'login', {

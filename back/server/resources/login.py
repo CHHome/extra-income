@@ -17,7 +17,6 @@ class Login(restful.Resource):
         token = self.create_token(args['tokenKey'])
         return token
 
-
     def create_token(self, key, expire=3600):
         ts_str = str(time.time() + expire)
         ts_byte = ts_str.encode("utf-8")

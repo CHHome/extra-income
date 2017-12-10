@@ -1,9 +1,13 @@
 <template>
   <div>
-    <login v-if="showLogin" @login="login"></login>
+    <login v-if="showLogin" @next="next"></login>
+    <register v-if="showRegister" @next="next"></register>
     <header>
-      <div @click="login">
+      <div @click="next('showLogin')">
         登录
+      </div>
+      <div @click="next('showRegister')">
+        注册
       </div>
     </header>
   </div>
@@ -14,7 +18,7 @@
     height: 60px;
     background-color: #ffae83;
   }
-  header div:nth-child(1){
+  header div:nth-child(1), header div:nth-child(2){
     float: right;
     cursor: pointer;
   }
@@ -22,6 +26,7 @@
 <script>
   import {mapMutations} from 'vuex'
   import Login from '@/components/Login'
+  import Register from '@/components/Register'
   export default {
     name: 'MyHeader',
     data () {
@@ -31,12 +36,13 @@
       }
     },
     components: {
-      Login
+      Login,
+      Register
     },
     methods: {
       ...mapMutations(['changeSinger']),
-      login () {
-        this.showLogin = !this.showLogin
+      next (dialogName) {
+        this[dialogName] = !this[dialogName]
         this.changeSinger('curtain')
       }
     }
