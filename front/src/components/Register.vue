@@ -33,7 +33,6 @@
   </div>
 </template>
 <script>
-  import {mapMutations} from 'vuex'
   import {baseUrl} from '@/config/config'
   import sha1 from 'js-sha1'
   export default {
@@ -47,7 +46,6 @@
       }
     },
     methods: {
-      ...mapMutations(['changeSinger']),
       cancel () {
         this.$emit('next', 'showRegister')
       },

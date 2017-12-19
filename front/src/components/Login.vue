@@ -37,8 +37,7 @@
   </div>
 </template>
 <script>
-  import {mapMutations} from 'vuex'
-  import {baseUrl, tokenKey} from '@/config/config'
+  import {baseUrl} from '@/config/config'
   import sha1 from 'js-sha1'
   export default {
     name: 'Login',
@@ -49,19 +48,21 @@
       }
     },
     methods: {
-      ...mapMutations(['changeSinger']),
       cancel () {
         this.$emit('next', 'showLogin')
       },
       submit () {
         this.$http.post(baseUrl + 'login', {
           username: this.username,
-          password: sha1(this.password),
-          tokenKey: tokenKey
+          password: sha1(this.password)
         }, {emulateJSON: true}).then(res => {
 //          todo 保存登录状态
-          let store = window.localStorage
-          store['token'] = res.data
+          if (res.data !== 'fail') {
+            let store = window.localStorage
+            store['token'] = res.data
+          } else {
+            console.log('登录失败，请检查用户名和密码是否正确')
+          }
         }, res => {
           console.log('登陆失败，请检查网络')
         })
@@ -71,10 +72,13 @@
         let store = window.localStorage
         console.log(store['token'])
         this.$http.post(baseUrl + 'tokenCheck', {
-          token: store['token'],
-          tokenKey: tokenKey
+          token: store['token']
         }, {emulateJSON: true}).then(res => {
-          console.log(res.data)
+          if (res.data === 'success') {
+            console.log('验证token成功')
+          } else {
+            console.log('token过期')
+          }
         }, res => {
           console.log(res.data)
         })

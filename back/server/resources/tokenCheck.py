@@ -3,30 +3,26 @@
 
 from flask.ext import restful
 from flask.ext.restful import reqparse
+from ..models import Users
+import hashlib
 import time
 import base64
 import hmac
+
+secretKey = 'JD98Dskw=23njQndW9D'
+maxAge = 10
 
 
 class TokenCheck(restful.Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('token', type=str, required=True, help='username is required', location='form')
-        parser.add_argument('tokenKey', type=str,required=True,help='password is required', location='form')
         args = parser.parse_args()
-        return self.certify_token(args['tokenKey'], args['token'])
+        tokenArr = args['token'].split('-')
+        user = Users.query.filter_by(id=tokenArr[0]).first()
+        if time.time() < float(tokenArr[1]):
+            s = '%s-%s-%s-%s' % (user.id, user.password, tokenArr[1], secretKey)
+            if hashlib.sha1(s.encode('utf-8')).hexdigest() == tokenArr[2]:
+                return 'success'
+        return 'fail'
 
-    def certify_token(self, key, token):
-        token_str = base64.urlsafe_b64decode(token).decode('utf-8')
-        token_list = token_str.split(':')
-        if len(token_list) != 2:
-            return False
-        ts_str = token_list[0]
-        if float(ts_str) < time.time():
-            return False
-        known_sha1_tsstr = token_list[1]
-        sha1 = hmac.new(key.encode("utf-8"), ts_str.encode('utf-8'), 'sha1')
-        calc_sha1_tsstr = sha1.hexdigest()
-        if calc_sha1_tsstr != known_sha1_tsstr:
-            return False
-        return True
