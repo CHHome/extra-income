@@ -47,7 +47,8 @@
     },
     methods: {
       cancel () {
-        this.$emit('next', 'showRegister')
+        this.$store.commit('changeSinger', 'showRegister')
+        this.$store.commit('changeSinger', 'curtain')
       },
       submit () {
         this.$http.post(baseUrl + 'register', {

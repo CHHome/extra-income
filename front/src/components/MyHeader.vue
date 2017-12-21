@@ -1,7 +1,5 @@
 <template>
   <div id="header" :class="{normal:$store.state.myHeader}">
-    <login v-if="showLogin" @next="next"></login>
-    <register v-if="showRegister" @next="next"></register>
     <header>
       <div class="left">
         <span>外快网</span>
@@ -33,7 +31,7 @@
   #header{
     position: fixed;
     width:100%;
-    z-index: 10001;
+    z-index: 9999;
   }
   header{
     width: 95%;
@@ -90,24 +88,15 @@
 </style>
 <script>
   import {mapMutations} from 'vuex'
-  import Login from '@/components/Login'
-  import Register from '@/components/Register'
   export default {
     name: 'MyHeader',
     data () {
-      return {
-        showLogin: false,
-        showRegister: false
-      }
-    },
-    components: {
-      Login,
-      Register
+      return {}
     },
     methods: {
       ...mapMutations(['changeSinger']),
       next (dialogName) {
-        this[dialogName] = !this[dialogName]
+        this.changeSinger(dialogName)
         this.changeSinger('curtain')
       }
     }

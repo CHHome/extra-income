@@ -16,7 +16,9 @@ Vue.config.productionTip = false
 const store = new Vuex.Store({
   state: {
     curtain: false,
-    myHeader: false
+    myHeader: false,
+    showLogin: false,
+    showRegister: false
   },
   mutations: {
     changeSinger (state, stateName) {
