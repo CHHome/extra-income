@@ -2,7 +2,9 @@
   <div id="app">
     <div class="curtain" v-if="$store.state.curtain"></div>
     <my-header></my-header>
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 <style scoped>
@@ -16,6 +18,7 @@
     opacity: 0.40;
     z-index: 10000;
   }
+
 </style>
 <script>
   import MyHeader from '@/components/MyHeader'

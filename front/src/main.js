@@ -7,6 +7,7 @@ import router from './router'
 import Vuex from 'vuex'
 import 'bootstrap-webpack'
 import $ from 'jquery'
+
 window.$ = $
 
 Vue.use(Vuex)
@@ -14,11 +15,15 @@ Vue.use(resource)
 Vue.config.productionTip = false
 const store = new Vuex.Store({
   state: {
-    curtain: false
+    curtain: false,
+    myHeader: false
   },
   mutations: {
     changeSinger (state, stateName) {
       state[stateName] = !state[stateName]
+    },
+    changeMyHeader (state, value) {
+      state['myHeader'] = value
     }
   }
 })
