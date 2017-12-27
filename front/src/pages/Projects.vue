@@ -8,12 +8,13 @@
   export default {
     methods: {
       ...mapMutations(['changeSinger'])
-    },
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        vm.$store.commit('changeMyHeader', true)
-      })
     }
+//    beforeRouteEnter (to, from, next) {
+//      next(vm => {
+//        window.onscroll = function () {}
+//        vm.$store.commit('changeMyHeader', true)
+//      })
+//    }
   }
 </script>
 <style scoped>

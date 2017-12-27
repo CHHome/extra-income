@@ -1,7 +1,7 @@
 # todo 验证登录信息,生成token
 
 from flask.ext import restful
-from flask.ext.restful import reqparse
+from flask_restful import reqparse
 from ..models import Users
 import time
 import base64

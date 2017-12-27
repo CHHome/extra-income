@@ -44,7 +44,7 @@
     margin-right:8px ;
   }
   header .user-opt:hover, .left span:hover{
-    border-bottom: 2px solid #ff4c81;
+    border-bottom: 2px solid #18f3fa;
     padding-bottom: 8px;
     border-radius: 1px;
   }
@@ -53,15 +53,13 @@
     border:none;
     padding: 8px 32px;
     border-radius: 16px;
-    font-family: PingFangSC-Regular;
     font-size: 14px;
-    color: #fff;
-    letter-spacing: 0;
     cursor: pointer;
   }
   .header-publish:hover{
-    background-color: #ff4c81;
+    background-color: #18f3fa;
     opacity: 0.85;
+    color: #000;
 
   }
   .right{
