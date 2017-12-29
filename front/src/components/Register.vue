@@ -57,6 +57,12 @@
           password: sha1(this.password)
         }, {emulateJSON: true}).then(res => {
           console.log(res.data)
+          if (res.data === '1') {
+            if (confirm('注册成功!请登录')) {
+              this.$store.commit('changeSinger', 'showRegister')
+              this.$store.commit('changeSinger', 'showLogin')
+            }
+          }
         }, res => {
           console.log(res.data)
         })

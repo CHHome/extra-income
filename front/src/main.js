@@ -18,7 +18,8 @@ const store = new Vuex.Store({
     curtain: false,
     myHeader: false,
     showLogin: false,
-    showRegister: false
+    showRegister: false,
+    hasLogin: false
   },
   mutations: {
     changeSinger (state, stateName) {

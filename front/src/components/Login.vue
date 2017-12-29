@@ -61,6 +61,9 @@
           if (res.data !== 'fail') {
             let store = window.localStorage
             store['token'] = res.data
+            this.cancel()
+            this.$store.commit('changeSinger', 'hasLogin')
+            console.log(this.$store.state.hasLogin)
           } else {
 //            todo
             console.log('登录失败，请检查用户名和密码是否正确')

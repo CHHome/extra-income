@@ -98,7 +98,7 @@
 </template>
 <style scoped>
   .swiper-container{
-    height:600px;
+    height:700px;
   }
   .swiper-slide img{
     height:100%;
@@ -119,9 +119,11 @@
     width: 90%;
     margin: 20px auto;
   }
-  .experts > div{
-    margin-top: 20px;
-    cursor: pointer;
+  .experts > a > div{
+    margin-top: 25px;
+  }
+  .experts > a > div:hover{
+    box-shadow: 0 7px 15px 2px rgba(71,83,108,.12);
   }
   .experts img{
     width:100%;

@@ -20,7 +20,7 @@ export default new Router({
     {
       path: '/expert',
       name: 'expert',
-      component:Expert
+      component: Expert
     }
   ]
 })

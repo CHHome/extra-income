@@ -13,12 +13,26 @@
       </div>
       <div class="right">
         <span class="header-publish">发布项目</span>
-        <span @click="next('showLogin')" class="user-opt">
-          登录
-        </span>
-        <span @click="next('showRegister')" class="user-opt">
-          注册
-        </span>
+        <div class="user-info" v-show="$store.state.hasLogin">
+          <div class="dropdown" @click="infoToggle">
+            <img src="http://127.0.0.1:5000/static/imgs/genhong.jpeg" alt="">
+            <span>我的外快</span>
+            <ul :class="{headerDropdown:$store.state.myHeader}">
+              <li>通知</li>
+              <li>个人信息</li>
+              <li>我的项目</li>
+              <li>退出登录</li>
+            </ul>
+          </div>
+        </div>
+        <div class="user-opt" v-show="!$store.state.hasLogin">
+          <span @click="next('showLogin')">
+            登录
+          </span>
+          <span @click="next('showRegister')">
+            注册
+          </span>
+        </div>
       </div>
     </header>
   </div>
@@ -40,10 +54,38 @@
     line-height: 60px;
     color: #fff;
   }
-  header .user-opt:nth-child(2){
+  .right > div{
+    display: inline;
+  }
+  .user-info img{
+    height: 35px;
+    border-radius: 50%;
+  }
+  .dropdown{
+    display: inline-block;
+  }
+  .dropdown ul{
+    position: absolute;
+    display: none;
+    padding: 0;
+    background-color: #fff;
+    color: #000;
+    min-width: 90px;
+    border-radius: 4px;
+  }
+  .dropdown ul.headerDropdown{
+    background-color: #000;
+    color: #fff;
+  }
+  .dropdown ul li{
+    list-style: none;
+    line-height: normal;
+    padding: 5px 15px;
+  }
+  header .user-opt > span:nth-child(2){
     margin-right:8px ;
   }
-  header .user-opt:hover, .left span:hover{
+  header .user-opt > span:hover, .left span:hover{
     border-bottom: 2px solid #18f3fa;
     padding-bottom: 8px;
     border-radius: 1px;
@@ -96,6 +138,16 @@
       next (dialogName) {
         this.changeSinger(dialogName)
         this.changeSinger('curtain')
+      },
+      infoToggle (e) {
+//      todo 阻止事件冒泡
+        window.event ? window.event.cancelBubble = true : e.stopPropagation()
+        let targer = $('.dropdown ul')
+        targer.slideToggle(function () {
+          document.onclick = function () {
+            targer.slideUp()
+          }
+        })
       }
     }
   }

@@ -16,5 +16,5 @@ class Register(restful.Resource):
         user = Users(args['phone'], args['username'], args['password'])
         db.session.add(user)
         db.session.commit()
-        return 'register success!'
+        return '1'
 

@@ -12,6 +12,8 @@ api = restful.Api(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
+
+
 from . import views, models
 
 
