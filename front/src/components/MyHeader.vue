@@ -15,11 +15,11 @@
         <span class="header-publish">发布项目</span>
         <div class="user-info" v-show="$store.state.hasLogin">
           <div class="dropdown" @click="infoToggle">
-            <img src="http://127.0.0.1:5000/static/imgs/genhong.jpeg" alt="">
+            <img v-bind:src="baseUrl+'static/imgs/genhong.jpeg'" alt="">
             <span>我的外快</span>
             <ul :class="{headerDropdown:$store.state.myHeader}">
               <li>通知</li>
-              <li>个人信息</li>
+              <li><router-link :to="{name: 'userInfo'}">个人信息</router-link></li>
               <li>我的项目</li>
               <li>退出登录</li>
             </ul>
@@ -75,12 +75,17 @@
   }
   .dropdown ul.headerDropdown{
     background-color: #000;
+  }
+  .dropdown ul.headerDropdown li > a{
     color: #fff;
   }
   .dropdown ul li{
     list-style: none;
     line-height: normal;
     padding: 5px 15px;
+  }
+  .dropdown ul li > a{
+    color: #000;
   }
   header .user-opt > span:nth-child(2){
     margin-right:8px ;
@@ -99,7 +104,7 @@
     cursor: pointer;
   }
   .header-publish:hover{
-    background-color: #18f3fa;
+    background-image: linear-gradient(-133deg,#004cfb,#85a1e1);
     opacity: 0.85;
     color: #000;
 
@@ -127,11 +132,15 @@
 
 </style>
 <script>
+  import {baseUrl} from '@/config/config'
+
   import {mapMutations} from 'vuex'
   export default {
     name: 'MyHeader',
     data () {
-      return {}
+      return {
+        baseUrl: baseUrl
+      }
     },
     methods: {
       ...mapMutations(['changeSinger']),

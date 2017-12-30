@@ -4,8 +4,6 @@ from flask.ext import restful
 from flask_restful import reqparse
 from ..models import Users
 import time
-import base64
-import hmac
 import hashlib
 
 secretKey = 'JD98Dskw=23njQndW9D'

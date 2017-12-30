@@ -5,6 +5,7 @@ from . import app,api
 from .resources.hellotest import Hello
 from .resources.user import Add
 from .resources.login import Login
+from .resources.userInfoSave import UserInfoSave
 from .resources.tokenCheck import TokenCheck
 from .resources.Register import Register
 
@@ -14,5 +15,6 @@ api.add_resource(Add, '/user')
 api.add_resource(Login, '/login')
 api.add_resource(Register, '/register')
 api.add_resource(TokenCheck, '/tokenCheck')
+api.add_resource(UserInfoSave, '/userInfoSave')
 
 

@@ -23,8 +23,29 @@ class Users(db.Model):
         return '<User %r>' % self.username
 
 
+class UserInfo(db.Model):
+    __tablename__ = 'userInfo'
+    id = db.Column(db.Integer, primary_key=True)
+    good_at = db.Column(db.String(64), nullable=False)
+    on_time = db.Column(db.Integer, nullable=False)
+    credit = db.Column(db.Integer, nullable=False)
+    quality = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    has_finish = db.Column(db.Integer, nullable=False)
 
-#
+    def __init__(self, id, good_at='', on_time=0, quality=0, price=0, has_finish=0, credit=0):
+        self.id = id
+        self.good_at = good_at
+        self.on_time = on_time
+        self.credit = credit
+        self.quality = quality
+        self.price = price
+        self.has_finish = has_finish
+
+    def __repr__(self):
+        return '<userInfo %r>' % self.id
+
+
 # class Admin(db.Model):
 #     __tablename__ = 'admins'
 #     id = db.Column(db.Integer, primary_key=True)

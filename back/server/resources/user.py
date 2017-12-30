@@ -12,7 +12,6 @@ class AddUser(object):
         self.username = username
         self.age = age
         self.sex = sex
-        self.status = 'active'
 
 class Add(restful.Resource):
     @marshal_with(resource_filed)
