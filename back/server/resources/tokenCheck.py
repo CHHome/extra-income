@@ -16,7 +16,7 @@ maxAge = 10
 class TokenCheck(restful.Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('token', type=str, required=True, help='username is required', location='form')
+        parser.add_argument('token', type=str, required=True, help='token is required', location='form')
         args = parser.parse_args()
         tokenArr = args['token'].split('-')
         user = Users.query.filter_by(id=tokenArr[0]).first()

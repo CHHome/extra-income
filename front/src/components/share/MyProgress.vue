@@ -32,20 +32,41 @@
     <div>
       <span>准时率</span>
       <div class="pro-container">
-        <div class="left"></div>
+        <div class="left on-time"></div>
       </div>
     </div>
     <div>
-      <span>准时率</span>
+      <span>高质比</span>
       <div class="pro-container">
-        <div class="left"></div>
+        <div class="left quality"></div>
       </div>
     </div>
     <div>
-      <span>准时率</span>
+      <span>信用度</span>
       <div class="pro-container">
-        <div class="left"></div>
+        <div class="left credit"></div>
       </div>
     </div>
   </div>
 </template>
+<script>
+  export default {
+    props:['on_time', 'credit', 'quality'],
+    computed: {
+      time () {
+        return this.on_time+'%'
+      }
+    },
+    watch: {
+      on_time () {
+        $('.on-time').css('width', this.on_time+'%')
+      },
+      credit () {
+        $('.credit').css('width', this.credit+'%')
+      },
+      quality () {
+        $('.quality').css('width', this.quality+'%')
+      }
+    }
+  }
+</script>

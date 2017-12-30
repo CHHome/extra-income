@@ -25,24 +25,27 @@
     opacity: 0.9;
   }
   .main-info img{
-    margin-top: 60px;
+    margin-top: 80px;
     margin-left: 30px;
+    float: left;
     width:120px;
     height: 150px;
   }
   .first-info{
-    min-width: 320px;
-    margin-left: 165px;
-
+    float: right;
+    margin-top: 80px;
+    margin-right: 30px;
   }
   label{
-    margin-right: 8px;
-  }
-  label, input{
-    margin-top: 10px;
     color: #fff;
+    margin-right: 8px;
+    margin-top: 10px;
+  }
+  label:nth-child(1){
+    margin-top: 0;
   }
   input{
+    color: #fff;
     border: none;
     border-bottom: 1px solid #fff;
     background-color: transparent;
@@ -59,7 +62,7 @@
   .about-expert input{
     border-bottom:1px solid #000;
   }
-  .about-expert label{
+  .about-expert label, .about-expert input{
     color: #000;
   }
   .submit-banner{
@@ -83,27 +86,34 @@
 </style>
 <template>
   <div class="user-info">
-    <form :action="baseUrl" method="post" id="userInfo"></form>
     <img v-bind:src="baseUrl+'static/imgs/userInfoBanner.jpg'" alt="">
     <div class="main-info row">
       <div class="col-md-7">
         <img v-bind:src="baseUrl+'static/imgs/genhong.jpeg'" alt="">
         <div class="first-info">
-          <label for="username">姓名  </label>
-          <input type="text" id="username" name="username" form="userInfo"><br>
-          <label for="age">年龄  </label>
-          <input type="text" id="age" name="age" form="userInfo"><br>
-          <label for="goodat">特长  </label>
-          <input type="text" id="goodat" name="goodat" form="userInfo"><br>
+          <label>姓名  </label>
+          <input type="text" v-model="mainInfo.username"><br>
+          <label>年龄  </label>
+          <input type="text"  v-model="mainInfo.age"><br>
+          <label >特长  </label>
+          <input type="text" v-model="mainInfo.good_at"><br>
+          <label>手机  </label>
+          <input type="text"  v-model="mainInfo.phone"><br>
+          <label >邮箱  </label>
+          <input type="text" v-model="mainInfo.email"><br>
         </div>
       </div>
       <div class="col-md-5">
-        <my-progress></my-progress>
+        <my-progress
+          :on_time="mainInfo.on_time"
+          :credit="mainInfo.credit"
+          :quality="mainInfo.quality"
+        ></my-progress>
         <div class="about-expert">
-          <label for="price" >报价</label>
-          <input type="text" id="price" name="priice" placeholder="800" form="userInfo"><br/>
+          <label >报价</label>
+          <input type="text" placeholder="800" v-model="mainInfo.price"><br/>
           <label>成交量</label>
-          <span>0</span>
+          <span>{{mainInfo.has_finish}}</span>
         </div>
       </div>
     </div>
@@ -114,7 +124,7 @@
 
     </div>
     <div class="submit-banner">
-      <span>保存</span>
+      <span @click="submit">保存</span>
       <span>预览</span>
     </div>
   </div>
@@ -126,15 +136,38 @@
   export default {
     data () {
       return {
-        baseUrl: baseUrl
+        baseUrl: baseUrl,
+        mainInfo: {}
       }
     },
+    created(){
+      this.getInfo()
+    },
     methods: {
-      ...mapMutations(['changeSinger'])
+      getInfo(){
+        let store = window.localStorage
+        console.log(store['token'])
+        this.$http.get(baseUrl+'userInfoShow', {params:{token: store['token']}})
+          .then(res => {
+            this.mainInfo = res.data
+          }, res => {
+            alert('获取数据失败')
+          })
+      },
+      ...mapMutations(['changeSinger']),
+      submit () {
+        this.mainInfo.token = window.localStorage.token
+        console.log(this.mainInfo)
+        this.$http.post(baseUrl+'userInfoSave',this.mainInfo)
+          .then(res => {
+            this.getInfo()
+          },res => {
+            console.log(res.data)
+          })
+      }
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        console.log('sss')
         window.onscroll = function () {}
         vm.$store.commit('changeMyHeader', true)
       })

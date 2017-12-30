@@ -12,38 +12,28 @@ class Users(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=True)
     gender = db.Column(db.String(2), unique=False, nullable=True)
     age = db.Column(db.String(3), unique=False, nullable=True)
+    good_at = db.Column(db.String(64), nullable=True)
+    on_time = db.Column(db.Integer, nullable=False)
+    credit = db.Column(db.Integer, nullable=False)
+    quality = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Integer, nullable=True)
+    has_finish = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, phone, username, password, register_time=time.time()):
+    def __init__(self, phone, username, password, register_time=time.time(), on_time=0, credit=0, quality=0,
+                 has_finish=0):
         self.username = username
         self.password = password
         self.phone = phone
         self.register_time = register_time
+        self.on_time = on_time
+        self.credit = credit
+        self.quality = quality
+        self.has_finish = has_finish
 
     def __repr__(self):
         return '<User %r>' % self.username
 
 
-class UserInfo(db.Model):
-    __tablename__ = 'userInfo'
-    id = db.Column(db.Integer, primary_key=True)
-    good_at = db.Column(db.String(64), nullable=False)
-    on_time = db.Column(db.Integer, nullable=False)
-    credit = db.Column(db.Integer, nullable=False)
-    quality = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
-    has_finish = db.Column(db.Integer, nullable=False)
-
-    def __init__(self, id, good_at='', on_time=0, quality=0, price=0, has_finish=0, credit=0):
-        self.id = id
-        self.good_at = good_at
-        self.on_time = on_time
-        self.credit = credit
-        self.quality = quality
-        self.price = price
-        self.has_finish = has_finish
-
-    def __repr__(self):
-        return '<userInfo %r>' % self.id
 
 
 # class Admin(db.Model):
