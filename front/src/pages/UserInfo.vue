@@ -146,7 +146,6 @@
     methods: {
       getInfo(){
         let store = window.localStorage
-        console.log(store['token'])
         this.$http.get(baseUrl+'userInfoShow', {params:{token: store['token']}})
           .then(res => {
             this.mainInfo = res.data
@@ -157,7 +156,6 @@
       ...mapMutations(['changeSinger']),
       submit () {
         this.mainInfo.token = window.localStorage.token
-        console.log(this.mainInfo)
         this.$http.post(baseUrl+'userInfoSave',this.mainInfo)
           .then(res => {
             this.getInfo()
@@ -168,6 +166,8 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
+        if(!vm.$store.state.hasLogin)
+          vm.$router.push({name: 'index'})
         window.onscroll = function () {}
         vm.$store.commit('changeMyHeader', true)
       })

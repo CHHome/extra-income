@@ -28,9 +28,6 @@
           <div @click="cancel">
             取消
           </div>
-          <div @click="testToken">
-            取消
-          </div>
         </div>
       </div>
     </form>
@@ -61,6 +58,7 @@
           if (res.data !== 'fail') {
             let store = window.localStorage
             store['token'] = res.data
+            console.log(store['token'])
             this.cancel()
             this.$store.commit('changeSinger', 'hasLogin')
             console.log(this.$store.state.hasLogin)
@@ -73,22 +71,6 @@
           console.log('登陆失败，请检查网络')
         })
       },
-//      todo 验证登录是否失效
-      testToken () {
-        let store = window.localStorage
-        console.log(store['token'])
-        this.$http.post(baseUrl + 'tokenCheck', {
-          token: store['token']
-        }, {emulateJSON: true}).then(res => {
-          if (res.data === 'success') {
-            console.log('验证token成功')
-          } else {
-            console.log('token过期')
-          }
-        }, res => {
-          console.log(res.data)
-        })
-      }
     }
   }
 </script>

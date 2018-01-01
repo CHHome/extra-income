@@ -12,9 +12,14 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        console.log('sss')
         window.onscroll = function () {}
         vm.$store.commit('changeMyHeader', true)
+        vm.$http.get(baseUrl+'user').then(res => {
+          console.log(res.data)
+        }, res => {
+          console.log('fail')
+        })
+
       })
     }
   }

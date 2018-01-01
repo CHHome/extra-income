@@ -7,7 +7,7 @@ import time
 import hashlib
 
 secretKey = 'JD98Dskw=23njQndW9D'
-maxAge = 10
+maxAge = 3600
 
 
 
@@ -17,10 +17,11 @@ class Login(restful.Resource):
         parser.add_argument('username', type=str, required=True, help='username is required', location='form')
         parser.add_argument('password', type=str, required=True,help='password is required', location='form')
         args = parser.parse_args()
-        expires = str(int(time.time() + maxAge))
+        expires = str(time.time() + maxAge)
         user = Users.query.filter_by(username=args['username']).first()
         if user.password == args['password']:
             s = '%s-%s-%s-%s' % (user.id, user.password, expires, secretKey)
+            print(s)
             tokenArr = [str(user.id), expires, hashlib.sha1(s.encode('utf-8')).hexdigest()]
             return '-'.join(tokenArr)
         return 'fail'

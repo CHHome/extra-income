@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
+    "express": "^4.16.2",
+    "mysql": "^2.15.0"
+  },
+  "scripts": {
+    "back": "node server.js&python3 ../run.py"
+  }
+}

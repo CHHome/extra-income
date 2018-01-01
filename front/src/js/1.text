@@ -1,0 +1,32 @@
+Request URL:http://127.0.0.1:5000/tokenCheck
+Request Method:POST
+Status Code:200 OK
+Remote Address:127.0.0.1:5000
+Referrer Policy:no-referrer-when-downgrade
+Response Headers
+view source
+Access-Control-Allow-Credentials:true
+Access-Control-Allow-Origin:http://127.0.0.1:8080
+Content-Length:7
+Content-Type:application/json
+Date:Sun, 31 Dec 2017 09:39:44 GMT
+Server:Werkzeug/0.13 Python/3.5.2
+Vary:Origin
+Request Headers
+view source
+Accept:application/json, text/javascript, */*; q=0.01
+Accept-Encoding:gzip, deflate, br
+Accept-Language:zh-CN,zh;q=0.9
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Length:59
+Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+Host:127.0.0.1:5000
+Origin:http://127.0.0.1:8080
+Pragma:no-cache
+Referer:http://127.0.0.1:8080/
+User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36
+Form Data
+view source
+view URL encoded
+token:2-1514710528-f816def19168b530f013e1ab7c309658d38e9be1
