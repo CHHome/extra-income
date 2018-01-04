@@ -12,6 +12,7 @@ import {baseUrl} from "./config/config";
 
 window.$ = $
 router.beforeEach((to, from, next) => {
+  let webStore = window.localStorage
   // let xhr = null
   // let store = window.localStorage
   // if(window.XMLHttpRequest)
@@ -27,7 +28,7 @@ router.beforeEach((to, from, next) => {
   // xhr.open('POST', 'http://127.0.0.1:8081/tokenCheck')
   // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
   // xhr.send("token="+store['token'])
-  if(!store.state.hasLogin){
+  if(!store.state.hasLogin && 'token' in webStore){
     // let store = window.localStorage
     // let xhr = null
     // if(window.XMLHttpRequest)
@@ -50,10 +51,7 @@ router.beforeEach((to, from, next) => {
     // xhr.open('POST', baseUrl+'tokenCheck')
     // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
     // xhr.send("token="+store['token'])
-
-    console.log('111')
     new Promise(function (resolve, reject) {
-      let store = window.localStorage
       let xhr = null
       if(window.XMLHttpRequest)
         xhr = new XMLHttpRequest()
@@ -61,10 +59,8 @@ router.beforeEach((to, from, next) => {
         xhr = new ActiveXObject()
       xhr.open('POST', 'http://127.0.0.1:8081/tokenCheck')
       xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
-      xhr.send("token="+store['token'])
-      console.log('222')
+      xhr.send("token="+webStore['token'])
       xhr.onreadystatechange = () => {
-        console.log('333')
         if(xhr.readyState != 4)
           return;
         if(xhr.status == 200)
@@ -73,16 +69,14 @@ router.beforeEach((to, from, next) => {
           reject()
       }
     }).then((result) => {
-      console.log(result,898989)
-      if(result){
-        console.log(result,66)
+      if(result == 'yes')
         store.commit('changeHasLogin', true)
-        next()
+      else{
+        webStore.removeItem('token')
+        console.log('过期')
       }
-      else
-        next()
+      next()
     },() => {
-      console.log('fail22')
       next()
     })
   }else{

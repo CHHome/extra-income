@@ -7,7 +7,7 @@ import time
 import hashlib
 
 secretKey = 'JD98Dskw=23njQndW9D'
-maxAge = 3600
+maxAge = 90
 
 
 

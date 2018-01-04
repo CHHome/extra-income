@@ -26,7 +26,7 @@ app.post('/tokenCheck', urlencodedParser, function (req, res) {
     let tokenArray = req.body.token.split('-')
     let userId = tokenArray[0]
     connection.query('select * from user where id='+userId, function(error, result,  fields) {
-        console.log(new Date().getTime() ,'-', tokenArray[1])
+        console.log(new Date().getTime() ,'-', tokenArray[1]*1000)
         if(error)
             console.error(error)
         else{
@@ -35,10 +35,10 @@ app.post('/tokenCheck', urlencodedParser, function (req, res) {
                 sha1.update(new Buffer(s, 'utf8').toString())
                 if(sha1.digest('hex') == tokenArray[2]){
                     console.log('success')
-                    res.send(true);
+                    res.send('yes');
                 }
             }else{
-                res.send(false);
+                res.send('no');
             }
         }
     })

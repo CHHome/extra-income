@@ -58,7 +58,7 @@
           if (res.data !== 'fail') {
             let store = window.localStorage
             store['token'] = res.data
-            console.log(store['token'])
+            console.log(store['token'],777777)
             this.cancel()
             this.$store.commit('changeSinger', 'hasLogin')
             console.log(this.$store.state.hasLogin)
