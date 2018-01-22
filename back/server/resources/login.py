@@ -7,7 +7,7 @@ import time
 import hashlib
 
 secretKey = 'JD98Dskw=23njQndW9D'
-maxAge = 90
+maxAge = 3600
 
 
 
@@ -15,7 +15,7 @@ class Login(restful.Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('username', type=str, required=True, help='username is required', location='form')
-        parser.add_argument('password', type=str, required=True,help='password is required', location='form')
+        parser.add_argument('password', type=str, required=True, help='password is required', location='form')
         args = parser.parse_args()
         expires = str(time.time() + maxAge)
         user = Users.query.filter_by(username=args['username']).first()

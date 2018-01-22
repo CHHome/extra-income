@@ -7,83 +7,46 @@ import router from './router'
 import Vuex from 'vuex'
 import 'bootstrap-webpack'
 import $ from 'jquery'
-import {testToken} from '@/js/testToken'
-import {baseUrl} from "./config/config";
 
 window.$ = $
 router.beforeEach((to, from, next) => {
   let webStore = window.localStorage
-  // let xhr = null
-  // let store = window.localStorage
-  // if(window.XMLHttpRequest)
-  //   xhr = new XMLHttpRequest()
-  // else
-  //   xhr = new ActiveXObject()
-  // xhr.onreadystatechange = () => {
-  //   if(xhr.readyState == 4 && xhr.status == 200){
-  //     console.log(xhr.responseText,996699)
-  //     next()
-  //   }
-  // }
-  // xhr.open('POST', 'http://127.0.0.1:8081/tokenCheck')
-  // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
-  // xhr.send("token="+store['token'])
-  if(!store.state.hasLogin && 'token' in webStore){
-    // let store = window.localStorage
-    // let xhr = null
-    // if(window.XMLHttpRequest)
-    //   xhr = new XMLHttpRequest()
-    // else
-    //   xhr = new ActiveXObject()
-    // xhr.onreadystatechange = () => {
-    //   if(xhr.readyState != 4)
-    //     return;
-    //   if(xhr.status == 200){
-    //     if(xhr.responseText){
-    //       console.log(xhr.responseText)
-    //       next()
-    //     }else{
-    //       next()
-    //     }
-    //   }else
-    //     next()
-    // }
-    // xhr.open('POST', baseUrl+'tokenCheck')
-    // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
-    // xhr.send("token="+store['token'])
+  if (!store.state.hasLogin && 'token' in webStore) {
     new Promise(function (resolve, reject) {
       let xhr = null
-      if(window.XMLHttpRequest)
+      if (window.XMLHttpRequest) {
         xhr = new XMLHttpRequest()
-      else
+      } else {
         xhr = new ActiveXObject()
+      }
       xhr.open('POST', 'http://127.0.0.1:8081/tokenCheck')
-      xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=UTF-8");
-      xhr.send("token="+webStore['token'])
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
+      xhr.send('token=' + webStore['token'])
       xhr.onreadystatechange = () => {
-        if(xhr.readyState != 4)
-          return;
-        if(xhr.status == 200)
+        if (xhr.readyState !== 4) {
+          return
+        }
+        if (xhr.status === 200) {
           resolve(xhr.responseText)
-        else
+        } else {
           reject()
+        }
       }
     }).then((result) => {
-      if(result == 'yes')
-        store.commit('changeHasLogin', true)
-      else{
+      if (result === 'yes') {
+        store.commit('changeSingerState', {stateName: 'hasLogin', value: true})
+      } else {
         webStore.removeItem('token')
         console.log('过期')
       }
       next()
-    },() => {
+    }, () => {
       next()
     })
-  }else{
+  } else {
     next()
   }
 })
-
 
 Vue.use(Vuex)
 Vue.use(resource)
@@ -94,17 +57,15 @@ const store = new Vuex.Store({
     myHeader: false,
     showLogin: false,
     showRegister: false,
+    showPortrait: false,
     hasLogin: false
   },
   mutations: {
+    changeSingerState (state, obj) {
+      state[obj.stateName] = obj.value
+    },
     changeSinger (state, stateName) {
       state[stateName] = !state[stateName]
-    },
-    changeMyHeader (state, value) {
-      state['myHeader'] = value
-    },
-    changeHasLogin (state, value) {
-      state['hasLogin'] = value
     }
   }
 })

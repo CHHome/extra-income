@@ -21,7 +21,7 @@
               <li>通知</li>
               <li><router-link :to="{name: 'userInfo'}">个人信息</router-link></li>
               <li>我的项目</li>
-              <li>退出登录</li>
+              <li @click="Cancellation">退出登录</li>
             </ul>
           </div>
         </div>
@@ -143,7 +143,7 @@
       }
     },
     methods: {
-      ...mapMutations(['changeSinger']),
+      ...mapMutations(['changeSinger', 'changeSingerState']),
       next (dialogName) {
         this.changeSinger(dialogName)
         this.changeSinger('curtain')
@@ -157,6 +157,10 @@
             targer.slideUp()
           }
         })
+      },
+      Cancellation () {
+        window.localStorage.removeItem('token')
+        this.changeSingerState({stateName: 'hasLogin', value: false})
       }
     }
   }

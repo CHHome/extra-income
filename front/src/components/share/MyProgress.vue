@@ -1,7 +1,7 @@
 <style scoped>
   .box{
     width:90%;
-    margin: 60px auto;
+    margin: 0 auto;
   }
   .box > div{
     display: flex;
@@ -22,7 +22,6 @@
   }
   .pro-container .left{
     background-color: #00ffb9;
-    width: 90%;
     height: 7px;
     border-radius: 4px;
   }
@@ -51,21 +50,21 @@
 </template>
 <script>
   export default {
-    props:['on_time', 'credit', 'quality'],
+    props: ['on_time', 'credit', 'quality'],
     computed: {
       time () {
-        return this.on_time+'%'
+        return this.on_time + '%'
       }
     },
     watch: {
       on_time () {
-        $('.on-time').css('width', this.on_time+'%')
+        $('.on-time').css('width', this.on_time + '%')
       },
       credit () {
-        $('.credit').css('width', this.credit+'%')
+        $('.credit').css('width', this.credit + '%')
       },
       quality () {
-        $('.quality').css('width', this.quality+'%')
+        $('.quality').css('width', this.quality + '%')
       }
     }
   }

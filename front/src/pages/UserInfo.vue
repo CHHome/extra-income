@@ -1,6 +1,7 @@
 <style scoped>
   .user-info{
     padding-top: 60px;
+    text-align: center;
   }
 
   .user-info > img{
@@ -9,13 +10,13 @@
     margin-bottom: -300px;
   }
   .main-info {
-    min-width:500px;
     width:65%;
     margin: 30px auto;
-    height: 350px;
   }
   .main-info > div{
-    height: 100%;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    min-height: 350px;
   }
   .main-info > div:nth-child(1){
     background-color: rgba(3,9,12,0.81);
@@ -23,18 +24,12 @@
   .main-info > div:nth-child(2){
     background-color: #fff;
     opacity: 0.9;
+    text-align: left;
   }
   .main-info img{
-    margin-top: 80px;
-    margin-left: 30px;
-    float: left;
     width:120px;
     height: 150px;
-  }
-  .first-info{
-    float: right;
-    margin-top: 80px;
-    margin-right: 30px;
+    cursor: pointer;
   }
   label{
     color: #fff;
@@ -83,24 +78,45 @@
     cursor: pointer;
     margin-right: 10px;
    }
+  .userImg:hover:before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.5) url(//static.lagou.com/www/static/account-c/modules/userinfo/img/camera_8d64bc7.png) center center no-repeat;
+    cursor: pointer;
+  }
+  .userImg > input{
+    display: none;
+  }
 </style>
 <template>
   <div class="user-info">
+    <portrait v-if="$store.state.showPortrait"
+    :headSrc="reader"
+    @confirmHead="confirmHeadPic"></portrait>
     <img v-bind:src="baseUrl+'static/imgs/userInfoBanner.jpg'" alt="">
     <div class="main-info row">
-      <div class="col-md-7">
-        <img v-bind:src="baseUrl+'static/imgs/genhong.jpeg'" alt="">
-        <div class="first-info">
-          <label>姓名  </label>
-          <input type="text" v-model="mainInfo.username"><br>
-          <label>年龄  </label>
-          <input type="text"  v-model="mainInfo.age"><br>
-          <label >特长  </label>
-          <input type="text" v-model="mainInfo.good_at"><br>
-          <label>手机  </label>
-          <input type="text"  v-model="mainInfo.phone"><br>
-          <label >邮箱  </label>
-          <input type="text" v-model="mainInfo.email"><br>
+      <div class="col-md-7 ">
+        <div class="row">
+          <div class="col-md-6 userImg" @click="changePortrait">
+            <img v-bind:src="baseUrl+'static/imgs/genhong.jpeg'" alt="更换头像" >
+            <input type="file" name="headPic">
+          </div>
+          <div class="col-md-6 ">
+            <label>姓名  </label>
+            <input type="text" v-model="mainInfo.username"><br>
+            <label>年龄  </label>
+            <input type="text"  v-model="mainInfo.age"><br>
+            <label >特长  </label>
+            <input type="text" v-model="mainInfo.good_at"><br>
+            <label>手机  </label>
+            <input type="text"  v-model="mainInfo.phone"><br>
+            <label >邮箱  </label>
+            <input type="text" v-model="mainInfo.email"><br>
+          </div>
         </div>
       </div>
       <div class="col-md-5">
@@ -133,20 +149,30 @@
   import {baseUrl} from '@/config/config'
   import MyProgress from '@/components/share/MyProgress'
   import {mapMutations} from 'vuex'
+  import Portrait from '@/components/Portrait'
   export default {
+    mounted () {
+      $('.userImg>input').bind('change', () => {
+        this.reader.readAsDataURL($('.userImg>input')[0].files[0])
+        this.reader.addEventListener("load", () => {
+          this.$store.commit('changeSingerState', {stateName: 'curtain', value: true})
+          this.$store.commit('changeSingerState', {stateName: 'showPortrait', value: true})
+//          console.log(this.reader.result)
+        }, false);
+      })
+    },
     data () {
       return {
         baseUrl: baseUrl,
-        mainInfo: {}
+        showPortrait: false,
+        mainInfo: {},
+        reader: new FileReader()
       }
     },
-    created(){
-      this.getInfo()
-    },
     methods: {
-      getInfo(){
+      getInfo () {
         let store = window.localStorage
-        this.$http.get(baseUrl+'userInfoShow', {params:{token: store['token']}})
+        this.$http.get(baseUrl + 'userInfoShow', {params: {token: store['token']}})
           .then(res => {
             this.mainInfo = res.data
           }, res => {
@@ -156,24 +182,36 @@
       ...mapMutations(['changeSinger']),
       submit () {
         this.mainInfo.token = window.localStorage.token
-        this.$http.post(baseUrl+'userInfoSave',this.mainInfo)
+        this.$http.post(baseUrl + 'userInfoSave', this.mainInfo)
           .then(res => {
             this.getInfo()
-          },res => {
+          }, res => {
             console.log(res.data)
           })
+      },
+      changePortrait () {
+        $('.userImg>input').click()
+      },
+      confirmHeadPic (headSrc) {
+        this.$store.commit('changeSingerState', {stateName: 'curtain', value: false})
+        this.$store.commit('changeSingerState', {stateName: 'showPortrait', value: false})
+        $('.userImg>img')[0].src = headSrc.result
+        this.mainInfo.headPic = headSrc.result.split(/;base64,/)[1]
       }
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        if(!vm.$store.state.hasLogin)
+        vm.getInfo()
+        if (!vm.$store.state.hasLogin) {
           vm.$router.push({name: 'index'})
+        }
         window.onscroll = function () {}
-        vm.$store.commit('changeMyHeader', true)
+        vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
     },
     components: {
-      MyProgress
+      MyProgress,
+      Portrait
     }
   }
 </script>

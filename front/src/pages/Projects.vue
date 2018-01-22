@@ -5,21 +5,16 @@
 </template>
 <script>
   import {baseUrl} from '@/config/config'
-  import {mapMutations} from 'vuex'
   export default {
-    methods: {
-      ...mapMutations(['changeSinger'])
-    },
     beforeRouteEnter (to, from, next) {
       next(vm => {
         window.onscroll = function () {}
-        vm.$store.commit('changeMyHeader', true)
-        vm.$http.get(baseUrl+'user').then(res => {
+        vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
+        vm.$http.get(baseUrl + 'user').then(res => {
           console.log(res.data)
         }, res => {
           console.log('fail')
         })
-
       })
     }
   }

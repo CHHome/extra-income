@@ -58,10 +58,8 @@
           if (res.data !== 'fail') {
             let store = window.localStorage
             store['token'] = res.data
-            console.log(store['token'],777777)
             this.cancel()
-            this.$store.commit('changeSinger', 'hasLogin')
-            console.log(this.$store.state.hasLogin)
+            this.$store.commit('changeSingerState', {stateName: 'hasLogin', value: true})
           } else {
 //            todo
             console.log('登录失败，请检查用户名和密码是否正确')
@@ -70,7 +68,7 @@
 //          todo
           console.log('登陆失败，请检查网络')
         })
-      },
+      }
     }
   }
 </script>

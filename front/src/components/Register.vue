@@ -1,5 +1,5 @@
 <template>
-  <div id="register-dialog" class="col-sm-5">
+  <div id="dialog" class="col-sm-5">
     <form class="form-horizontal">
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-8">
@@ -71,7 +71,7 @@
   }
 </script>
 <style scoped>
-  #register-dialog{
+  #dialog{
     position: fixed;
     top: 25%;
     left: calc(50% - 17.5%);
@@ -83,7 +83,7 @@
     opacity: 1;
     border-radius: 4px;
   }
-  .registerBtn div > div,.registerBtn div >input{
+  .dialog div > div,.dialog div >input{
     border-style: none;
     line-height: 32px;
     padding: 0 32px;

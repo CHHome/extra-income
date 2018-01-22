@@ -147,19 +147,19 @@
   export default {
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        vm.$store.commit('changeMyHeader', false)
+        vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: false})
         window.onscroll = () => {
           if (document.documentElement.scrollTop >= 540) {
-            vm.$store.commit('changeMyHeader', true)
+            vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
           } else {
-            vm.$store.commit('changeMyHeader', false)
+            vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: false})
           }
         }
       })
     },
     beforeRouteLeave (to, from, next) {
       window.onscroll = function () {}
-      this.$store.commit('changeMyHeader', true)
+      this.$store.commit('changeSingerState', {state: 'myHeader', value: true})
       next()
     },
     data () {
