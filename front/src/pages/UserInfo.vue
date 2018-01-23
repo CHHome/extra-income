@@ -91,6 +91,70 @@
   .userImg > input{
     display: none;
   }
+  .good-at{
+    width:85%;
+    background-color: #fff;
+    margin: 30px auto;
+    padding: 50px 0;
+    position: relative;
+  }
+  .good-at > .good-at-title{
+    color: #000;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .good-at>span{
+    width: 40px;
+    height: 5px;
+    color: red;
+    background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
+    display: inline-block;
+  }
+  .good-at-add{
+    display: inline-block;
+    position: absolute;
+    right: 30px;
+    line-height: 32px;
+    padding: 0 32px;
+    border-radius: 16px;
+    border:1px solid #00ffb9;
+    font-size: 14px;
+    font-weight: normal;
+    cursor: pointer;
+  }
+  .good-at-add:hover{
+    background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
+  }
+  .good-at-box{
+    position: relative;
+    width: 60%;
+    background-color: #f8f9fb;
+    margin: 20px auto;
+    padding: 0 30px;
+    height: 500px;
+  }
+  .box-fade-enter-active, .box-fade-leave-active {
+    transition: all 1s ease;
+  }
+  .box-fade-enter, .box-fade-leave-to{
+    opacity: 0;
+    transform: translateX(150px);
+  }
+  .developer{
+    text-align: left;
+  }
+  .good-at-box header{
+    padding-top: 15px;
+    padding-bottom: 8px;
+    color: #00ffb9;
+  }
+  .developer span{
+    padding: 5px 10px;
+    border-radius: 10px;
+    border:1px solid #00ffb9;
+    cursor: pointer;
+  }
 </style>
 <template>
   <div class="user-info">
@@ -134,7 +198,30 @@
       </div>
     </div>
     <div class="good-at">
-
+      <div class="good-at-title">
+        擅长技能
+        <div class="good-at-add" @click="showBox">添加</div>
+      </div>
+      <span></span>
+      <transition name="box-fade">
+        <div class="good-at-box" v-show="goodAtBox">
+          <div class="developer">
+            <header>
+              开发
+            </header>
+            <span>Python</span>
+            <span>Web</span>
+            <span>Html5</span>
+            <span>Java</span>
+            <span>Android</span>
+            <span>Ios</span>
+            <span>lunix</span>
+            <span>.net</span>
+            <span>Php</span>
+            <span>小程序</span>
+          </div>
+        </div>
+      </transition>
     </div>
     <div class="projects">
 
@@ -166,7 +253,8 @@
         baseUrl: baseUrl,
         showPortrait: false,
         mainInfo: {},
-        reader: new FileReader()
+        reader: new FileReader(),
+        goodAtBox: false
       }
     },
     methods: {
@@ -197,6 +285,9 @@
         this.$store.commit('changeSingerState', {stateName: 'showPortrait', value: false})
         $('.userImg>img')[0].src = headSrc.result
         this.mainInfo.headPic = headSrc.result.split(/;base64,/)[1]
+      },
+      showBox(){
+        this.goodAtBox = !this.goodAtBox
       }
     },
     beforeRouteEnter (to, from, next) {
