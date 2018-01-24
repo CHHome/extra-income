@@ -24,6 +24,7 @@ resource_filed = {
 class UserInfoShow(restful.Resource):
     @marshal_with(resource_filed)
     def get(self):
+        print('kkfkfkfkdfkdfkd')
         parser = reqparse.RequestParser()
         parser.add_argument('token', type=str, required=True, help='token is required')
         args = parser.parse_args()

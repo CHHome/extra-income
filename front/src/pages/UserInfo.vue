@@ -104,7 +104,7 @@
     font-size: 20px;
     font-weight: 500;
   }
-  .good-at>span{
+  .good-at>i{
     width: 40px;
     height: 5px;
     color: red;
@@ -126,13 +126,16 @@
   .good-at-add:hover{
     background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
   }
+  .user-select{
+    width: 60%;
+    margin: 0 auto;
+  }
   .good-at-box{
     position: relative;
     width: 60%;
     background-color: #f8f9fb;
     margin: 20px auto;
-    padding: 0 30px;
-    height: 500px;
+    padding: 10px 30px;
   }
   .box-fade-enter-active, .box-fade-leave-active {
     transition: all 1s ease;
@@ -141,7 +144,8 @@
     opacity: 0;
     transform: translateX(150px);
   }
-  .developer{
+  .good-at-box > div{
+    padding-top: 10px;
     text-align: left;
   }
   .good-at-box header{
@@ -149,11 +153,23 @@
     padding-bottom: 8px;
     color: #00ffb9;
   }
-  .developer span{
+  .good-at span{
+    margin-right: 5px;
     padding: 5px 10px;
+    margin-bottom: 3px;
     border-radius: 10px;
     border:1px solid #00ffb9;
     cursor: pointer;
+    display: inline-block;
+  }
+  .selected{
+    background-color: #00ffb9;
+  }
+  .glyphicon-remove{
+    color: rgba(0,0,0,0.53);
+    padding-left:5px;
+    font-weight: 300;
+    font-size: 10px;
   }
 </style>
 <template>
@@ -174,8 +190,6 @@
             <input type="text" v-model="mainInfo.username"><br>
             <label>年龄  </label>
             <input type="text"  v-model="mainInfo.age"><br>
-            <label >特长  </label>
-            <input type="text" v-model="mainInfo.good_at"><br>
             <label>手机  </label>
             <input type="text"  v-model="mainInfo.phone"><br>
             <label >邮箱  </label>
@@ -200,25 +214,45 @@
     <div class="good-at">
       <div class="good-at-title">
         擅长技能
-        <div class="good-at-add" @click="showBox">添加</div>
+        <div class="good-at-add" @click="showBox">{{goodAtText}}</div>
       </div>
-      <span></span>
+      <i></i>
+      <div class="user-select" @click="remove">
+        <span v-for="item in selected">{{item}}<i class="glyphicon glyphicon-remove"></i></span>
+      </div>
       <transition name="box-fade">
         <div class="good-at-box" v-show="goodAtBox">
-          <div class="developer">
+          <div>
             <header>
               开发
             </header>
-            <span>Python</span>
-            <span>Web</span>
-            <span>Html5</span>
-            <span>Java</span>
-            <span>Android</span>
-            <span>Ios</span>
-            <span>lunix</span>
-            <span>.net</span>
-            <span>Php</span>
-            <span>小程序</span>
+            <div @click="select">
+              <span v-for="item in category.developer">{{item}}</span>
+            </div>
+          </div>
+          <div>
+            <header>
+              设计
+            </header>
+            <div @click="select">
+              <span v-for="item in category.design">{{item}}</span>
+            </div>
+          </div>
+          <div>
+            <header>
+              市场/运营
+            </header>
+            <div @click="select">
+              <span v-for="item in category.market">{{item}}</span>
+            </div>
+          </div>
+          <div>
+            <header>
+              产品
+            </header>
+            <div @click="select">
+              <span v-for="item in category.product">{{item}}</span>
+            </div>
           </div>
         </div>
       </transition>
@@ -237,6 +271,7 @@
   import MyProgress from '@/components/share/MyProgress'
   import {mapMutations} from 'vuex'
   import Portrait from '@/components/Portrait'
+  import {category} from '@/js/webData'
   export default {
     mounted () {
       $('.userImg>input').bind('change', () => {
@@ -244,7 +279,6 @@
         this.reader.addEventListener("load", () => {
           this.$store.commit('changeSingerState', {stateName: 'curtain', value: true})
           this.$store.commit('changeSingerState', {stateName: 'showPortrait', value: true})
-//          console.log(this.reader.result)
         }, false);
       })
     },
@@ -254,21 +288,27 @@
         showPortrait: false,
         mainInfo: {},
         reader: new FileReader(),
-        goodAtBox: false
+        goodAtBox: false,
+        category: category,
+        selected: [],
+        goodAtText: '添加'
       }
     },
     methods: {
       getInfo () {
         let store = window.localStorage
+        console.log('hahahah')
         this.$http.get(baseUrl + 'userInfoShow', {params: {token: store['token']}})
           .then(res => {
             this.mainInfo = res.data
+            this.selected = this.mainInfo.good_at.split(' ')
           }, res => {
             alert('获取数据失败')
           })
       },
       ...mapMutations(['changeSinger']),
       submit () {
+        this.mainInfo.good_at = this.selected.join(' ');
         this.mainInfo.token = window.localStorage.token
         this.$http.post(baseUrl + 'userInfoSave', this.mainInfo)
           .then(res => {
@@ -287,7 +327,28 @@
         this.mainInfo.headPic = headSrc.result.split(/;base64,/)[1]
       },
       showBox(){
+        if (this.goodAtText === '添加') {
+          this.goodAtText = '取消'
+        } else {
+          this.goodAtText = '添加'
+        }
         this.goodAtBox = !this.goodAtBox
+      },
+      select (e) {
+        console.log()
+        if (e.target.nodeName === 'DIV') {
+          return
+        }
+        if (this.selected.indexOf(e.target.textContent) === -1) {
+          this.selected.push(e.target.textContent)
+          e.target.classList.add('selected')
+        }
+      },
+      remove (e) {
+        if (e.target.nodeName !== 'I') {
+          return
+        }
+        this.selected.splice(this.selected.indexOf(e.target.parentNode.textContent), 1)
       }
     },
     beforeRouteEnter (to, from, next) {
