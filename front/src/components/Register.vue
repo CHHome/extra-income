@@ -47,8 +47,7 @@
     },
     methods: {
       cancel () {
-        this.$store.commit('changeSinger', 'showRegister')
-        this.$store.commit('changeSinger', 'curtain')
+        this.$emit('next', 'showRegister')
       },
       submit () {
         this.$http.post(baseUrl + 'register', {
@@ -59,8 +58,8 @@
           console.log(res.data)
           if (res.data === '1') {
             if (confirm('注册成功!请登录')) {
-              this.$store.commit('changeSinger', 'showRegister')
-              this.$store.commit('changeSinger', 'showLogin')
+              this.cancel()
+              this.$emit('next', 'showLogin')
             }
           }
         }, res => {
@@ -83,7 +82,7 @@
     opacity: 1;
     border-radius: 4px;
   }
-  .dialog div > div,.dialog div >input{
+  .registerBtn div > div, .registerBtn div >input{
     border-style: none;
     line-height: 32px;
     padding: 0 32px;

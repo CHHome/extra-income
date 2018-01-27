@@ -26,22 +26,20 @@ class UserInfoSave(restful.Resource):
         tokenArr = args['token'].split('-')
         user = Users.query.filter_by(id=tokenArr[0]).first()
         if(args['headPic']):
-            self.saveFile(args['headPic'], user.id)
+            self.saveFile(args['headPic'], user)
         user.username = args.username
         user.age = args.age
         user.good_at = args.good_at
         user.price = args.price
         user.phone = args.phone
         user.email = args.email
-        user.on_time = 33
-        user.credit = 55
-        user.quality = 44
         db.session.commit()
         return user.username
 
-    def saveFile(self, baseStr, id):
+    def saveFile(self, baseStr, user):
         print(baseStr)
         imgData = base64.b64decode(baseStr)
-        file = open(upLoad_file+str(id) + '.jpg', 'wb')
+        file = open(upLoad_file+str(user.id) + '.jpg', 'wb')
         file.write(imgData)
         file.close()
+        user.head_img = str(user.id) + '.jpg'

@@ -14,6 +14,9 @@ class Register(restful.Resource):
         parser.add_argument('password', type=str, required=True, help='password is required', location='form')
         args = parser.parse_args()
         user = Users(args['phone'], args['username'], args['password'])
+        user.on_time = 33
+        user.credit = 55
+        user.quality = 44
         db.session.add(user)
         db.session.commit()
         return '1'

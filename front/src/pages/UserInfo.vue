@@ -3,7 +3,9 @@
     padding-top: 60px;
     text-align: center;
   }
-
+  .user-info>div{
+    margin-top: 30px;
+  }
   .user-info > img{
     height: 350px;
     width: 100%;
@@ -91,27 +93,30 @@
   .userImg > input{
     display: none;
   }
-  .good-at{
+  .justChange{
+    width:90%;
+    margin: 0 auto;
+  }
+  .good-at, .project{
     width:85%;
     background-color: #fff;
     margin: 30px auto;
     padding: 50px 0;
     position: relative;
   }
-  .good-at > .good-at-title{
+  .title{
     color: #000;
     text-align: center;
     font-size: 20px;
     font-weight: 500;
   }
-  .good-at>i{
+  .good-at>i, .project>i{
     width: 40px;
     height: 5px;
-    color: red;
     background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
     display: inline-block;
   }
-  .good-at-add{
+  .add{
     display: inline-block;
     position: absolute;
     right: 30px;
@@ -123,14 +128,14 @@
     font-weight: normal;
     cursor: pointer;
   }
-  .good-at-add:hover{
+  .add:hover{
     background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
   }
   .user-select{
     width: 60%;
-    margin: 0 auto;
+    margin: 30px auto;
   }
-  .good-at-box{
+  .good-at-box, .project-box{
     position: relative;
     width: 60%;
     background-color: #f8f9fb;
@@ -174,7 +179,7 @@
 </style>
 <template>
   <div class="user-info">
-    <portrait v-if="$store.state.showPortrait"
+    <portrait v-if="showPortrait"
     :headSrc="reader"
     @confirmHead="confirmHeadPic"></portrait>
     <img v-bind:src="baseUrl+'static/imgs/userInfoBanner.jpg'" alt="">
@@ -182,7 +187,7 @@
       <div class="col-md-7 ">
         <div class="row">
           <div class="col-md-6 userImg" @click="changePortrait">
-            <img v-bind:src="baseUrl+'static/imgs/genhong.jpeg'" alt="更换头像" >
+            <img v-bind:src="baseUrl+'static/imgs/'+mainInfo.head_img" alt="更换头像" >
             <input type="file" name="headPic">
           </div>
           <div class="col-md-6 ">
@@ -198,11 +203,20 @@
         </div>
       </div>
       <div class="col-md-5">
-        <my-progress
-          :on_time="mainInfo.on_time"
-          :credit="mainInfo.credit"
-          :quality="mainInfo.quality"
-        ></my-progress>
+        <div class="justChange">
+          <my-progress
+            :value="mainInfo.on_time"
+            :label="'准时率'"
+          ></my-progress>
+          <my-progress
+            :value="mainInfo.credit"
+            :label="'信任度'"
+          ></my-progress>
+          <my-progress
+            :value="mainInfo.quality"
+            :label="'优质比'"
+          ></my-progress>
+        </div>
         <div class="about-expert">
           <label >报价</label>
           <input type="text" placeholder="800" v-model="mainInfo.price"><br/>
@@ -212,9 +226,9 @@
       </div>
     </div>
     <div class="good-at">
-      <div class="good-at-title">
+      <div class="title">
         擅长技能
-        <div class="good-at-add" @click="showBox">{{goodAtText}}</div>
+        <div class="add" @click="showBox">{{goodAtText}}</div>
       </div>
       <i></i>
       <div class="user-select" @click="remove">
@@ -257,8 +271,18 @@
         </div>
       </transition>
     </div>
-    <div class="projects">
-
+    <div class="project">
+      <div class="title">
+        项目案例
+        <div class="add" @click="showBoxPro">{{projectText}}</div>
+      </div>
+      <i></i>
+      <transition name="box-fade">
+        <div class="project-box" v-show="projectBox">
+          <span>建议提交两个以上具有代表性的作品</span>
+          <project-box></project-box>
+        </div>
+      </transition>
     </div>
     <div class="submit-banner">
       <span @click="submit">保存</span>
@@ -271,14 +295,18 @@
   import MyProgress from '@/components/share/MyProgress'
   import {mapMutations} from 'vuex'
   import Portrait from '@/components/Portrait'
+  import ProjectBox from '@/components/ProjectBox'
   import {category} from '@/js/webData'
   export default {
+    created () {
+      this.mainInfo.head_img = 'default_head.jpg'
+    },
     mounted () {
       $('.userImg>input').bind('change', () => {
         this.reader.readAsDataURL($('.userImg>input')[0].files[0])
         this.reader.addEventListener("load", () => {
           this.$store.commit('changeSingerState', {stateName: 'curtain', value: true})
-          this.$store.commit('changeSingerState', {stateName: 'showPortrait', value: true})
+          this.showPortrait = !this.showPortrait
         }, false);
       })
     },
@@ -289,19 +317,24 @@
         mainInfo: {},
         reader: new FileReader(),
         goodAtBox: false,
+        projectBox: false,
         category: category,
         selected: [],
-        goodAtText: '添加'
+        goodAtText: '添加',
+        projectText: '添加'
       }
     },
     methods: {
       getInfo () {
         let store = window.localStorage
-        console.log('hahahah')
         this.$http.get(baseUrl + 'userInfoShow', {params: {token: store['token']}})
           .then(res => {
             this.mainInfo = res.data
-            this.selected = this.mainInfo.good_at.split(' ')
+            if (this.mainInfo.good_at !== '') {
+              if (this.mainInfo.good_at !== null) {
+                this.selected = this.mainInfo.good_at.split(' ')
+              }
+            }
           }, res => {
             alert('获取数据失败')
           })
@@ -321,8 +354,7 @@
         $('.userImg>input').click()
       },
       confirmHeadPic (headSrc) {
-        this.$store.commit('changeSingerState', {stateName: 'curtain', value: false})
-        this.$store.commit('changeSingerState', {stateName: 'showPortrait', value: false})
+        this.next('showPortrait')
         $('.userImg>img')[0].src = headSrc.result
         this.mainInfo.headPic = headSrc.result.split(/;base64,/)[1]
       },
@@ -349,6 +381,18 @@
           return
         }
         this.selected.splice(this.selected.indexOf(e.target.parentNode.textContent), 1)
+      },
+      showBoxPro () {
+        this.projectBox = !this.projectBox
+        if (this.projectText === '添加') {
+          this.projectText = '取消'
+        } else {
+          this.projectText = '添加'
+        }
+      },
+      next (dialogName) {
+        this[dialogName] = !this[dialogName]
+        this.$store.commit('changeSinger', 'curtain')
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -363,7 +407,8 @@
     },
     components: {
       MyProgress,
-      Portrait
+      Portrait,
+      ProjectBox
     }
   }
 </script>

@@ -1,5 +1,7 @@
 <template>
   <div id="header" :class="{normal:$store.state.myHeader}">
+    <login v-if="showLogin" @next="next"></login>
+    <register v-if="showRegister" @next="next"></register>
     <header>
       <div class="left">
         <span>外快网</span>
@@ -133,19 +135,22 @@
 </style>
 <script>
   import {baseUrl} from '@/config/config'
-
+  import Login from '@/components/Login'
+  import Register from '@/components/Register'
   import {mapMutations} from 'vuex'
   export default {
     name: 'MyHeader',
     data () {
       return {
-        baseUrl: baseUrl
+        baseUrl: baseUrl,
+        showLogin: false,
+        showRegister : false
       }
     },
     methods: {
       ...mapMutations(['changeSinger', 'changeSingerState']),
       next (dialogName) {
-        this.changeSinger(dialogName)
+        this[dialogName] = !this[dialogName]
         this.changeSinger('curtain')
       },
       infoToggle (e) {
@@ -162,6 +167,10 @@
         window.localStorage.removeItem('token')
         this.changeSingerState({stateName: 'hasLogin', value: false})
       }
+    },
+    components: {
+      Login,
+      Register
     }
   }
 </script>

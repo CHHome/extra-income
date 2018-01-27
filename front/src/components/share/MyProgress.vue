@@ -1,9 +1,5 @@
 <style scoped>
-  .box{
-    width:90%;
-    margin: 0 auto;
-  }
-  .box > div{
+  .slider{
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -27,44 +23,19 @@
   }
 </style>
 <template>
-  <div class="box">
-    <div>
-      <span>准时率</span>
+    <div class="slider">
+      <span>{{label}}</span>
       <div class="pro-container">
-        <div class="left on-time"></div>
+        <div :class="[label, 'left']"></div>
       </div>
     </div>
-    <div>
-      <span>高质比</span>
-      <div class="pro-container">
-        <div class="left quality"></div>
-      </div>
-    </div>
-    <div>
-      <span>信用度</span>
-      <div class="pro-container">
-        <div class="left credit"></div>
-      </div>
-    </div>
-  </div>
 </template>
 <script>
   export default {
-    props: ['on_time', 'credit', 'quality'],
-    computed: {
-      time () {
-        return this.on_time + '%'
-      }
-    },
+    props: ['value', 'label'],
     watch: {
-      on_time () {
-        $('.on-time').css('width', this.on_time + '%')
-      },
-      credit () {
-        $('.credit').css('width', this.credit + '%')
-      },
-      quality () {
-        $('.quality').css('width', this.quality + '%')
+      value () {
+        $('.' + this.label).css('width', this.value + "%")
       }
     }
   }

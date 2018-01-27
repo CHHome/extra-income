@@ -55,9 +55,6 @@ const store = new Vuex.Store({
   state: {
     curtain: false,
     myHeader: false,
-    showLogin: false,
-    showRegister: false,
-    showPortrait: false,
     hasLogin: false
   },
   mutations: {

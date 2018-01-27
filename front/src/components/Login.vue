@@ -46,8 +46,7 @@
     },
     methods: {
       cancel () {
-        this.$store.commit('changeSinger', 'showLogin')
-        this.$store.commit('changeSinger', 'curtain')
+        this.$emit('next', 'showLogin')
       },
       submit () {
         this.$http.post(baseUrl + 'login', {

@@ -18,6 +18,7 @@ class Users(db.Model):
     quality = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=True)
     has_finish = db.Column(db.Integer, nullable=False)
+    head_img = db.Column(db.String(120), unique=False, default='default_head.jpg')
 
     def __init__(self, phone, username, password, register_time=time.time(), on_time=0, credit=0, quality=0,
                  has_finish=0):

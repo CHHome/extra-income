@@ -41,8 +41,7 @@
     },
     methods: {
       cancel () {
-        this.$store.commit('changeSinger', 'showPortrait')
-        this.$store.commit('changeSinger', 'curtain')
+        this.$emit('next', 'showPortrait')
       },
       submit () {
         this.$emit('confirmHead', this.headSrc)
