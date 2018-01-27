@@ -1,6 +1,7 @@
 <template>
   <div class="projects-container">
     projects
+    <span>sdjbkjdsksdf</span>
   </div>
 </template>
 <script>
@@ -19,8 +20,15 @@
     }
   }
 </script>
-<style scoped>
+<style lang="less" rel="stylesheet/less" scoped>
+  @import '../css/test.less';
   .projects-container{
     padding-top: 60px;
+  }
+  .projects-container{
+    color: @base;
+  }
+  span{
+    color: blue;
   }
 </style>

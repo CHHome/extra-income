@@ -1,45 +1,137 @@
-<style scoped>
+<style lang="less" rel="stylesheet/less" scoped>
+  @import '../css/theme.less';
   .user-info{
     padding-top: 60px;
     text-align: center;
-  }
-  .user-info>div{
-    margin-top: 30px;
-  }
-  .user-info > img{
-    height: 350px;
-    width: 100%;
-    margin-bottom: -300px;
-  }
-  .main-info {
-    width:65%;
-    margin: 30px auto;
-  }
-  .main-info > div{
-    padding-top: 10%;
-    padding-bottom: 10%;
-    min-height: 350px;
-  }
-  .main-info > div:nth-child(1){
-    background-color: rgba(3,9,12,0.81);
-  }
-  .main-info > div:nth-child(2){
-    background-color: #fff;
-    opacity: 0.9;
-    text-align: left;
-  }
-  .main-info img{
-    width:120px;
-    height: 150px;
-    cursor: pointer;
+    & > div{
+      margin: auto;
+      margin-bottom: 60px;
+    }
+    & > img{
+      height: 350px;
+      width: 100%;
+      margin-bottom: -250px;
+    }
+    .main-info {
+      width:65%;
+      margin: 30px auto;
+      .userImg{
+        &:hover{
+          &:before{
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,.5) url(//static.lagou.com/www/static/account-c/modules/userinfo/img/camera_8d64bc7.png) center center no-repeat;
+            cursor: pointer;
+          }
+        }
+        & > input{
+          display: none;
+        }
+      }
+      img{
+        width:120px;
+        height: 150px;
+        cursor: pointer;
+      }
+      & > div{
+        padding-top: 10%;
+        padding-bottom: 10%;
+        min-height: 350px;
+      }
+      & > div:nth-child(1){
+        background-color: rgba(3,9,12,0.81);
+      }
+      & > div:nth-child(2){
+        background-color: #fff;
+        opacity: 0.9;
+        text-align: left;
+      }
+      .justChange{
+        width:90%;
+        margin: 0 auto;
+      }
+      .about-expert{
+        width: 90%;
+        margin: 0  auto;
+        font-weight: 600;
+        font-size: 13px;
+        color: #000;
+        input{
+          border-bottom:1px solid #000;
+        }
+        label, input{
+          color: #000;
+        }
+      }
+    }
+     .goodAt-pro(){
+      width:85%;
+      background-color: #fff;
+      margin: 30px auto;
+      padding: 50px 0;
+      position: relative;
+       .title{
+         color: #000;
+         text-align: center;
+         font-size: 20px;
+         font-weight: 500;
+       }
+       & > i{
+         width: 40px;
+         height: 5px;
+         background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
+         display: inline-block;
+       }
+       & > div:nth-last-child(1){
+         position: relative;
+         width: 60%;
+         background-color: #f8f9fb;
+         margin: 20px auto;
+         padding: 10px 30px;
+       }
+    }
+    .good-at{
+      .goodAt-pro;
+      span{
+        margin-right: 5px;
+        padding: 5px 10px;
+        margin-bottom: 3px;
+        border-radius: 10px;
+        border:1px solid #00ffb9;
+        cursor: pointer;
+        display: inline-block;
+      }
+      .user-select{
+        width: 60%;
+        margin: 30px auto;
+      }
+      & > div:nth-last-child(1){
+        & > div{
+          padding-top: 10px;
+          text-align: left;
+        }
+        header{
+          padding-top: 15px;
+          padding-bottom: 8px;
+          color: #00ffb9;
+        }
+      }
+    }
+    .project{
+      .goodAt-pro;
+    }
   }
   label{
     color: #fff;
     margin-right: 8px;
     margin-top: 10px;
-  }
-  label:nth-child(1){
-    margin-top: 0;
+    &:nth-child(1){
+      margin-top: 0;
+    }
   }
   input{
     color: #fff;
@@ -49,72 +141,12 @@
     border-radius: 4px;
     outline:none;
   }
-  .about-expert{
-    width: 90%;
-    margin: 0  auto;
-    font-weight: 600;
-    font-size: 13px;
-    color: #000;
-  }
-  .about-expert input{
-    border-bottom:1px solid #000;
-  }
-  .about-expert label, .about-expert input{
-    color: #000;
-  }
   .submit-banner{
     width: 65%;
     margin: 30px auto;
-  }
-  .submit-banner span{
-    border-style: none;
-    line-height: 32px;
-    padding: 0 32px;
-    background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
-    border-radius: 16px;
-    font-family: PingFangSC-Regular;
-    font-size: 14px;
-    color: #000;
-    letter-spacing: 0;
-    display: inline-block;
-    cursor: pointer;
-    margin-right: 10px;
-   }
-  .userImg:hover:before{
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,.5) url(//static.lagou.com/www/static/account-c/modules/userinfo/img/camera_8d64bc7.png) center center no-repeat;
-    cursor: pointer;
-  }
-  .userImg > input{
-    display: none;
-  }
-  .justChange{
-    width:90%;
-    margin: 0 auto;
-  }
-  .good-at, .project{
-    width:85%;
-    background-color: #fff;
-    margin: 30px auto;
-    padding: 50px 0;
-    position: relative;
-  }
-  .title{
-    color: #000;
-    text-align: center;
-    font-size: 20px;
-    font-weight: 500;
-  }
-  .good-at>i, .project>i{
-    width: 40px;
-    height: 5px;
-    background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
-    display: inline-block;
+    span{
+      .btnTheme
+    }
   }
   .add{
     display: inline-block;
@@ -131,41 +163,12 @@
   .add:hover{
     background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
   }
-  .user-select{
-    width: 60%;
-    margin: 30px auto;
-  }
-  .good-at-box, .project-box{
-    position: relative;
-    width: 60%;
-    background-color: #f8f9fb;
-    margin: 20px auto;
-    padding: 10px 30px;
-  }
   .box-fade-enter-active, .box-fade-leave-active {
     transition: all 1s ease;
   }
   .box-fade-enter, .box-fade-leave-to{
     opacity: 0;
     transform: translateX(150px);
-  }
-  .good-at-box > div{
-    padding-top: 10px;
-    text-align: left;
-  }
-  .good-at-box header{
-    padding-top: 15px;
-    padding-bottom: 8px;
-    color: #00ffb9;
-  }
-  .good-at span{
-    margin-right: 5px;
-    padding: 5px 10px;
-    margin-bottom: 3px;
-    border-radius: 10px;
-    border:1px solid #00ffb9;
-    cursor: pointer;
-    display: inline-block;
   }
   .selected{
     background-color: #00ffb9;
@@ -181,6 +184,7 @@
   <div class="user-info">
     <portrait v-if="showPortrait"
     :headSrc="reader"
+    @next="next"
     @confirmHead="confirmHeadPic"></portrait>
     <img v-bind:src="baseUrl+'static/imgs/userInfoBanner.jpg'" alt="">
     <div class="main-info row">
@@ -235,7 +239,7 @@
         <span v-for="item in selected">{{item}}<i class="glyphicon glyphicon-remove"></i></span>
       </div>
       <transition name="box-fade">
-        <div class="good-at-box" v-show="goodAtBox">
+        <div v-show="goodAtBox">
           <div>
             <header>
               开发
@@ -278,7 +282,7 @@
       </div>
       <i></i>
       <transition name="box-fade">
-        <div class="project-box" v-show="projectBox">
+        <div v-show="projectBox">
           <span>建议提交两个以上具有代表性的作品</span>
           <project-box></project-box>
         </div>
@@ -307,6 +311,7 @@
         this.reader.addEventListener("load", () => {
           this.$store.commit('changeSingerState', {stateName: 'curtain', value: true})
           this.showPortrait = !this.showPortrait
+          console.log(this.showPortrait)
         }, false);
       })
     },
@@ -392,6 +397,7 @@
       },
       next (dialogName) {
         this[dialogName] = !this[dialogName]
+        console.log(this.showPortrait)
         this.$store.commit('changeSinger', 'curtain')
       }
     },

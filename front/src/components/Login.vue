@@ -1,3 +1,12 @@
+<style lang="less" rel="stylesheet/less" scoped>
+  @import '../css/theme.less';
+  #login-dialog{
+    .my-dialog(35%)
+  }
+  .loginBtn div > div,.loginBtn div >input{
+    .btnTheme
+  }
+</style>
 <template>
   <div id="login-dialog" class="col-sm-5">
     <form class="form-horizontal">
@@ -71,30 +80,4 @@
     }
   }
 </script>
-<style scoped>
-  #login-dialog{
-    position: fixed;
-    top: 25%;
-    left: calc(50% - 17.5%);
-    background-color: #fff;
-    width: 35%;
-    padding: 30px;
-    box-shadow: 0 0 10px #cdcdcd;
-    z-index: 10001;
-    opacity: 1;
-    border-radius: 4px;
-  }
-  .loginBtn div > div,.loginBtn div >input{
-    border-style: none;
-    line-height: 32px;
-    padding: 0 32px;
-    background-image: linear-gradient(-133deg,#004cfb,#85a1e1);
-    border-radius: 16px;
-    font-family: PingFangSC-Regular;
-    font-size: 14px;
-    color: #fff;
-    letter-spacing: 0;
-    display: inline-block;
-    cursor: pointer;
-  }
-</style>
+

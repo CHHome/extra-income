@@ -1,9 +1,105 @@
+<style lang="less" rel="stylesheet/less" scoped>
+  @import '../css/theme.less';
+  a{
+    text-decoration: none;
+    color: #fff;
+  }
+  #header{
+    position: fixed;
+    width:100%;
+    z-index: 9999;
+    color: #fff;
+    & > header{
+      width: 95%;
+      margin: 0 auto;
+      height: 60px;
+      line-height: 60px;
+      /*左边*/
+      & > div:nth-child(1){
+        float: left;
+        font-size: 18px;
+        cursor: pointer;
+        & span{
+          margin-right: 18px;
+          &:hover:extend(.span-hover){}
+        }
+        & > span:nth-child(1){
+          margin-right: 65px;
+          text-decoration: none;
+        }
+      }
+      /*右边*/
+      & > div:nth-child(2){
+        float: right;
+        cursor: pointer;
+        .header-publish{
+          .btnTheme;
+          margin-right: 50px;
+        }
+        & > div{
+          display: inline;
+        }
+        & > .user-info{
+          img{
+            height: 35px;
+            border-radius: 50%;
+          }
+        }
+        & > .user-opt{
+          & > span{
+            margin-right:8px ;
+          }
+          & > span:hover:extend(.span-hover){}
+        }
+      }
+    }
+  }
+  .span-hover{
+    border-bottom: 2px solid @secondColor;
+    padding-bottom: 8px;
+    border-radius: 1px;
+  }
+  .dropdown{
+    display: inline-block;
+    & > ul{
+      position: absolute;
+      display: none;
+      padding: 0;
+      background-color: #fff;
+      color: #000;
+      min-width: 90px;
+      border-radius: 4px;
+      & li{
+        list-style: none;
+        line-height: normal;
+        padding: 5px 15px;
+        & > a{
+          color: #000;
+        }
+      }
+    }
+  }
+  .headerDropdown{
+    background-color: #000;
+  }
+  .headerDropdown li > a{
+    color: #fff;
+  }
+  .normal{
+    color: @fontColor;
+    background-color: @baseColor;
+    border-bottom: 1px solid #e0dfdf;
+    a, span{
+      color: @fontColor;
+    }
+  }
+</style>
 <template>
   <div id="header" :class="{normal:$store.state.myHeader}">
     <login v-if="showLogin" @next="next"></login>
     <register v-if="showRegister" @next="next"></register>
     <header>
-      <div class="left">
+      <div>
         <span>外快网</span>
         <router-link :to="{name:'index'}">
           <span>首页</span>
@@ -13,7 +109,7 @@
         </router-link>
         <span>服务指南</span>
       </div>
-      <div class="right">
+      <div>
         <span class="header-publish">发布项目</span>
         <div class="user-info" v-show="$store.state.hasLogin">
           <div class="dropdown" @click="infoToggle">
@@ -39,100 +135,6 @@
     </header>
   </div>
 </template>
-<style scoped>
-  a{
-    color: #fff;
-    text-decoration: none;
-  }
-  #header{
-    position: fixed;
-    width:100%;
-    z-index: 9999;
-  }
-  header{
-    width: 95%;
-    margin: 0 auto;
-    height: 60px;
-    line-height: 60px;
-    color: #fff;
-  }
-  .right > div{
-    display: inline;
-  }
-  .user-info img{
-    height: 35px;
-    border-radius: 50%;
-  }
-  .dropdown{
-    display: inline-block;
-  }
-  .dropdown ul{
-    position: absolute;
-    display: none;
-    padding: 0;
-    background-color: #fff;
-    color: #000;
-    min-width: 90px;
-    border-radius: 4px;
-  }
-  .dropdown ul.headerDropdown{
-    background-color: #000;
-  }
-  .dropdown ul.headerDropdown li > a{
-    color: #fff;
-  }
-  .dropdown ul li{
-    list-style: none;
-    line-height: normal;
-    padding: 5px 15px;
-  }
-  .dropdown ul li > a{
-    color: #000;
-  }
-  header .user-opt > span:nth-child(2){
-    margin-right:8px ;
-  }
-  header .user-opt > span:hover, .left span:hover{
-    border-bottom: 2px solid #18f3fa;
-    padding-bottom: 8px;
-    border-radius: 1px;
-  }
-  .header-publish{
-    margin-right: 32px;
-    border:none;
-    padding: 8px 32px;
-    border-radius: 16px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .header-publish:hover{
-    background-image: linear-gradient(-133deg,#004cfb,#85a1e1);
-    opacity: 0.85;
-    color: #000;
-
-  }
-  .right{
-    float: right;
-    cursor: pointer;
-  }
-  .left{
-    float: left;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  .left span{
-    margin-right: 18px;
-  }
-  .left > span:nth-child(1){
-    margin-right: 65px;
-    text-decoration: none;
-    color: #fff;
-  }
-  .normal{
-    background-color: black;
-  }
-
-</style>
 <script>
   import {baseUrl} from '@/config/config'
   import Login from '@/components/Login'

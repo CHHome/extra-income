@@ -16,7 +16,7 @@
     margin-left: 8px;
     opacity: 0.65;
   }
-  .pro-container .left{
+  .pro-container{
     background-color: #00ffb9;
     height: 7px;
     border-radius: 4px;

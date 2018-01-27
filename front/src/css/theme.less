@@ -1,0 +1,36 @@
+@baseColor: #fff;
+@secondColor: #00ffb9;
+@fontColor: #000;
+@btnBackImg: linear-gradient(-133deg,#00ffb9,#ACFFEC);
+.btnTheme(){
+  border-style: none;
+  line-height: 32px;
+  padding: 0 32px;
+  background-image: @btnBackImg;
+  border-radius: 16px;
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: #000;
+  letter-spacing: 0;
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.box-shadow(@color, @frist, @second, @third, @fouth:0){
+  -moz-box-shadow:@color @frist @second @third @fouth; /* Firefox */
+  -webkit-box-shadow:@color @frist @second @third @fouth; /* Safari 和 Chrome */
+  box-shadow: @color @frist @second @third @fouth; /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
+
+}
+.my-dialog(@size){
+  position: fixed;
+  top: 25%;
+  left: 50% - @size/2;
+  background-color: #fff;
+  width: @size;
+  padding: 30px;
+  .box-shadow(#cdcdcd,0,0,10px);
+  z-index: 10001;
+  opacity: 1;
+  border-radius: 4px;
+}
