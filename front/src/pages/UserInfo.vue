@@ -80,7 +80,7 @@
          font-size: 20px;
          font-weight: 500;
        }
-       & > i{
+       & > div> i{
          width: 40px;
          height: 5px;
          background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
@@ -91,7 +91,9 @@
          width: 60%;
          background-color: #f8f9fb;
          margin: 20px auto;
-         padding: 10px 30px;
+         min-width: 300px;
+         padding: 10px;
+         clear: both;
        }
     }
     .good-at{
@@ -149,9 +151,8 @@
     }
   }
   .add{
-    display: inline-block;
-    position: absolute;
-    right: 30px;
+    float: right;
+    margin-right: 30px;
     line-height: 32px;
     padding: 0 32px;
     border-radius: 16px;
@@ -230,11 +231,13 @@
       </div>
     </div>
     <div class="good-at">
-      <div class="title">
-        擅长技能
-        <div class="add" @click="showBox">{{goodAtText}}</div>
+      <div>
+        <div class="title">
+          擅长技能
+        </div>
+        <i></i>
       </div>
-      <i></i>
+      <div class="add" @click="showBox">{{goodAtText}}</div>
       <div class="user-select" @click="remove">
         <span v-for="item in selected">{{item}}<i class="glyphicon glyphicon-remove"></i></span>
       </div>
@@ -276,15 +279,19 @@
       </transition>
     </div>
     <div class="project">
-      <div class="title">
-        项目案例
-        <div class="add" @click="showBoxPro">{{projectText}}</div>
+      <div>
+        <div class="title">
+          项目案例
+        </div>
+        <i></i>
       </div>
-      <i></i>
+      <div class="add" @click="showBoxPro">{{projectText}}</div>
       <transition name="box-fade">
         <div v-show="projectBox">
           <span>建议提交两个以上具有代表性的作品</span>
-          <project-box></project-box>
+          <project-box
+          @proCancle="showBoxPro"
+          @confirmPro="confirmPro"></project-box>
         </div>
       </transition>
     </div>
@@ -311,7 +318,6 @@
         this.reader.addEventListener("load", () => {
           this.$store.commit('changeSingerState', {stateName: 'curtain', value: true})
           this.showPortrait = !this.showPortrait
-          console.log(this.showPortrait)
         }, false);
       })
     },
@@ -326,7 +332,8 @@
         category: category,
         selected: [],
         goodAtText: '添加',
-        projectText: '添加'
+        projectText: '添加',
+        projectList: []
       }
     },
     methods: {
@@ -363,6 +370,11 @@
         $('.userImg>img')[0].src = headSrc.result
         this.mainInfo.headPic = headSrc.result.split(/;base64,/)[1]
       },
+      confirmPro (obj) {
+        this.projectList.unshift(obj)
+        console.log(this.projectList)
+        this.showBoxPro()
+      },
       showBox(){
         if (this.goodAtText === '添加') {
           this.goodAtText = '取消'
@@ -372,7 +384,6 @@
         this.goodAtBox = !this.goodAtBox
       },
       select (e) {
-        console.log()
         if (e.target.nodeName === 'DIV') {
           return
         }

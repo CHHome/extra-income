@@ -7,8 +7,10 @@ import router from './router'
 import Vuex from 'vuex'
 import 'bootstrap-webpack'
 import $ from 'jquery'
+import Vuelidate from 'vuelidate'
 
 window.$ = $
+
 router.beforeEach((to, from, next) => {
   let webStore = window.localStorage
   if (!store.state.hasLogin && 'token' in webStore) {
@@ -19,7 +21,7 @@ router.beforeEach((to, from, next) => {
       } else {
         xhr = new ActiveXObject()
       }
-      xhr.open('POST', 'http://127.0.0.1:8081/tokenCheck')
+      xhr.open('POST', 'http://192.168.0.101:8081/tokenCheck')
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
       xhr.send('token=' + webStore['token'])
       xhr.onreadystatechange = () => {
@@ -47,7 +49,7 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-
+Vue.use(Vuelidate)
 Vue.use(Vuex)
 Vue.use(resource)
 Vue.config.productionTip = false

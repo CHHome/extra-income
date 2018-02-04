@@ -4,6 +4,8 @@ const Index = () => import('@/pages/Index')
 const Projects = () => import('@/pages/Projects')
 const Expert = () => import('@/pages/Expert')
 const UserInfo = () => import('@/pages/UserInfo')
+
+
 Vue.use(Router)
 
 export default new Router({
