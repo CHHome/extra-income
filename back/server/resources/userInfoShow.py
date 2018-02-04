@@ -19,6 +19,7 @@ resource_filed = {
     'price': fields.Integer,
     'has_finish': fields.Integer,
     'head_img': fields.String
+    # 'list': fields.List
 }
 
 

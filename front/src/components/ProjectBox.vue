@@ -36,7 +36,7 @@
     & > div{
       width: 50%;
       margin: 20px auto;
-      min-width: 280px;
+      min-width: 260px;
       text-align: left;
       input, textarea{
         width:100%;
@@ -106,7 +106,7 @@
   export default {
     data () {
       return {
-        imgUrl: null,
+        imgUrl: '',
         proName: '',
         player: '',
         industry:''
@@ -153,18 +153,13 @@
           return
         }
         let obj = {}
-        if (this.imgUrl) {
-          obj.proImg = this.imgUrl.split(/;base64,/)[1]
-        } else {
-          obj.proImg = null
-        }
+        obj.proImg = this.imgUrl.split(/;base64,/)[1]
         obj.proName = this.proName
         obj.player = this.player
         obj.industry = this.industry
         obj.linkTo = document.getElementById('linkto').value
         obj.describe = document.getElementById('describe').value
         this.$emit('confirmPro', obj)
-        this.imgUrl = null
       }
     }
   }

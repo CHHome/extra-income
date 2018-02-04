@@ -70,9 +70,10 @@
     }
      .goodAt-pro(){
       width:85%;
+      min-width: 300px;
       background-color: #fff;
       margin: 30px auto;
-      padding: 50px 0;
+      padding: 50px 10px;
       position: relative;
        .title{
          color: #000;
@@ -86,12 +87,12 @@
          background-image: linear-gradient(-133deg,#00ffb9,#ACFFEC);
          display: inline-block;
        }
-       & > div:nth-last-child(1){
+       & > .add-box{
          position: relative;
          width: 60%;
          background-color: #f8f9fb;
          margin: 20px auto;
-         min-width: 300px;
+         min-width: 280px;
          padding: 10px;
          clear: both;
        }
@@ -242,7 +243,7 @@
         <span v-for="item in selected">{{item}}<i class="glyphicon glyphicon-remove"></i></span>
       </div>
       <transition name="box-fade">
-        <div v-show="goodAtBox">
+        <div class="add-box" v-show="goodAtBox">
           <div>
             <header>
               开发
@@ -286,14 +287,16 @@
         <i></i>
       </div>
       <div class="add" @click="showBoxPro">{{projectText}}</div>
-      <transition name="box-fade">
-        <div v-show="projectBox">
+      <transition name="box-fade" >
+        <div v-show="projectBox" class="add-box">
           <span>建议提交两个以上具有代表性的作品</span>
           <project-box
           @proCancle="showBoxPro"
-          @confirmPro="confirmPro"></project-box>
+          @confirmPro="confirmPro"
+          :key="viewId"></project-box>
         </div>
       </transition>
+      <show-old-pro v-for="item in projectList" :item="item"></show-old-pro>
     </div>
     <div class="submit-banner">
       <span @click="submit">保存</span>
@@ -308,6 +311,7 @@
   import Portrait from '@/components/Portrait'
   import ProjectBox from '@/components/ProjectBox'
   import {category} from '@/js/webData'
+  import ShowOldPro from '@/components/ShowOldPro'
   export default {
     created () {
       this.mainInfo.head_img = 'default_head.jpg'
@@ -333,7 +337,8 @@
         selected: [],
         goodAtText: '添加',
         projectText: '添加',
-        projectList: []
+        projectList: [],
+        viewId: 0
       }
     },
     methods: {
@@ -353,6 +358,7 @@
       },
       ...mapMutations(['changeSinger']),
       submit () {
+        this.mainInfo.projectList = this.projectList
         this.mainInfo.good_at = this.selected.join(' ');
         this.mainInfo.token = window.localStorage.token
         this.$http.post(baseUrl + 'userInfoSave', this.mainInfo)
@@ -372,7 +378,6 @@
       },
       confirmPro (obj) {
         this.projectList.unshift(obj)
-        console.log(this.projectList)
         this.showBoxPro()
       },
       showBox(){
@@ -402,6 +407,7 @@
         this.projectBox = !this.projectBox
         if (this.projectText === '添加') {
           this.projectText = '取消'
+          this.viewId++
         } else {
           this.projectText = '添加'
         }
@@ -425,7 +431,8 @@
     components: {
       MyProgress,
       Portrait,
-      ProjectBox
+      ProjectBox,
+      ShowOldPro
     }
   }
 </script>

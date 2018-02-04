@@ -12,7 +12,7 @@ class Users(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=True)
     gender = db.Column(db.String(2), unique=False, nullable=True)
     age = db.Column(db.String(3), unique=False, nullable=True)
-    good_at = db.Column(db.String(64), nullable=True)
+    good_at = db.Column(db.String(520), nullable=True)
     on_time = db.Column(db.Integer, nullable=False)
     credit = db.Column(db.Integer, nullable=False)
     quality = db.Column(db.Integer, nullable=False)
@@ -35,7 +35,25 @@ class Users(db.Model):
         return '<User %r>' % self.username
 
 
+class OldProject(db.Model):
+    __tablename__ = 'oldproject'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=False, nullable=False)
+    pro_name = db.Column(db.String(30), unique=False, nullable=False)
+    player = db.Column(db.String(20), unique=False, nullable=False)
+    industry = db.Column(db.String(20), unique=False, nullable=False)
+    head_img = db.Column(db.String(30), unique=False, default='default_pro.jpg')
+    link_to = db.Column(db.String(100), unique=False, nullable=True)
+    describe = db.Column(db.String(200), unique=False, nullable=True)
 
+    def __init__(self, pro_name, username, player, industry):
+        self.pro_name = pro_name
+        self.username = username
+        self.player = player
+        self.industry = industry
+
+    def __repr__(self):
+        return '<OldProject %r>' % self.pro_name
 
 # class Admin(db.Model):
 #     __tablename__ = 'admins'
