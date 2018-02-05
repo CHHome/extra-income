@@ -3,18 +3,18 @@
 from flask.ext import restful
 from flask_restful import reqparse
 from .. import db
-from ..models import Users
+from ..models import User
 
 
 class Register(restful.Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('phone', type=str, required=True, help='phone is required', location='form')
-        parser.add_argument('username', type=str, required=True, help='username is required', location='form')
+        parser.add_argument('userName', type=str, required=True, help='user Name is required', location='form')
         parser.add_argument('password', type=str, required=True, help='password is required', location='form')
         args = parser.parse_args()
-        user = Users(args['phone'], args['username'], args['password'])
-        user.on_time = 33
+        user = User(args['phone'], args['userName'], args['password'])
+        user.onTime = 33
         user.credit = 55
         user.quality = 44
         db.session.add(user)

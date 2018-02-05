@@ -25,7 +25,7 @@ app.post('/tokenCheck', urlencodedParser, function (req, res) {
     let sha1 = crypto.createHash("sha1")
     let tokenArray = req.body.token.split('-')
     let userId = tokenArray[0]
-    connection.query('select * from users where id='+userId, function(error, result,  fields) {
+    connection.query('select * from user where id='+userId, function(error, result,  fields) {
         console.log(new Date().getTime() ,'-', tokenArray[1]*1000)
         if(error)
             console.error(error)

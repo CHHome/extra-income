@@ -2,87 +2,87 @@ from . import db
 import time
 
 
-class Users(db.Model):
-    __tablename__ = 'users'
+class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     phone = db.Column(db.String(20), unique=True, nullable=False)
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    userName = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(520), nullable=False)
-    register_time = db.Column(db.String(32), unique=False, nullable=False)
+    registerTime = db.Column(db.String(32), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=True)
     gender = db.Column(db.String(2), unique=False, nullable=True)
     age = db.Column(db.String(3), unique=False, nullable=True)
-    good_at = db.Column(db.String(520), nullable=True)
-    on_time = db.Column(db.Integer, nullable=False)
+    goodAt = db.Column(db.String(520), nullable=True)
+    onTime = db.Column(db.Integer, nullable=False)
     credit = db.Column(db.Integer, nullable=False)
     quality = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=True)
-    has_finish = db.Column(db.Integer, nullable=False)
-    old_project = db.relationship('OldProject', backref='users', lazy='dynamic')
-    head_img = db.Column(db.String(120), unique=False, default='default_head.jpg')
+    hasFinish = db.Column(db.Integer, nullable=False)
+    oldProject = db.relationship('OldProject', backref='user', lazy='dynamic')
+    headImg = db.Column(db.String(120), unique=False, default='default_head.jpg')
 
-    def __init__(self, phone, username, password, register_time=time.time(), on_time=0, credit=0, quality=0,
+    def __init__(self, phone, user_name, password, register_time=time.time(), on_time=0, credit=0, quality=0,
                  has_finish=0):
-        self.username = username
+        self.userName = user_name
         self.password = password
         self.phone = phone
-        self.register_time = register_time
-        self.on_time = on_time
+        self.registerTime = register_time
+        self.onTime = on_time
         self.credit = credit
         self.quality = quality
-        self.has_finish = has_finish
+        self.hasFinish = has_finish
 
     def __repr__(self):
-        return '<Users %r>' % self.username
+        return '<Users %r>' % self.userName
 
     def to_dict(self):
         return {
             'id': self.id,
             'phone': self.phone,
-            'username': self.username,
-            'register_time': self.register_time,
+            'userName': self.userName,
+            'registerTime': self.registerTime,
             'email': self.email,
             'gender': self.gender,
             'age': self.age,
-            'good_at': self.good_at,
-            'on_time': self.on_time,
+            'goodAt': self.goodAt,
+            'onTime': self.onTime,
             'credit': self.credit,
             'quality': self.quality,
             'price': self.price,
-            'has_finish': self.has_finish,
-            'head_img': self.head_img,
+            'hasFinish': self.hasFinish,
+            'headImg': self.headImg,
         }
 
 
 class OldProject(db.Model):
     __tablename__ = 'oldproject'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), db.ForeignKey('users.username'), unique=False, nullable=False)
-    pro_name = db.Column(db.String(30), unique=False, nullable=False)
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'), unique=False)
+    proName = db.Column(db.String(30), unique=False, nullable=False)
     player = db.Column(db.String(20), unique=False, nullable=False)
     industry = db.Column(db.String(20), unique=False, nullable=False)
-    head_img = db.Column(db.String(30), unique=False, default='default_pro.jpg')
-    link_to = db.Column(db.String(100), unique=False, nullable=True)
-    describe = db.Column(db.String(200), unique=False, nullable=True)
+    headImg = db.Column(db.String(30), unique=False, default='project/default_pro.jpg')
+    linkTo = db.Column(db.String(100), unique=False, default='')
+    describe = db.Column(db.String(200), unique=False, default='')
 
-    def __init__(self, pro_name, username, player, industry):
-        self.pro_name = pro_name
-        self.username = username
+    def __init__(self, user_id, pro_name, player, industry):
+        self.proName = pro_name
+        self.userId = user_id
         self.player = player
         self.industry = industry
 
     def __repr__(self):
-        return '<OldProject %r>' % self.pro_name
+        return '<OldProject %r>' % self.proName
 
     def to_dict(self):
         return{
             'id': self.id,
-            'username': self.username,
-            'pro_name': self.pro_name,
+            'userId': self.userId,
+            'proName': self.proName,
             'player': self.player,
             'industry': self.industry,
-            'head_img': self.head_img,
-            'link_to': self.link_to,
+            'headImg': self.headImg,
+            'linkTo': self.linkTo,
             'describe': self.describe
         }
 

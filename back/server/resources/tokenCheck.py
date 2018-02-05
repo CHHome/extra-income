@@ -3,7 +3,7 @@
 
 from flask.ext import restful
 from flask_restful import reqparse
-from ..models import Users
+from ..models import User
 import hashlib
 import time
 import base64
@@ -19,7 +19,7 @@ class TokenCheck(restful.Resource):
         parser.add_argument('token', type=str, required=True, help='token is required', location='form')
         args = parser.parse_args()
         tokenArr = args['token'].split('-')
-        user = Users.query.filter_by(id=tokenArr[0]).first()
+        user = User.query.filter_by(id=tokenArr[0]).first()
         print(round(time.time(), 5), '-', round(float(tokenArr[1]), 5))
         if time.time() < float(tokenArr[1]):
             s = '%s-%s-%s-%s' % (user.id, user.password, tokenArr[1], secretKey)
