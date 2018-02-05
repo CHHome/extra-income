@@ -3,7 +3,7 @@ import time
 
 
 class Users(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     phone = db.Column(db.String(20), unique=True, nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -18,6 +18,7 @@ class Users(db.Model):
     quality = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=True)
     has_finish = db.Column(db.Integer, nullable=False)
+    old_project = db.relationship('OldProject', backref='users', lazy='dynamic')
     head_img = db.Column(db.String(120), unique=False, default='default_head.jpg')
 
     def __init__(self, phone, username, password, register_time=time.time(), on_time=0, credit=0, quality=0,
@@ -32,13 +33,31 @@ class Users(db.Model):
         self.has_finish = has_finish
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Users %r>' % self.username
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'phone': self.phone,
+            'username': self.username,
+            'register_time': self.register_time,
+            'email': self.email,
+            'gender': self.gender,
+            'age': self.age,
+            'good_at': self.good_at,
+            'on_time': self.on_time,
+            'credit': self.credit,
+            'quality': self.quality,
+            'price': self.price,
+            'has_finish': self.has_finish,
+            'head_img': self.head_img,
+        }
 
 
 class OldProject(db.Model):
     __tablename__ = 'oldproject'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=False, nullable=False)
+    username = db.Column(db.String(80), db.ForeignKey('users.username'), unique=False, nullable=False)
     pro_name = db.Column(db.String(30), unique=False, nullable=False)
     player = db.Column(db.String(20), unique=False, nullable=False)
     industry = db.Column(db.String(20), unique=False, nullable=False)
@@ -54,6 +73,18 @@ class OldProject(db.Model):
 
     def __repr__(self):
         return '<OldProject %r>' % self.pro_name
+
+    def to_dict(self):
+        return{
+            'id': self.id,
+            'username': self.username,
+            'pro_name': self.pro_name,
+            'player': self.player,
+            'industry': self.industry,
+            'head_img': self.head_img,
+            'link_to': self.link_to,
+            'describe': self.describe
+        }
 
 # class Admin(db.Model):
 #     __tablename__ = 'admins'

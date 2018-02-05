@@ -62,8 +62,8 @@ class UserInfoSave(restful.Resource):
                 print(oldproject.id)
                 oldproject.link_to = proDict['linkTo']
                 oldproject.describe = proDict['describe']
-            if proDict['proImg'] != '':
-                self.saveFile(proDict['proImg'], 'project/', oldproject)
+            if proDict['head_img'] != '':
+                self.saveFile(proDict['head_img'], 'project/', oldproject)
             db.session.commit()
 
     def saveFile(self, baseStr, dir, obj):
