@@ -39,7 +39,9 @@
 
 <template>
   <div class="show-pro">
-    <img :src="'data:image/png;base64,'+item.proImg" alt="">
+    <img :src="item.head_img" v-if="item.head_img.indexOf('base64,') != -1" alt="">
+    <img :src="baseUrl+'static/imgs/project/default_pro.jpg'" v-else-if="item.head_img == ''"/>
+    <img :src="baseUrl+'static/imgs/'+item.head_img" v-else/>
     <div class="show-pro-info">
       <div class="show-pro-info-title">
         <span>{{item.proName}}</span>
@@ -60,7 +62,13 @@
   </div>
 </template>
 <script>
+  import {baseUrl} from '@/config/config'
   export default{
-    props: ['item']
+    props: ['item'],
+    data () {
+      return{
+        baseUrl: baseUrl
+      }
+    }
   }
 </script>

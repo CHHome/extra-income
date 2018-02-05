@@ -153,7 +153,7 @@
           return
         }
         let obj = {}
-        obj.proImg = this.imgUrl.split(/;base64,/)[1]
+        obj.head_img = this.imgUrl
         obj.proName = this.proName
         obj.player = this.player
         obj.industry = this.industry

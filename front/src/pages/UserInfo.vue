@@ -347,6 +347,7 @@
         this.$http.get(baseUrl + 'userInfoShow', {params: {token: store['token']}})
           .then(res => {
             this.mainInfo = res.data
+            this.projectList = this.mainInfo.projectList
             if (this.mainInfo.good_at !== '') {
               if (this.mainInfo.good_at !== null) {
                 this.selected = this.mainInfo.good_at.split(' ')

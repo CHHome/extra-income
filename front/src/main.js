@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
       } else {
         xhr = new ActiveXObject()
       }
-      xhr.open('POST', 'http://192.168.0.102:8081/tokenCheck')
+      xhr.open('POST', 'http://192.168.0.103:8081/tokenCheck')
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
       xhr.send('token=' + webStore['token'])
       xhr.onreadystatechange = () => {
