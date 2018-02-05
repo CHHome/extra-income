@@ -193,12 +193,12 @@
       <div class="col-md-7 ">
         <div class="row">
           <div class="col-md-6 userImg" @click="changePortrait">
-            <img v-bind:src="baseUrl+'static/imgs/'+mainInfo.head_img" alt="更换头像" >
+            <img v-bind:src="baseUrl+'static/imgs/'+mainInfo.headImg" alt="更换头像" >
             <input type="file" name="headPic">
           </div>
           <div class="col-md-6 ">
             <label>姓名  </label>
-            <input type="text" v-model="mainInfo.username"><br>
+            <input type="text" v-model="mainInfo.userName"><br>
             <label>年龄  </label>
             <input type="text"  v-model="mainInfo.age"><br>
             <label>手机  </label>
@@ -211,7 +211,7 @@
       <div class="col-md-5">
         <div class="justChange">
           <my-progress
-            :value="mainInfo.on_time"
+            :value="mainInfo.onTime"
             :label="'准时率'"
           ></my-progress>
           <my-progress
@@ -227,7 +227,7 @@
           <label >报价</label>
           <input type="text" placeholder="800" v-model="mainInfo.price"><br/>
           <label>成交量</label>
-          <span>{{mainInfo.has_finish}}</span>
+          <span>{{mainInfo.hasFinish}}</span>
         </div>
       </div>
     </div>
@@ -314,7 +314,7 @@
   import ShowOldPro from '@/components/ShowOldPro'
   export default {
     created () {
-      this.mainInfo.head_img = 'default_head.jpg'
+      this.mainInfo.headImg = 'default_head.jpg'
     },
     mounted () {
       $('.userImg>input').bind('change', () => {
@@ -348,9 +348,9 @@
           .then(res => {
             this.mainInfo = res.data
             this.projectList = this.mainInfo.projectList
-            if (this.mainInfo.good_at !== '') {
-              if (this.mainInfo.good_at !== null) {
-                this.selected = this.mainInfo.good_at.split(' ')
+            if (this.mainInfo.goodAt !== '') {
+              if (this.mainInfo.goodAt !== null) {
+                this.selected = this.mainInfo.goodAt.split(' ')
               }
             }
           }, res => {
@@ -360,7 +360,7 @@
       ...mapMutations(['changeSinger']),
       submit () {
         this.mainInfo.projectList = this.projectList
-        this.mainInfo.good_at = this.selected.join(' ');
+        this.mainInfo.goodAt = this.selected.join(' ');
         this.mainInfo.token = window.localStorage.token
         this.$http.post(baseUrl + 'userInfoSave', this.mainInfo)
           .then(res => {

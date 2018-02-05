@@ -39,9 +39,9 @@
 
 <template>
   <div class="show-pro">
-    <img :src="item.head_img" v-if="item.head_img.indexOf('base64,') != -1" alt="">
-    <img :src="baseUrl+'static/imgs/project/default_pro.jpg'" v-else-if="item.head_img == ''"/>
-    <img :src="baseUrl+'static/imgs/'+item.head_img" v-else/>
+    <img :src="item.imgData" v-if="typeof item.imgData !='undefined'&&item.imgData != ''" alt="">
+    <img :src="baseUrl+'static/imgs/project/default_pro.jpg'" v-else-if="typeof item.headImg == 'undefined'"/>
+    <img :src="baseUrl+'static/imgs/'+item.headImg" v-else/>
     <div class="show-pro-info">
       <div class="show-pro-info-title">
         <span>{{item.proName}}</span>

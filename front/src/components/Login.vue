@@ -13,7 +13,7 @@
       <div class="form-group">
         <label for="accout" class="col-sm-2 control-label">帐号:</label>
         <div class="col-sm-8">
-          <input v-model="username" type="text" id="accout" class="form-control" placeholder="请输入手机号/邮箱" name="username">
+          <input v-model="userName" type="text" id="accout" class="form-control" placeholder="请输入手机号/邮箱" name="username">
         </div>
       </div>
       <div class="form-group">
@@ -49,7 +49,7 @@
     name: 'Login',
     data () {
       return {
-        username: '',
+        userName: '',
         password: ''
       }
     },
@@ -59,7 +59,7 @@
       },
       submit () {
         this.$http.post(baseUrl + 'login', {
-          username: this.username,
+          userName: this.userName,
           password: sha1(this.password)
         }, {emulateJSON: true}).then(res => {
 //          todo 保存登录状态

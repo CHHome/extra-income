@@ -153,7 +153,7 @@
           return
         }
         let obj = {}
-        obj.head_img = this.imgUrl
+        obj.imgData = this.imgUrl
         obj.proName = this.proName
         obj.player = this.player
         obj.industry = this.industry
