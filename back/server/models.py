@@ -53,6 +53,21 @@ class User(db.Model):
             'headImg': self.headImg,
         }
 
+    def to_show(self):
+        return {
+            'userName': self.userName,
+            'email': self.email,
+            'gender': self.gender,
+            'age': self.age,
+            'goodAt': self.goodAt,
+            'onTime': self.onTime,
+            'credit': self.credit,
+            'quality': self.quality,
+            'price': self.price,
+            'hasFinish': self.hasFinish,
+            'headImg': self.headImg,
+        }
+
 
 class OldProject(db.Model):
     __tablename__ = 'oldproject'

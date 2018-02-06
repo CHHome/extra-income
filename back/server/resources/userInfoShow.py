@@ -27,11 +27,15 @@ class UserInfoShow(restful.Resource):
     # @marshal_with(resource_filed)
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('token', type=str, required=True, help='token is required')
+        parser.add_argument('id', type=int, required=True, help='id is required')
+        parser.add_argument('type', type=str, required=False)
         args = parser.parse_args()
-        tokenArr = args['token'].split('-')
-        user = User.query.filter_by(id=tokenArr[0]).first()
-        responseData = user.to_dict()
+        id = args['id']
+        user = User.query.filter_by(id=id).first()
+        if args['type'] is None:
+            responseData = user.to_dict()
+        else:
+            responseData = user.to_show()
         proList = list()
         for item in user.oldProject.all():
             proList.append(item.to_dict())

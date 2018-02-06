@@ -300,7 +300,7 @@
     </div>
     <div class="submit-banner">
       <span @click="submit">保存</span>
-      <span>预览</span>
+      <span><router-link :to="{name:'showUserInfo', params: {id: id}}">预览</router-link></span>
     </div>
   </div>
 </template>
@@ -327,6 +327,7 @@
     },
     data () {
       return {
+        id: null,
         baseUrl: baseUrl,
         showPortrait: false,
         mainInfo: {},
@@ -344,7 +345,8 @@
     methods: {
       getInfo () {
         let store = window.localStorage
-        this.$http.get(baseUrl + 'userInfoShow', {params: {token: store['token']}})
+        this.id = store['token'].split('-')[0]
+        this.$http.get(baseUrl + 'userInfoShow', {params: {id: store['token'].split('-')[0]}})
           .then(res => {
             this.mainInfo = res.data
             this.projectList = this.mainInfo.projectList
@@ -421,10 +423,10 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        vm.getInfo()
         if (!vm.$store.state.hasLogin) {
           vm.$router.push({name: 'index'})
         }
+        vm.getInfo()
         window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })

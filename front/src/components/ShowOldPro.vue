@@ -1,18 +1,21 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import '../css/theme.less';
   .show-pro{
+    border: 1px solid #e4e4e4;
+    border-top:none ;
     position: relative;
     width: 60%;
-    margin: 20px auto;
+    margin: 40px auto;
     background-color: #fff;
     min-width: 280px;
-    padding: 10px;
     clear: both;
+    padding-bottom: 40px;
     img{
       width:100%;
     }
     .show-pro-info{
       text-align: left;
+      padding: 10px;
       .show-pro-info-title{
         font-weight: 600;
         font-size: 16px;
@@ -53,7 +56,7 @@
       </p>
       <div>
         <a :href="item.linkTo">作品链接</a>
-        <div class="show-pro-info-opt">
+        <div class="show-pro-info-opt" v-if="typeof this.type == 'undefined'">
           <i class="glyphicon glyphicon-pencil"></i>
           <i class="glyphicon glyphicon-calendar"></i>
         </div>
@@ -64,7 +67,7 @@
 <script>
   import {baseUrl} from '@/config/config'
   export default{
-    props: ['item'],
+    props: ['item', 'type'],
     data () {
       return{
         baseUrl: baseUrl

@@ -4,7 +4,7 @@ const Index = () => import('@/pages/Index')
 const Projects = () => import('@/pages/Projects')
 const Expert = () => import('@/pages/Expert')
 const UserInfo = () => import('@/pages/UserInfo')
-
+const ShowUserInfo = () => import('@/pages/ShowUserInfo')
 
 Vue.use(Router)
 
@@ -29,6 +29,12 @@ export default new Router({
       path: '/userInfo',
       name: 'userInfo',
       component: UserInfo
+    },
+    {
+      path: '/showUserInfo/:id',
+      name: 'showUserInfo',
+      component: ShowUserInfo,
+      props: true,
     }
   ]
 })
