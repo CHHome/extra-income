@@ -19,6 +19,7 @@ class User(db.Model):
     price = db.Column(db.Integer, nullable=True)
     hasFinish = db.Column(db.Integer, nullable=False)
     oldProject = db.relationship('OldProject', backref='user', lazy='dynamic')
+    release = db.relationship('ReleasePro', backref='employer', lazy='dynamic')
     headImg = db.Column(db.String(120), unique=False, default='default_head.jpg')
 
     def __init__(self, phone, user_name, password, register_time=time.time(), on_time=0, credit=0, quality=0,
@@ -100,6 +101,36 @@ class OldProject(db.Model):
             'linkTo': self.linkTo,
             'describe': self.describe
         }
+
+
+class ReleasePro(db.Model):
+    __tablename__ = 'releasepro'
+    id = db.Column(db.Integer, primary_key=True)
+    employerId = db.Column(db.Integer, db.ForeignKey('user.id'), unique=False)
+    projectName = db.Column(db.String(30), nullable=False)
+    firstType = db.Column(db.String(10), nullable=False)
+    secondType = db.Column(db.String(10), nullable=False)
+    describe = db.Column(db.String(500), nullable=False)
+    budget = db.Column(db.Integer, nullable=False)
+    cycle = db.Column(db.Integer, nullable=False)
+    company = db.Column(db.String(30), nullable=True)
+    status = db.Column(db.String(2), default='1')
+    releaseTime = db.Column(db.String(32), nullable=False)
+
+    def __init__(self, employer_id, project_name, first_type, second_type, describe, budget, cycle, company, release_time = time.time()):
+        self.employerId = employer_id
+        self.projectName = project_name
+        self.firstType = first_type
+        self.secondType = second_type
+        self.describe = describe
+        self.budget = budget
+        self.cycle = cycle
+        self.company = company
+        self.releaseTime = release_time
+
+    def __repr__(self):
+        return '<Release %r>' % self.projectName
+
 
 # class Admin(db.Model):
 #     __tablename__ = 'admins'

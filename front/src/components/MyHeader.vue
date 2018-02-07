@@ -110,7 +110,9 @@
         <span>服务指南</span>
       </div>
       <div>
-        <span class="header-publish">发布项目</span>
+        <router-link :to="{name: 'releasePro'}">
+          <span class="header-publish">发布项目</span>
+        </router-link>
         <div class="user-info" v-show="$store.state.hasLogin">
           <div class="dropdown" @click="infoToggle">
             <img v-bind:src="baseUrl+'static/imgs/genhong.jpeg'" alt="">

@@ -5,6 +5,7 @@ const Projects = () => import('@/pages/Projects')
 const Expert = () => import('@/pages/Expert')
 const UserInfo = () => import('@/pages/UserInfo')
 const ShowUserInfo = () => import('@/pages/ShowUserInfo')
+const ReleasePro = () => import('@/pages/ReleasePro')
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
       name: 'showUserInfo',
       component: ShowUserInfo,
       props: true,
+    },
+    {
+      path: '/releasePro',
+      name: 'releasePro',
+      component: ReleasePro
     }
   ]
 })

@@ -9,6 +9,7 @@ from .resources.userInfoSave import UserInfoSave
 from .resources.userInfoShow import UserInfoShow
 from .resources.tokenCheck import TokenCheck
 from .resources.Register import Register
+from .resources.releaseSave import ReleaseSave
 
 
 api.add_resource(Hello, '/')
@@ -18,5 +19,6 @@ api.add_resource(Register, '/register')
 api.add_resource(TokenCheck, '/tokenCheck')
 api.add_resource(UserInfoSave, '/userInfoSave')
 api.add_resource(UserInfoShow, '/userInfoShow')
+api.add_resource(ReleaseSave, '/releaseSave')
 
 

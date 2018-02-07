@@ -31,7 +31,7 @@ class UserInfoSave(restful.Resource):
         tokenArr = args['token'].split('-')
         user = User.query.filter_by(id=tokenArr[0]).first()
         self.saveOldPro(args['projectList'], user.id)
-        if(args['headPic']):
+        if args['headPic']:
             self.saveFile(args['headPic'], '', user)
         user.userName = args.userName
         user.age = args.age
