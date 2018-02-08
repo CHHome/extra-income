@@ -255,7 +255,6 @@
       ShowOldPro
     },
     beforeRouteEnter (to, from, next) {
-      console.log('646466')
       next(vm => {
         if (!vm.$store.state.hasLogin) {
           vm.$router.push({name: 'index'})

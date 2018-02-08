@@ -116,8 +116,10 @@ class ReleasePro(db.Model):
     company = db.Column(db.String(30), nullable=True)
     status = db.Column(db.String(2), default='1')
     releaseTime = db.Column(db.String(32), nullable=False)
+    apply = db.Column(db.Integer, default=0)
+    browse = db.Column(db.Integer, default=0)
 
-    def __init__(self, employer_id, project_name, first_type, second_type, describe, budget, cycle, company, release_time = time.time()):
+    def __init__(self, employer_id, project_name, first_type, second_type, describe, budget, cycle, company, release_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())):
         self.employerId = employer_id
         self.projectName = project_name
         self.firstType = first_type

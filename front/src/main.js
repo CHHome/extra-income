@@ -8,6 +8,9 @@ import Vuex from 'vuex'
 import 'bootstrap-webpack'
 import $ from 'jquery'
 import Vuelidate from 'vuelidate'
+import axios from 'axios'
+
+Vue.prototype.$ajax = axios
 
 window.$ = $
 

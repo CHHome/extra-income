@@ -6,6 +6,7 @@ const Expert = () => import('@/pages/Expert')
 const UserInfo = () => import('@/pages/UserInfo')
 const ShowUserInfo = () => import('@/pages/ShowUserInfo')
 const ReleasePro = () => import('@/pages/ReleasePro')
+const ShowReleasePro = () => import('@/pages/ShowReleasePro')
 
 Vue.use(Router)
 
@@ -41,6 +42,12 @@ export default new Router({
       path: '/releasePro',
       name: 'releasePro',
       component: ReleasePro
+    },
+    {
+      path: '/showReleasePro/:id',
+      name: 'showReleasePro',
+      component: ShowReleasePro,
+      props: true,
     }
   ]
 })
