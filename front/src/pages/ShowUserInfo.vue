@@ -135,8 +135,15 @@
   }
   .main-info span{
     color: #fff;
+    vertical-align: middle;
     display: inline-block;
-    min-width:100px;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100px;
+    text-overflow: ellipsis;
+  }
+  .left-info{
+    text-align: left;
   }
   .selected{
     background-color: #00ffb9;
@@ -151,15 +158,19 @@
           <div class="col-md-6 userImg">
             <img v-bind:src="baseUrl+'static/imgs/'+mainInfo.headImg" alt="更换头像" >
           </div>
-          <div class="col-md-6 ">
+          <div class="col-md-6 left-info">
             <label>姓名  </label>
             <span>{{mainInfo.userName}}</span><br>
+            <label>职业  </label>
+            <span>{{mainInfo.profession}}</span><br>
             <label>年龄  </label>
             <span>{{mainInfo.age}}</span><br>
             <label>手机  </label>
             <span>{{mainInfo.phone}}</span><br>
             <label >邮箱  </label>
             <span>{{mainInfo.email}}</span><br>
+            <label>简介  </label>
+            <span :title="mainInfo.synopsis">{{mainInfo.synopsis}}</span><br>
           </div>
         </div>
       </div>
@@ -216,7 +227,6 @@
   import ShowOldPro from '@/components/ShowOldPro'
   export default {
     created () {
-      console.log('ceated')
       this.mainInfo.headImg = 'default_head.jpg'
     },
     mounted(){
@@ -256,13 +266,18 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        if (!vm.$store.state.hasLogin) {
-          vm.$router.push({name: 'index'})
-        }
         vm.getInfo()
         window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
+    },
+    beforeRouteLeave (to, from, next) {
+      console.log('sfsf')
+      this.mainInfo = {}
+      this.mainInfo.headImg = 'default_head.jpg'
+      this.selected = []
+      this.projectList = []
+      next()
     }
   }
 </script>

@@ -10,7 +10,6 @@ import base64
 import hmac
 
 secretKey = 'JD98Dskw=23njQndW9D'
-maxAge = 10
 
 
 class TokenCheck(restful.Resource):
@@ -24,7 +23,6 @@ class TokenCheck(restful.Resource):
         if time.time() < float(tokenArr[1]):
             s = '%s-%s-%s-%s' % (user.id, user.password, tokenArr[1], secretKey)
             if hashlib.sha1(s.encode('utf-8')).hexdigest() == tokenArr[2]:
-                return 1
+                return 10000
         else:
-            return 0
-
+            return 11000

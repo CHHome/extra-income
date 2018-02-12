@@ -4,6 +4,7 @@ from flask.ext import restful
 from flask_restful import reqparse
 from .. import db
 from ..models import User
+import random
 
 
 class Register(restful.Resource):
@@ -14,9 +15,10 @@ class Register(restful.Resource):
         parser.add_argument('password', type=str, required=True, help='password is required', location='form')
         args = parser.parse_args()
         user = User(args['phone'], args['userName'], args['password'])
-        user.onTime = 33
-        user.credit = 55
-        user.quality = 44
+        user.onTime = random.randint(60, 100)
+        user.credit = random.randint(60, 100)
+        user.quality = random.randint(60, 100)
+        user.totalScore = user.onTime + user.credit + user.quality
         db.session.add(user)
         db.session.commit()
         return '1'

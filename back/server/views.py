@@ -11,6 +11,8 @@ from .resources.tokenCheck import TokenCheck
 from .resources.Register import Register
 from .resources.releaseSave import ReleaseSave
 from .resources.showReleasePro import ShowReleasePro
+from .resources.Recommend import Recommend
+from .resources.showBase import ShowBase
 
 
 
@@ -23,6 +25,7 @@ api.add_resource(UserInfoSave, '/userInfoSave')
 api.add_resource(UserInfoShow, '/userInfoShow')
 api.add_resource(ReleaseSave, '/releaseSave')
 api.add_resource(ShowReleasePro, '/showReleasePro')
-
+api.add_resource(Recommend, '/recommend')
+api.add_resource(ShowBase, '/showBase')
 
 

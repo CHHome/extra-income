@@ -24,6 +24,8 @@ class UserInfoSave(restful.Resource):
         parser.add_argument('goodAt', type=str, required=False)
         parser.add_argument('price', type=int, required=False)
         parser.add_argument('phone', type=str, required=False)
+        parser.add_argument('profession', type=str, required=False)
+        parser.add_argument('synopsis', type=str, required=False)
         parser.add_argument('email', type=str, required=False)
         parser.add_argument('token', type=str, required=True, help='token is required')
         parser.add_argument('projectList', type=str, required=False, action='append')
@@ -39,6 +41,8 @@ class UserInfoSave(restful.Resource):
         user.price = args.price
         user.phone = args.phone
         user.email = args.email
+        user.profession = args.profession
+        user.synopsis = args.synopsis
         db.session.commit()
         return user.userName
 

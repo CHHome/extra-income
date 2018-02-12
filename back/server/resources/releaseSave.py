@@ -23,5 +23,17 @@ class ReleaseSave(restful.Resource):
                                     args['describe'], args['budget'], args['cycle'], args['company'])
             db.session.add(newProject)
             db.session.commit()
-            return '1'
+            return newProject.id
+        else:
+            newProject = ReleasePro.query.filter_by(id=args['id']).first()
+            newProject.projectName = args['projectName']
+            newProject.firstType = args['firstType']
+            newProject.secondType =  args['secondType']
+            newProject.describe = args['describe']
+            newProject.budget = args['budget']
+            newProject.cycle = args['cycle']
+            newProject.company = args['company']
+            db.session.commit()
+            return newProject.id
+
 

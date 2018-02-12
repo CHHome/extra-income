@@ -9,6 +9,7 @@ import 'bootstrap-webpack'
 import $ from 'jquery'
 import Vuelidate from 'vuelidate'
 import axios from 'axios'
+import {baseUrl} from "./config/config";
 
 Vue.prototype.$ajax = axios
 
@@ -24,7 +25,7 @@ router.beforeEach((to, from, next) => {
       } else {
         xhr = new ActiveXObject()
       }
-      xhr.open('POST', 'http://192.168.0.103:8081/tokenCheck')
+      xhr.open('POST', baseUrl + 'tokenCheck')
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
       xhr.send('token=' + webStore['token'])
       xhr.onreadystatechange = () => {
@@ -38,15 +39,24 @@ router.beforeEach((to, from, next) => {
         }
       }
     }).then((result) => {
-      if (result === 'yes') {
+      result = parseInt(result)
+      if (result === 10000) {
         store.commit('changeSingerState', {stateName: 'hasLogin', value: true})
       } else {
         webStore.removeItem('token')
         console.log('过期')
+        next()
       }
       next()
+      return axios.get(baseUrl + 'showBase', {
+        params: {
+          id: webStore['token'].split('-')[0]
+        }
+      })
     }, () => {
       next()
+    }).then(res => {
+      store.commit('changeHead', res.data.headImg)
     })
   } else {
     next()
@@ -60,7 +70,8 @@ const store = new Vuex.Store({
   state: {
     curtain: false,
     myHeader: false,
-    hasLogin: false
+    hasLogin: false,
+    headPic: 'default_head.jpg'
   },
   mutations: {
     changeSingerState (state, obj) {
@@ -68,6 +79,9 @@ const store = new Vuex.Store({
     },
     changeSinger (state, stateName) {
       state[stateName] = !state[stateName]
+    },
+    changeHead (state, headPic) {
+      state.headPic = headPic
     }
   }
 })

@@ -15,7 +15,7 @@ resource_filed = {
     'company': fields.String,
     'status': fields.String,
     'releaseTime': fields.String,
-    'apply': fields.Integer,
+    'applyAmount': fields.Integer,
     'browse': fields.Integer
 }
 
@@ -26,7 +26,5 @@ class ShowReleasePro(restful.Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('id', type=int, required=True, help='id is required')
         args = parser.parse_args()
-        print(args['id'], '6464')
         releasePro = ReleasePro.query.filter_by(id=args['id']).first()
-        print(args['id'], '6464')
         return releasePro

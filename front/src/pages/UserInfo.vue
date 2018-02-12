@@ -199,12 +199,16 @@
           <div class="col-md-6 ">
             <label>姓名  </label>
             <input type="text" v-model="mainInfo.userName"><br>
+            <label>职业  </label>
+            <input type="text" v-model="mainInfo.profession"><br>
             <label>年龄  </label>
             <input type="text"  v-model="mainInfo.age"><br>
             <label>手机  </label>
             <input type="text"  v-model="mainInfo.phone"><br>
             <label >邮箱  </label>
             <input type="text" v-model="mainInfo.email"><br>
+            <label>简介  </label>
+            <input type="text" v-model="mainInfo.synopsis"><br>
           </div>
         </div>
       </div>
@@ -314,24 +318,18 @@
   import ShowOldPro from '@/components/ShowOldPro'
   export default {
     created () {
-      this.mainInfo.headImg = 'default_head.jpg'
+      this.mainInfo.headImg = this.$store.state.headPic
     },
-    mounted () {
-      $('.userImg>input').bind('change', () => {
-        this.reader.readAsDataURL($('.userImg>input')[0].files[0])
-        this.reader.addEventListener("load", () => {
-          this.$store.commit('changeSingerState', {stateName: 'curtain', value: true})
-          this.showPortrait = !this.showPortrait
-        }, false);
-      })
-    },
+//    mounted () {
+//      this.listenPortrait()
+//    },
     data () {
       return {
         id: null,
         baseUrl: baseUrl,
         showPortrait: false,
         mainInfo: {},
-        reader: new FileReader(),
+        reader: new FileReader(), //todo  不能全局要修改
         goodAtBox: false,
         projectBox: false,
         category: category,
@@ -349,6 +347,7 @@
         this.$http.get(baseUrl + 'userInfoShow', {params: {id: store['token'].split('-')[0]}})
           .then(res => {
             this.mainInfo = res.data
+            this.$store.commit('changeHead', this.mainInfo.headImg) // todo 独立出来，所有页面共用获取base信息
             this.projectList = this.mainInfo.projectList
             if (this.mainInfo.goodAt !== '') {
               if (this.mainInfo.goodAt !== null) {
@@ -359,6 +358,15 @@
             alert('获取数据失败')
           })
       },
+      listenPortrait () {
+        $('.userImg>input').bind('change', () => {
+          this.reader.readAsDataURL($('.userImg>input')[0].files[0])
+          this.reader.addEventListener("load", () => {
+            this.$store.commit('changeSingerState', {stateName: 'curtain', value: true})
+            this.showPortrait = true
+          }, false);
+        })
+      },
       ...mapMutations(['changeSinger']),
       submit () {
         this.mainInfo.projectList = this.projectList
@@ -366,7 +374,7 @@
         this.mainInfo.token = window.localStorage.token
         this.$http.post(baseUrl + 'userInfoSave', this.mainInfo)
           .then(res => {
-            this.getInfo()
+            location.reload()
           }, res => {
             console.log(res.data)
           })
@@ -427,7 +435,7 @@
           vm.$router.push({name: 'index'})
         }
         vm.getInfo()
-        window.onscroll = function () {}
+        vm.listenPortrait()
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
     },

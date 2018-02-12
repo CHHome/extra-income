@@ -191,6 +191,7 @@
         let userId = store['token'].split('-')[0]
         this.$http.post(baseUrl + 'releaseSave', {
           userId: userId,
+          id: this.itemData ? this.itemData.id : null,
           projectName: this.projectName,
           firstType: this.firstType,
           secondType: this.secondType,
@@ -200,6 +201,11 @@
           company: this.company
         })
           .then(res => {
+            if (this.type === 'showReleasePro') {
+              location.reload();
+            } else {
+              this.$router.push('/showReleasePro/' + res.data)
+            }
           }, res => {
             alert('发布失败，请检查网络')
           })
@@ -238,9 +244,11 @@
 
     },
     mounted () {
-      for (let key of Object.keys(this.itemData)){
-        if (key in this.$data){
-          this[key] = this.itemData[key]
+      if (this.itemData) {
+        for (let key of Object.keys(this.itemData)){
+          if (key in this.$data){
+            this[key] = this.itemData[key]
+          }
         }
       }
     }

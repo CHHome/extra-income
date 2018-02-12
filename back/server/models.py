@@ -2,6 +2,13 @@ from . import db
 import time
 
 
+def to_dict(self):
+    return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
+
+
+db.Model.trans_to_dict = to_dict
+
+
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -16,14 +23,17 @@ class User(db.Model):
     onTime = db.Column(db.Integer, nullable=False)
     credit = db.Column(db.Integer, nullable=False)
     quality = db.Column(db.Integer, nullable=False)
+    totalScore =  db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=True)
     hasFinish = db.Column(db.Integer, nullable=False)
     oldProject = db.relationship('OldProject', backref='user', lazy='dynamic')
     release = db.relationship('ReleasePro', backref='employer', lazy='dynamic')
     headImg = db.Column(db.String(120), unique=False, default='default_head.jpg')
+    profession = db.Column(db.String(10), unique=False, default='')
+    synopsis = db.Column(db.String(15), unique=False, default='')
 
     def __init__(self, phone, user_name, password, register_time=time.time(), on_time=0, credit=0, quality=0,
-                 has_finish=0):
+                 total_score=0, has_finish=0):
         self.userName = user_name
         self.password = password
         self.phone = phone
@@ -32,6 +42,7 @@ class User(db.Model):
         self.credit = credit
         self.quality = quality
         self.hasFinish = has_finish
+        self.totalScore = total_score
 
     def __repr__(self):
         return '<Users %r>' % self.userName
@@ -52,10 +63,14 @@ class User(db.Model):
             'price': self.price,
             'hasFinish': self.hasFinish,
             'headImg': self.headImg,
+            'profession': self.profession,
+            'synopsis': self.synopsis
+
         }
 
     def to_show(self):
         return {
+            'id': self.id,
             'userName': self.userName,
             'email': self.email,
             'gender': self.gender,
@@ -67,6 +82,8 @@ class User(db.Model):
             'price': self.price,
             'hasFinish': self.hasFinish,
             'headImg': self.headImg,
+            'profession': self.profession,
+            'synopsis': self.synopsis
         }
 
 
@@ -107,6 +124,7 @@ class ReleasePro(db.Model):
     __tablename__ = 'releasepro'
     id = db.Column(db.Integer, primary_key=True)
     employerId = db.Column(db.Integer, db.ForeignKey('user.id'), unique=False)
+    apply = db.relationship('ApplyPro', backref='releasePro', lazy='dynamic')
     projectName = db.Column(db.String(30), nullable=False)
     firstType = db.Column(db.String(10), nullable=False)
     secondType = db.Column(db.String(10), nullable=False)
@@ -114,9 +132,9 @@ class ReleasePro(db.Model):
     budget = db.Column(db.Integer, nullable=False)
     cycle = db.Column(db.Integer, nullable=False)
     company = db.Column(db.String(30), nullable=True)
-    status = db.Column(db.String(2), default='1')
+    status = db.Column(db.String(10), default='招募中')
     releaseTime = db.Column(db.String(32), nullable=False)
-    apply = db.Column(db.Integer, default=0)
+    applyAmount = db.Column(db.Integer, default=0)
     browse = db.Column(db.Integer, default=0)
 
     def __init__(self, employer_id, project_name, first_type, second_type, describe, budget, cycle, company, release_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())):
@@ -143,3 +161,19 @@ class ReleasePro(db.Model):
 #
 #     def __repr__(self):
 #         return '<User %r>' % self.username
+
+class ApplyPro(db.Model):
+    __tablename__ = 'applypro'
+    id = db.Column(db.Integer, primary_key=True)
+    ReleaseProId = db.Column(db.Integer, db.ForeignKey('releasepro.id'), unique=False)
+    applyUserId = db.Column(db.Integer)
+    status = db.Column(db.String(10), default='申请中')
+    applyTime = db.Column(db.String(32), nullable=False)
+
+    def __init__(self, release_pro_id, apply_user_id, apply_time=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())):
+        self.ReleaseProId = release_pro_id
+        self.applyUserId = apply_user_id
+        self.applyTime = apply_time
+
+    def __repr__(self):
+        return '<Applypro %r>' % self.ReleaseProId

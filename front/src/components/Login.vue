@@ -68,6 +68,11 @@
             store['token'] = res.data
             this.cancel()
             this.$store.commit('changeSingerState', {stateName: 'hasLogin', value: true})
+            return this.$ajax.get(baseUrl + 'showBase', {
+              params: {
+                id: store['token'].split('-')[0]
+              }
+            })
           } else {
 //            todo
             console.log('登录失败，请检查用户名和密码是否正确')
@@ -75,7 +80,13 @@
         }, res => {
 //          todo
           console.log('登陆失败，请检查网络')
-        })
+        }).then(
+          res => {
+            this.$store.commit('changeHead', res.data.headImg)
+          }, res => {
+            alert('登录成功但获取您的相关基础信息失败')
+          }
+        )
       }
     }
   }

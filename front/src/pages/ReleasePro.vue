@@ -36,6 +36,7 @@
     beforeRouteEnter (to, from, next) {
       next(vm => {
         if (!vm.$store.state.hasLogin) {
+          alert('请先登录')
           vm.$router.push({name: 'index'})
         }
         window.onscroll = function () {}

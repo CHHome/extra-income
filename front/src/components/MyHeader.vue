@@ -41,7 +41,7 @@
         }
         & > .user-info{
           img{
-            height: 35px;
+            width: 36px;
             border-radius: 50%;
           }
         }
@@ -115,7 +115,7 @@
         </router-link>
         <div class="user-info" v-show="$store.state.hasLogin">
           <div class="dropdown" @click="infoToggle">
-            <img v-bind:src="baseUrl+'static/imgs/genhong.jpeg'" alt="">
+            <img v-bind:src="baseUrl+ 'static/imgs/' + $store.state.headPic" alt="">
             <span>我的外快</span>
             <ul :class="{headerDropdown:$store.state.myHeader}">
               <li>通知</li>
@@ -170,6 +170,7 @@
       Cancellation () {
         window.localStorage.removeItem('token')
         this.changeSingerState({stateName: 'hasLogin', value: false})
+        this.$store.commit('changeHead', 'default_head.jpg')
       }
     },
     components: {

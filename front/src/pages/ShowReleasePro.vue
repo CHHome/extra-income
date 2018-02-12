@@ -11,15 +11,31 @@
     .show-release-container{
       background-color: #fff;
       padding: 0 10%;
-      display: flex;
+      display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+      display: -moz-box; /* 老版本语法: Firefox (buggy) */
+      display: -ms-flexbox; /* 混合版本语法: IE 10 */
+      display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+      display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
+      -webkit-box-pack: center;
+      -moz-justify-content: center;
+      -webkit-justify-content: center;
       justify-content: center;
       flex-wrap: wrap;
       .title{
         span{
           margin-right: 8px;
+          &:nth-child(1), &:nth-child(2){
+            font-size: 16px;
+            font-weight: 700;
+          }
         }
         & > span:nth-child(3){
           margin-left: 8px;
+          padding: 2px 10px;
+          border: 1px solid @secondColor;
+          border-radius: 8px;
+          background-color: @secondColor;
+          color: #fff;
         }
       }
       .container-right{
@@ -43,6 +59,9 @@
             justify-content: flex-start;
             margin-bottom: 15px;
             & > div{
+              span{
+                display: inline-block;
+              }
               padding-right: 60px;
               & > span:nth-child(1){
                 color: #999;
@@ -136,17 +155,17 @@
       <div class="container-right">
         <div class="title">
           <span>项目名称</span><span>{{data.projectName}}</span>
-          <span>状态</span><span>{{data.status}}</span>
-          <i class="glyphicon glyphicon-pencil" title="修改" @click="modify"></i>
+          <span>{{data.status}}</span>
+          <i class="glyphicon glyphicon-pencil" title="修改" @click="modify" v-if="modifyIcon"></i>
         </div>
         <div class="container-title">
           <div>
             <div>
-              <span>项目类型</span>
+              <span>项目类型</span><br>
               <span>{{data.firstType}}/{{data.secondType}}</span>
             </div>
             <div>
-              <span>公司</span>
+              <span>公司</span><br>
               <span>{{data.company}}</span>
             </div>
           </div>
@@ -177,7 +196,8 @@
     data () {
       return{
         data: {},
-        showModify: false
+        showModify: false,
+        modifyIcon: false
       }
     },
     methods: {
@@ -188,7 +208,15 @@
               id: this.id
             }
           }).then(res => {
-            this.data = res.data
+          this.data = res.data
+          let store = window.localStorage
+          if (this.$store.state.hasLogin && store['token']) {
+            //todo 此处需要增加token验证用户token的正确性
+            let userId = store['token'].split('-')[0]
+            if (parseInt(userId) === this.data.employerId) {
+              this.modifyIcon = true
+            }
+          }
         }, res => {
             confirm('获取数据失败，请检查网络连接')
         })
