@@ -45,62 +45,33 @@
       }
     }
     .recommend-pro {
+      background-color: #fff;
       width: 90%;
       margin: 0 auto;
       & > a{
         cursor: pointer;
         color: #000;
-        & > div{
-          margin-top: 20px;
+      }
+    }
+    .show-more-release{
+      text-align: center;
+      padding: 8px;
+      width: 90%;
+      margin: 0 auto;
+      background-color: @secondColor;
+      cursor: pointer;
+      a{
+        color: #000;
+        text-decoration: none;
+        i{
+          margin-left: 5px;
+          font-size: 12px;
+          font-weight: 500;
         }
-        .up-banner{
-          background-image: url("../assets/recommendPro.jpg");
-          height: 120px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          & > i{
-            color: #fff;
-            font-size: 30px;
-          }
-        }
-        .recommend-pro-container{
-          border:  1px solid #e5e8ef;
-          text-align: center;
-          padding-bottom: 20px;
-          header{
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 30px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            word-wrap: normal;
-            margin-bottom: 15px;
-          }
-          & > i{
-            color: #ff734b;
-          }
-          .container-second-title{
-            width: 50%;
-            border-radius: 16px;
-            border: 1px solid @secondColor;
-            padding: 6px 8px;
-            box-sizing: border-box;
-            margin-top: 15px;
-            display: inline-block;
-          }
-          .container-info{
-            margin-top: 20px;
-            & > div{
-              display: inline-block;
-              padding: 10px 12px;
-              border-right: 1px dotted #d9d9d9;
-              &:nth-last-child(1){
-                border-right: none;
-              }
-            }
-          }
+      }
+      &:hover{
+        a{
+          color: #fff;
         }
       }
     }
@@ -139,31 +110,15 @@
       推荐对接最优质的项目<br>
       <span class="subtitle">每个项目的交易都有完善的保障</span>
     </header>
-    <div class="recommend-pro">
+    <div class="recommend-pro clearfix">
       <router-link
         v-for="item in releasePro"
         :to="{name: 'showReleasePro', params: {id: item.id}}">
-      <div class="col-md-3 col-sm-4 ">
-          <div class="up-banner">
-            <i class="glyphicon glyphicon-pushpin"></i>
-          </div>
-          <div class="recommend-pro-container">
-            <header>{{item.projectName}}</header>
-            <i>{{item.budget}}元</i><br>
-            <span class="container-second-title">{{item.secondType}}</span>
-            <div class="container-info">
-              <div>
-                <i>申请数</i><br>
-                <span>{{item.applyAmount}}</span>
-              </div>
-              <div>
-                <i>浏览数</i><br>
-                <span>{{item.browse}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <project-card :item="item"></project-card>
       </router-link>
+    </div>
+    <div class="show-more-release">
+      <router-link :to="{name: 'showMoreRelease'}">更多<i class="glyphicon glyphicon-plus"></i></router-link>
     </div>
   </div>
 </template>
@@ -171,6 +126,8 @@
   import {baseUrl} from '@/config/config'
   import 'swiper/dist/css/swiper.min.css'
   import Swiper from 'swiper/dist/js/swiper.min'
+  import ProjectCard from '@/components/share/ProjectCard'
+
   export default {
     data () {
       return{
@@ -223,6 +180,9 @@
           clickable: true
         }
       })
+    },
+    components: {
+      ProjectCard
     }
   }
 </script>

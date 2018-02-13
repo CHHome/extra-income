@@ -7,6 +7,8 @@ const UserInfo = () => import('@/pages/UserInfo')
 const ShowUserInfo = () => import('@/pages/ShowUserInfo')
 const ReleasePro = () => import('@/pages/ReleasePro')
 const ShowReleasePro = () => import('@/pages/ShowReleasePro')
+const ShowMoreRelease = () => import('@/pages/ShowMoreRelease')
+
 
 Vue.use(Router)
 
@@ -48,6 +50,11 @@ export default new Router({
       name: 'showReleasePro',
       component: ShowReleasePro,
       props: true,
+    },
+    {
+      path: '/showMoreRelease',
+      name: 'showMoreRelease',
+      component: ShowMoreRelease
     }
   ]
 })

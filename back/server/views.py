@@ -13,6 +13,8 @@ from .resources.releaseSave import ReleaseSave
 from .resources.showReleasePro import ShowReleasePro
 from .resources.Recommend import Recommend
 from .resources.showBase import ShowBase
+from .resources.myProjectData import MyProjectData
+from .resources.proPageQuery import ProPageQuery
 
 
 
@@ -27,5 +29,8 @@ api.add_resource(ReleaseSave, '/releaseSave')
 api.add_resource(ShowReleasePro, '/showReleasePro')
 api.add_resource(Recommend, '/recommend')
 api.add_resource(ShowBase, '/showBase')
+api.add_resource(MyProjectData, '/myProjectData')
+api.add_resource(ProPageQuery, '/proPageQuery')
+
 
 
