@@ -113,7 +113,8 @@
     <div class="recommend-pro clearfix row">
       <router-link
         v-for="item in releasePro"
-        :to="{name: 'showReleasePro', params: {id: item.id}}">
+        :to="{name: 'showReleasePro', params: {id: item.id}}"
+        :key="item.id">
         <project-card :item="item"></project-card>
       </router-link>
     </div>

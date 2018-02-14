@@ -74,36 +74,31 @@
       <transition name="type-fade">
         <card-grounp
           :type="'全部'"
-          v-if="showAll"
-          :key="'全部'"
+          v-show="showAll"
         ></card-grounp>
       </transition>
       <transition name="type-fade">
         <card-grounp
           :type="'开发'"
-          v-if="showDeveloper"
-          :key="'开发'"
+          v-show="showDeveloper"
         ></card-grounp>
       </transition>
       <transition name="type-fade">
         <card-grounp
           :type="'设计'"
-          v-if="showDesign"
-          :key="'设计'"
+          v-show="showDesign"
         ></card-grounp>
       </transition>
       <transition name="type-fade">
         <card-grounp
           :type="'市场/运营'"
-          v-if="showMarket"
-          :key="'市场/运营'"
+          v-show="showMarket"
         ></card-grounp>
       </transition>
       <transition name="type-fade">
         <card-grounp
           :type="'产品'"
-          v-if="showProject"
-          :key="'产品'"
+          v-show="showProject"
         ></card-grounp>
       </transition>
     </div>

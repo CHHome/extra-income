@@ -292,12 +292,12 @@
       </div>
       <div class="add" @click="showBoxPro">{{projectText}}</div>
       <transition name="box-fade" >
-        <div v-show="projectBox" class="add-box">
+        <div v-if="projectBox" class="add-box">
           <span>建议提交两个以上具有代表性的作品</span>
           <project-box
           @proCancle="showBoxPro"
           @confirmPro="confirmPro"
-          :key="viewId"></project-box>
+          ></project-box>
         </div>
       </transition>
       <show-old-pro v-for="item in projectList" :item="item"></show-old-pro>

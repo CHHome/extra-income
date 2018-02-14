@@ -20,7 +20,7 @@
 <template>
   <div class="release">
     <img src="../assets/releaseBanner.jpg" alt="banner">
-    <release-form :type="'releasePro'"></release-form>
+    <release-form :type="'releasePro'" :key="viewId"></release-form>
     <router-link :to="{name: 'showReleasePro', params: {id: 2}}">test</router-link>
   </div>
 </template>
@@ -33,6 +33,11 @@
     components: {
       ReleaseForm
     },
+    data () {
+      return {
+        viewId: 1
+      }
+    },
     beforeRouteEnter (to, from, next) {
       next(vm => {
         if (!vm.$store.state.hasLogin) {
@@ -42,6 +47,10 @@
         window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
-    }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.viewId++
+      next()
+    },
   }
 </script>
