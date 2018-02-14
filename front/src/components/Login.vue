@@ -66,6 +66,7 @@
           if (res.data !== 'fail') {
             let store = window.localStorage
             store['token'] = res.data
+            this.$store.commit('changeLoginId', store['token'].split('-')[0])
             this.cancel()
             this.$store.commit('changeSingerState', {stateName: 'hasLogin', value: true})
             return this.$ajax.get(baseUrl + 'showBase', {

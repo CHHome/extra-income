@@ -34,11 +34,11 @@
     <div>
       <header @click="selectType">
         <span data-type="releasing" class="clicked">发布中</span>
+        <span data-type="applying">申请中</span>
         <span>进行中</span>
-        <span>申请中</span>
         <span>已完成</span>
       </header>
-      <div class="projects-container">
+      <div class="projects-container row">
         <router-link
           v-for="item in showList"
           :to="{name: 'showReleasePro', params: {id: item.id}}">
@@ -76,15 +76,30 @@
             case 'releasing':
               this.getTypeData('releasing')
               break;
+            case 'applying':
+              this.getApplyList()
+              break
+
           }
         }
     },
+      getApplyList () {
+        this.$ajax.get(baseUrl + 'applyListShow', {
+          params: {
+            applyUserId: this.$store.state.loginId,
+          }
+        }).then(res => {
+          this.showList = res.data
+        }, res => {
+          alert('获取数据失败,请检查网络')
+        })
+      },
       getTypeData (type) {
         let store = window.localStorage
         if (store['token']) {
           this.$ajax.get(baseUrl + 'myProjectData', {
             params: {
-              id: store['token'].split('-')[0],
+              id: this.$store.state.loginId,
               type: type
             }
           })

@@ -91,7 +91,7 @@
       精选高质量可信赖的专家/团队入驻平台<br/>
       <span class="subtitle">每一位专家都经过严格审核</span>
     </header>
-    <div class="experts clearfix">
+    <div class="experts clearfix row">
       <router-link
         v-for="item in employee"
         :key="item.id"
@@ -110,7 +110,7 @@
       推荐对接最优质的项目<br>
       <span class="subtitle">每个项目的交易都有完善的保障</span>
     </header>
-    <div class="recommend-pro clearfix">
+    <div class="recommend-pro clearfix row">
       <router-link
         v-for="item in releasePro"
         :to="{name: 'showReleasePro', params: {id: item.id}}">
@@ -142,7 +142,6 @@
           .then(res => {
             this.employee = res.data.employeeList
             this.releasePro = res.data.releaseProList
-            console.log(this.releasePro, 'dsfsdf')
           }, res => {
             alert('获取数据失败，请检查网络')
           })

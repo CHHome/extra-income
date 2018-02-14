@@ -6,21 +6,11 @@
       width: 100%;
     }
     & > div, & > img{
-      margin-bottom: 40px;
+      margin: 30px auto;
     }
     .show-release-container{
       background-color: #fff;
-      padding: 0 10%;
-      display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
-      display: -moz-box; /* 老版本语法: Firefox (buggy) */
-      display: -ms-flexbox; /* 混合版本语法: IE 10 */
-      display: -webkit-flex; /* 新版本语法: Chrome 21+ */
-      display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
-      -webkit-box-pack: center;
-      -moz-justify-content: center;
-      -webkit-justify-content: center;
-      justify-content: center;
-      flex-wrap: wrap;
+      width: 80%;
       .title{
         span{
           margin-right: 8px;
@@ -40,7 +30,6 @@
       }
       .container-right{
         margin: 20px 0;
-        width:65%;
         min-width: 320px;
         padding: 0 10%;
         .title i{
@@ -83,7 +72,6 @@
         }
       }
       .container-left{
-        width: 35%;
         background-color: @secondColor;
         min-width: 300px;
         margin-top: -8%;
@@ -109,6 +97,9 @@
         .container-parameters{
           & > div{
             margin-bottom: 8px;
+            & > span:nth-child(1){
+              color: #999;
+            }
           }
         }
         .container-apply{
@@ -121,13 +112,24 @@
         }
       }
     }
+    .release-apply-list{
+      width: 90%;
+      margin:  auto;
+      background-color: #fff;
+      border-radius: 4px;
+      padding-bottom: 30px;
+      header{
+        padding: 10px 15px;
+        border-bottom: 1px solid #ccc;
+      }
+    }
   }
 </style>
 <template>
   <div class="show-release">
     <img src="../assets/releaseBanner.jpg" alt="banner">
-    <div class="show-release-container" v-if="!showModify">
-      <div class="container-left">
+    <div class="show-release-container row" v-if="!showModify">
+      <div class="container-left col-md-4">
         <div>
           <div>
             <span>项目预算</span><br>
@@ -137,13 +139,13 @@
             <span>项目周期</span><br>
             <span>{{data.cycle}}</span>
           </div>
-          <div class="container-apply">
+          <div class="container-apply" v-if="!modifyIcon" @click="sendApply">
             发送申请
           </div>
           <div class="container-parameters">
             <div>
               <span>申请数</span>
-              <span>{{data.apply}}</span>
+              <span>{{data.applyAmount}}</span>
             </div>
             <div>
               <span>浏览数</span>
@@ -152,7 +154,7 @@
           </div>
         </div>
       </div>
-      <div class="container-right">
+      <div class="container-right col-md-8">
         <div class="title">
           <span>项目名称</span><span>{{data.projectName}}</span>
           <span>{{data.status}}</span>
@@ -161,11 +163,11 @@
         <div class="container-title">
           <div>
             <div>
-              <span>项目类型</span><br>
+              <span>项目类型</span>
               <span>{{data.firstType}}/{{data.secondType}}</span>
             </div>
             <div>
-              <span>公司</span><br>
+              <span>公司</span>
               <span>{{data.company}}</span>
             </div>
           </div>
@@ -187,21 +189,35 @@
       v-if="showModify"
       @cancelModify="modify"
     :itemData="data"></release-form>
+    <div class="release-apply-list" v-if="modifyIcon">
+      <header>申请列表</header>
+      <div class="row">
+        <router-link
+          v-for="item in applyUserList"
+          :key="item.id"
+          :to="{name: 'showUserInfo', params: {id: item.id}}">
+          <apply-card :item="item"></apply-card>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 <script>
   import {baseUrl} from '@/config/config'
   import ReleaseForm from '@/components/share/ReleaseForm'
+  import ApplyCard from '@/components/share/ApplyCard'
   export default {
     data () {
       return{
         data: {},
         showModify: false,
-        modifyIcon: false
+        modifyIcon: false,
+        applyUserList: []
       }
     },
     methods: {
       getData () {
+        this.data = {}
         this.$ajax.get(baseUrl + 'showReleasePro',
           {
             params:{
@@ -209,21 +225,50 @@
             }
           }).then(res => {
           this.data = res.data
-          let store = window.localStorage
-          if (this.$store.state.hasLogin && store['token']) {
+          if (this.$store.state.hasLogin) {
             //todo 此处需要增加token验证用户token的正确性
-            let userId = store['token'].split('-')[0]
+            let userId = this.$store.state.loginId
             if (parseInt(userId) === this.data.employerId) {
               this.modifyIcon = true
+              return this.$ajax.get(baseUrl + 'applyUserList', {
+                params:{
+                  releaseProId: this.id
+                }
+              })
+            } else {
+              this.modifyIcon = false
+              return null
             }
           }
         }, res => {
             confirm('获取数据失败，请检查网络连接')
+        }).then(res => {
+          if (res){
+            this.applyUserList = res.data
+          }
         })
       },
       modify () {
         this.showModify = !this.showModify
       },
+      sendApply () {
+        if (this.$store.state.loginId){
+          this.$ajax.get(baseUrl + 'addApply', {
+            params: {
+              ReleaseProId: this.id,
+              applyUserId: this.$store.state.loginId
+            }
+          }).then(res => {
+            if (res.data === 100001) {
+              confirm('已发送申请')
+            } else {
+              alert('您已经申请过该项目')
+            }
+          })
+        } else {
+          alert('请先登录')
+        }
+      }
     },
     props: ['id'],
     beforeRouteEnter (to, from, next) {
@@ -234,7 +279,8 @@
       })
     },
     components: {
-      ReleaseForm
+      ReleaseForm,
+      ApplyCard
     }
   }
 </script>

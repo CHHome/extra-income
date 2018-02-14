@@ -42,6 +42,7 @@ router.beforeEach((to, from, next) => {
       result = parseInt(result)
       if (result === 10000) {
         store.commit('changeSingerState', {stateName: 'hasLogin', value: true})
+        store.commit('changeLoginId', webStore['token'].split('-')[0])
       } else {
         webStore.removeItem('token')
         console.log('过期')
@@ -71,7 +72,8 @@ const store = new Vuex.Store({
     curtain: false,
     myHeader: false,
     hasLogin: false,
-    headPic: 'default_head.jpg'
+    headPic: 'default_head.jpg',
+    loginId: null
   },
   mutations: {
     changeSingerState (state, obj) {
@@ -82,6 +84,9 @@ const store = new Vuex.Store({
     },
     changeHead (state, headPic) {
       state.headPic = headPic
+    },
+    changeLoginId (state, value) {
+      state.loginId = value
     }
   }
 })

@@ -8,7 +8,7 @@ from .. import db
 class Recommend(restful.Resource):
     def get(self):
         employees = User.query.order_by(db.desc(User.totalScore)).limit(8).all()
-        releasePro = ReleasePro.query.order_by(db.desc(ReleasePro.budget)).limit(8).all()
+        releasePro = ReleasePro.query.filter_by(status='招募中').order_by(db.desc(ReleasePro.budget)).limit(8).all()
         result = dict()
         employeeList = list()
         releaseProList = list()

@@ -169,6 +169,7 @@
       },
       Cancellation () {
         window.localStorage.removeItem('token')
+        this.$store.commit('changeLoginId', null)
         this.changeSingerState({stateName: 'hasLogin', value: false})
         this.$store.commit('changeHead', 'default_head.jpg')
       }

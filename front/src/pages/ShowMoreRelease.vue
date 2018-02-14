@@ -49,72 +49,111 @@
   .clicked{
     border-bottom: 2px solid @secondColor;
   }
+  .type-fade-enter-active, .type-fade-leave-active {
+    transition: all 1.5s ease;
+  }
+  .type-fade-enter{
+    opacity: 0;
+    transform: translateX(300px);
+  }
+  .type-fade-leave{
+    opacity: 0;
+    transform: translateY(300px);
+  }
 </style>
 <template>
   <div class="more-release">
     <div>
-      <header @click="selectProType">
+      <header @click="selectProType" class="title-header">
         <span class="clicked">全部</span>
         <span>开发</span>
         <span>设计</span>
         <span>市场/运营</span>
         <span>产品</span>
       </header>
-      <div class="more-release-container clearfix">
-        <router-link
-          v-for="item in showList"
-          :to="{name: 'showReleasePro', params: {id: item.id}}">
-          <project-card :item="item"></project-card>
-        </router-link>
-      </div>
-      <div class="show-next-page" @nextPage>
-        更多<i class="glyphicon glyphicon-plus"></i>
-      </div>
+      <transition name="type-fade">
+        <card-grounp
+          :type="'全部'"
+          v-if="showAll"
+          :key="'全部'"
+        ></card-grounp>
+      </transition>
+      <transition name="type-fade">
+        <card-grounp
+          :type="'开发'"
+          v-if="showDeveloper"
+          :key="'开发'"
+        ></card-grounp>
+      </transition>
+      <transition name="type-fade">
+        <card-grounp
+          :type="'设计'"
+          v-if="showDesign"
+          :key="'设计'"
+        ></card-grounp>
+      </transition>
+      <transition name="type-fade">
+        <card-grounp
+          :type="'市场/运营'"
+          v-if="showMarket"
+          :key="'市场/运营'"
+        ></card-grounp>
+      </transition>
+      <transition name="type-fade">
+        <card-grounp
+          :type="'产品'"
+          v-if="showProject"
+          :key="'产品'"
+        ></card-grounp>
+      </transition>
     </div>
   </div>
 </template>
 <script>
   import {baseUrl} from '@/config/config'
   import ProjectCard from '@/components/share/ProjectCard'
+  import CardGrounp from '@/components/share/CardGrounp'
   export default {
-    mounted () {
-      this.getPageData(this.nowType, this.allPage)
-    },
     data () {
       return {
-        allPage: 1,
-        developerPage: 1,
-        designPage: 1,
-        marketPage: 1,
-        productPage: 1,
-        showList: [],
-        nowType: '全部'
+        showAll: true,
+        showDeveloper: false,
+        showMarket: false,
+        showDesign: false,
+        showProject: false
       }
     },
     methods: {
-      getPageData (type, index) {
-        this.$ajax.get(baseUrl + 'proPageQuery', {
-          params: {
-            index: index,
-            type: type
-          }
-        }).then(res => {
-          this.showList = res.data
-        }, res => {
-          alert('获取数据失败,请检查网络')
-        })
-      },
-      selectProType (e) {
+      selectProType(e) {
         if (e.target.nodeName === 'SPAN') {
-          switch(e.target.textContent)
-          {
+          switch (e.target.textContent) {
             case '全部':
-              this.getPageData('全部', this.allPage)
+              this.reInit(e)
+              this['showAll'] = true
+              break;
+            case '开发':
+              this.reInit(e)
+              this['showDeveloper'] = true
+              break;
+            case '设计':
+              this.reInit(e)
+              this['showDesign'] = true
+              break;
+            case '市场/运营':
+              this.reInit(e)
+              this['showMarket'] = true
+              break;
+            case '产品':
+              this.reInit(e)
+              this['showProject'] = true
               break;
           }
         }
       },
-      nextPage () {
+      reInit (e) {
+        $('.title-header span').removeClass('clicked')
+        e.target.classList.add('clicked')
+        this.showAll = this.showDesign = this.showDeveloper = this.showMarket = this.showProject = false
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -124,7 +163,7 @@
       })
     },
     components: {
-      ProjectCard
+      CardGrounp
     }
   }
 </script>
