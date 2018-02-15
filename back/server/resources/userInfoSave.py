@@ -7,7 +7,9 @@ import json
 import re
 
 
-upLoad_file = '/usr/code/extra-income/back/server/static/imgs/'
+# upLoad_file = '/usr/code/extra-income/back/server/static/imgs/'
+upLoad_file = '/home/ubuntu/code/extra-income/back/server/static/imgs/'
+
 
 # def updateDate():
 
