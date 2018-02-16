@@ -122,6 +122,9 @@
         padding: 10px 15px;
         border-bottom: 1px solid #ccc;
       }
+      .row{
+        margin: auto;
+      }
     }
   }
 </style>
@@ -192,12 +195,8 @@
     <div class="release-apply-list" v-if="modifyIcon">
       <header>申请列表</header>
       <div class="row">
-        <router-link
-          v-for="item in applyUserList"
-          :key="item.id"
-          :to="{name: 'showUserInfo', params: {id: item.id}}">
-          <apply-card :item="item"></apply-card>
-        </router-link>
+        <apply-card :item="item" v-for="item in applyUserList"
+                    :key="item.id"></apply-card>
       </div>
     </div>
   </div>

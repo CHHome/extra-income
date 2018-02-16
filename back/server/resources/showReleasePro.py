@@ -27,4 +27,5 @@ class ShowReleasePro(restful.Resource):
         parser.add_argument('id', type=int, required=True, help='id is required')
         args = parser.parse_args()
         releasePro = ReleasePro.query.filter_by(id=args['id']).first()
+        releasePro.releaseTime = releasePro.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
         return releasePro

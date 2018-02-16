@@ -3,6 +3,7 @@ from flask_restful import reqparse
 from flask.ext.restful import fields, marshal_with, marshal
 from ..models import User, OldProject
 import json
+import datetime
 
 # resource_filed = {
 #     'id': fields.Integer,
@@ -33,11 +34,13 @@ class UserInfoShow(restful.Resource):
         id = args['id']
         user = User.query.filter_by(id=id).first()
         if args['type'] is None:
-            responseData = user.to_dict()
+            responseData = user.trans_to_dict()
         else:
-            responseData = user.to_show()
+            responseData = user.trans_to_dict()
         proList = list()
         for item in user.oldProject.all():
-            proList.append(item.to_dict())
+            proList.append(item.trans_to_dict())
         responseData['projectList'] = proList
+        responseData['registerTime'] = responseData['registerTime'].strftime("%Y-%m-%d %H:%M:%S")
+        print(responseData['registerTime'])
         return responseData

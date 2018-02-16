@@ -15,7 +15,9 @@ class Recommend(restful.Resource):
         result['employeeList'] = employeeList
         result['releaseProList'] = releaseProList
         for item in employees:
+            item.registerTime = item.registerTime.strftime("%Y-%m-%d %H:%M:%S")
             employeeList.append(item.trans_to_dict())
         for item in releasePro:
+            item.releaseTime = item.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
             releaseProList.append(item.trans_to_dict())
         return result

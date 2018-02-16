@@ -13,5 +13,6 @@ class ApplyListShow(restful.Resource):
         applyList = ApplyPro.query.filter_by(applyUserId=args['applyUserId'], status='申请中').all()
         resultList = list()
         for item in applyList:
-            resultList.append(item.releasePro.trans_to_dict())
+            item.applyTime = item.applyTime.strftime("%Y-%m-%d %H:%M:%S")
+            resultList.append(item.trans_to_dict())
         return resultList

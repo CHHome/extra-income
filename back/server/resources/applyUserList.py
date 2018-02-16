@@ -13,5 +13,7 @@ class ApplyUserList(restful.Resource):
         applyList = ApplyPro.query.filter_by(ReleaseProId=args['releaseProId'], status='申请中').all()
         resultList = list()
         for applyItem in applyList:
-            resultList.append(User.query.filter_by(id=applyItem.applyUserId).first().trans_to_dict())
+            user = User.query.filter_by(id=applyItem.applyUserId).first()
+            user.registerTime = user.registerTime.strftime("%Y-%m-%d %H:%M:%S")
+            resultList.append(user.trans_to_dict())
         return resultList

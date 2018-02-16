@@ -1,5 +1,6 @@
 from . import db
 import time
+import datetime
 
 
 def to_dict(self):
@@ -15,32 +16,31 @@ class User(db.Model):
     phone = db.Column(db.String(20), unique=True, nullable=False)
     userName = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(520), nullable=False)
-    registerTime = db.Column(db.String(32), unique=False, nullable=False)
+    registerTime = db.Column(db.DateTime,  default=datetime.datetime.now())
     email = db.Column(db.String(120), unique=True, nullable=True)
     gender = db.Column(db.String(2), unique=False, nullable=True)
     age = db.Column(db.String(3), unique=False, nullable=True)
     goodAt = db.Column(db.String(520), nullable=True)
-    onTime = db.Column(db.Integer, nullable=False)
-    credit = db.Column(db.Integer, nullable=False)
-    quality = db.Column(db.Integer, nullable=False)
-    totalScore =  db.Column(db.Integer, nullable=False)
+    onTime = db.Column(db.Integer, default=100)
+    credit = db.Column(db.Integer, default=100)
+    quality = db.Column(db.Integer, default=100)
+    totalScore =  db.Column(db.Integer, default=100)
     price = db.Column(db.Integer, nullable=True)
     hasFinish = db.Column(db.Integer, nullable=False)
     oldProject = db.relationship('OldProject', backref='user', lazy='dynamic')
     release = db.relationship('ReleasePro', backref='employer', lazy='dynamic')
+    apply = db.relationship('ApplyPro', backref='applyUser', lazy='dynamic')
     headImg = db.Column(db.String(120), unique=False, default='default_head.jpg')
     profession = db.Column(db.String(10), unique=False, default='')
     synopsis = db.Column(db.String(15), unique=False, default='')
+    employeeNum = db.Column(db.Integer, default=0)   # todo 当雇主次数
+    notAppraised = db.Column(db.Integer, default=0)   # todo 未评价订单数
+    status = db.Column(db.String(10), default='正常')   # todo 帐号状态
 
-    def __init__(self, phone, user_name, password, register_time=time.time(), on_time=0, credit=0, quality=0,
-                 total_score=0, has_finish=0):
+    def __init__(self, phone, user_name, password, total_score=0, has_finish=0):
         self.userName = user_name
         self.password = password
         self.phone = phone
-        self.registerTime = register_time
-        self.onTime = on_time
-        self.credit = credit
-        self.quality = quality
         self.hasFinish = has_finish
         self.totalScore = total_score
 
@@ -133,11 +133,11 @@ class ReleasePro(db.Model):
     cycle = db.Column(db.Integer, nullable=False)
     company = db.Column(db.String(30), nullable=True)
     status = db.Column(db.String(10), default='招募中')
-    releaseTime = db.Column(db.String(32), nullable=False)
+    releaseTime = db.Column(db.DateTime, default=datetime.datetime.now())
     applyAmount = db.Column(db.Integer, default=0)
     browse = db.Column(db.Integer, default=0)
 
-    def __init__(self, employer_id, project_name, first_type, second_type, describe, budget, cycle, company, release_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())):
+    def __init__(self, employer_id, project_name, first_type, second_type, describe, budget, cycle, company):
         self.employerId = employer_id
         self.projectName = project_name
         self.firstType = first_type
@@ -146,7 +146,6 @@ class ReleasePro(db.Model):
         self.budget = budget
         self.cycle = cycle
         self.company = company
-        self.releaseTime = release_time
 
     def __repr__(self):
         return '<Release %r>' % self.projectName
@@ -165,15 +164,42 @@ class ReleasePro(db.Model):
 class ApplyPro(db.Model):
     __tablename__ = 'applypro'
     id = db.Column(db.Integer, primary_key=True)
-    ReleaseProId = db.Column(db.Integer, db.ForeignKey('releasepro.id'), unique=False)
-    applyUserId = db.Column(db.Integer)
+    ReleaseProId = db.Column(db.Integer, db.ForeignKey('releasepro.id'))
+    applyUserId = db.Column(db.Integer, db.ForeignKey('user.id'))
     status = db.Column(db.String(10), default='申请中')
-    applyTime = db.Column(db.String(32), nullable=False)
+    applyTime = db.Column(db.DateTime, default=datetime.datetime.now())
 
-    def __init__(self, release_pro_id, apply_user_id, apply_time=time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())):
+    def __init__(self, release_pro_id, apply_user_id):
         self.ReleaseProId = release_pro_id
         self.applyUserId = apply_user_id
-        self.applyTime = apply_time
 
     def __repr__(self):
         return '<Applypro %r>' % self.ReleaseProId
+
+
+class Order(db.Model):
+    __tablename__ = 'order'
+    id = db.Column(db.Integer, primary_key=True)
+    applyId = db.Column(db.Integer)
+    employerId = db.Column(db.Integer)
+    employeeId = db.Column(db.Integer)
+    releaseId = db.Column(db.Integer)
+    beginTime = db.Column(db.DateTime, default=datetime.datetime.now())
+    deadlineTime = db.Column(db.DateTime, nullable=False)
+    completionTime = db.Column(db.DateTime, nullable=True)
+    progress = db.Column(db.Integer, default=0)
+    credit = db.Column(db.Integer, default=0)
+    quality = db.Column(db.Integer, default=0)
+    onTime = db.Column(db.Integer, default=0)
+    employerScore = db.Column(db.Integer, default=0)
+    status = db.Column(db.String(10), default='进行中')
+
+    def __init__(self, apply_id, employer_id, employee_id, release_id, deadline_time):
+        self.applyId = apply_id
+        self.employerId = employer_id
+        self.employeeId = employee_id
+        self.releaseId = release_id
+        self.deadlineTime = deadline_time
+
+    def __repr__(self):
+        return '<Order %r>' % self.id

@@ -19,5 +19,6 @@ class MyProjectData(restful.Resource):
         resultList = list()
         result = ReleasePro.query.filter_by(employerId=id, status='招募中').all()
         for item in result:
+            item.releaseTime = item.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
             resultList.append(item.trans_to_dict())
         return resultList

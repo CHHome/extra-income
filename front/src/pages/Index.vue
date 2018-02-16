@@ -54,11 +54,11 @@
       }
     }
     .show-more-release{
+      clear: both;
       text-align: center;
       padding: 8px;
       width: 90%;
       margin: 0 auto;
-      background-color: @secondColor;
       cursor: pointer;
       a{
         color: #000;
@@ -71,7 +71,7 @@
       }
       &:hover{
         a{
-          color: #fff;
+          color: @secondColor;
         }
       }
     }
@@ -117,9 +117,9 @@
         :key="item.id">
         <project-card :item="item"></project-card>
       </router-link>
-    </div>
-    <div class="show-more-release">
-      <router-link :to="{name: 'showMoreRelease'}">更多<i class="glyphicon glyphicon-plus"></i></router-link>
+      <div class="show-more-release">
+        <router-link :to="{name: 'showMoreRelease'}">更多<i class="glyphicon glyphicon-plus"></i></router-link>
+      </div>
     </div>
   </div>
 </template>

@@ -19,6 +19,7 @@ class ProPageQuery(restful.Resource):
         else:
             queryResult = ReleasePro.query.filter_by(firstType=args['type'], status='招募中').order_by(db.desc(ReleasePro.budget)).limit(2).offset((args['index']-1)*2)
         for item in queryResult:
+            item.releaseTime = item.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
             resultList.append(item.trans_to_dict())
         return resultList
 
