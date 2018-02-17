@@ -8,110 +8,6 @@
     & > div, & > img{
       margin: 30px auto;
     }
-    .show-release-container{
-      background-color: #fff;
-      width: 80%;
-      .title{
-        span{
-          margin-right: 8px;
-          &:nth-child(1), &:nth-child(2){
-            font-size: 16px;
-            font-weight: 700;
-          }
-        }
-        & > span:nth-child(3){
-          margin-left: 8px;
-          padding: 2px 10px;
-          border: 1px solid @secondColor;
-          border-radius: 8px;
-          background-color: @secondColor;
-          color: #fff;
-        }
-      }
-      .container-right{
-        margin: 20px 0;
-        min-width: 320px;
-        padding: 0 10%;
-        .title i{
-          color: @secondColor;
-          cursor: pointer;
-          float: right;
-          margin-right: 30px;
-          font-size: 20px;
-        }
-        & > div{
-          margin-bottom: 30px;
-        }
-        .container-title{
-          & > div{
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 15px;
-            & > div{
-              span{
-                display: inline-block;
-              }
-              padding-right: 60px;
-              & > span:nth-child(1){
-                color: #999;
-                margin-right: 8px;
-              }
-            }
-          }
-        }
-        .container-describe{
-          header{
-            display: inline;
-            padding-right: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #999;
-          }
-          p{
-            margin-top: 35px;
-          }
-        }
-      }
-      .container-left{
-        background-color: @secondColor;
-        min-width: 300px;
-        margin-top: -8%;
-        color: #fff;
-        & > div{
-          width: 80%;
-          padding: 30px 0;
-          margin: 0 auto;
-          & > div{
-            margin-bottom: 30px;
-            & > span{
-              &:nth-child(1){
-                color: #999;
-                font-size: 16px;
-              }
-              &:nth-child(3){
-                font-size: 24px;
-                font-weight: 700;
-              }
-            }
-          }
-        }
-        .container-parameters{
-          & > div{
-            margin-bottom: 8px;
-            & > span:nth-child(1){
-              color: #999;
-            }
-          }
-        }
-        .container-apply{
-          cursor: pointer;
-          border-radius: 4px;
-          text-align: center;
-          padding: 13px 8px;
-          background-color: #fff;
-          color: @secondColor;
-        }
-      }
-    }
     .release-apply-list{
       width: 90%;
       margin:  auto;
@@ -131,62 +27,23 @@
 <template>
   <div class="show-release">
     <img src="../assets/releaseBanner.jpg" alt="banner">
-    <div class="show-release-container row" v-if="!showModify">
-      <div class="container-left col-md-4">
-        <div>
-          <div>
-            <span>项目预算</span><br>
-            <span>{{data.budget}}</span>
-          </div>
-          <div>
-            <span>项目周期</span><br>
-            <span>{{data.cycle}}</span>
-          </div>
-          <div class="container-apply" v-if="!modifyIcon" @click="sendApply">
-            发送申请
-          </div>
-          <div class="container-parameters">
-            <div>
-              <span>申请数</span>
-              <span>{{data.applyAmount}}</span>
-            </div>
-            <div>
-              <span>浏览数</span>
-              <span>{{data.browse}}</span>
-            </div>
-          </div>
-        </div>
+    <release-info
+      :data="data"
+      v-if="!showModify">
+      <!--运用slot实现实现组件的复用，防止组件强依赖-->
+      <i slot="icon"
+         class="glyphicon glyphicon-pencil"
+         title="修改"
+         @click="modify"
+         v-if="modifyIcon"></i>
+
+      <div class="container-apply"
+           v-if="!modifyIcon"
+           @click="sendApply"
+      slot="applyBtn">
+        发送申请
       </div>
-      <div class="container-right col-md-8">
-        <div class="title">
-          <span>项目名称</span><span>{{data.projectName}}</span>
-          <span>{{data.status}}</span>
-          <i class="glyphicon glyphicon-pencil" title="修改" @click="modify" v-if="modifyIcon"></i>
-        </div>
-        <div class="container-title">
-          <div>
-            <div>
-              <span>项目类型</span>
-              <span>{{data.firstType}}/{{data.secondType}}</span>
-            </div>
-            <div>
-              <span>公司</span>
-              <span>{{data.company}}</span>
-            </div>
-          </div>
-          <div>
-            <div>
-              <span>发布时间</span>
-              <span>{{data.releaseTime}}</span>
-            </div>
-          </div>
-        </div>
-        <div class="container-describe">
-          <header>项目描述</header>
-          <p>{{data.describe}}</p>
-        </div>
-      </div>
-    </div>
+    </release-info>
     <release-form
       :type="'showReleasePro'"
       v-if="showModify"
@@ -196,7 +53,11 @@
       <header>申请列表</header>
       <div class="row">
         <apply-card :item="item" v-for="item in applyUserList"
-                    :key="item.id"></apply-card>
+                    :key="item.id">
+          <span class="agree"
+                @click="agree(item.id, item.applyUserId)"
+          slot="agree">同意申请</span>
+        </apply-card>
       </div>
     </div>
   </div>
@@ -205,6 +66,8 @@
   import {baseUrl} from '@/config/config'
   import ReleaseForm from '@/components/share/ReleaseForm'
   import ApplyCard from '@/components/share/ApplyCard'
+  import ReleaseInfo from '@/components/share/ReleaseInfo'
+
   export default {
     data () {
       return{
@@ -267,6 +130,19 @@
         } else {
           alert('请先登录')
         }
+      },
+      agree (applyId, applyUserId) {
+        this.$ajax.post(baseUrl + 'generatingOrder', {
+          applyId: applyId,
+          employeeId: applyUserId,
+          releaseId: this.data.id,
+          employerId: this.data.employerId,
+          cycle: this.data.cycle
+        }).then(res => {
+
+        }, res => {
+
+        })
       }
     },
     props: ['id'],
@@ -279,7 +155,8 @@
     },
     components: {
       ReleaseForm,
-      ApplyCard
+      ApplyCard,
+      ReleaseInfo
     }
   }
 </script>

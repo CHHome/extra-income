@@ -177,8 +177,8 @@ class ApplyPro(db.Model):
         return '<Applypro %r>' % self.ReleaseProId
 
 
-class Order(db.Model):
-    __tablename__ = 'order'
+class ProOrder(db.Model):
+    __tablename__ = 'proorder'
     id = db.Column(db.Integer, primary_key=True)
     applyId = db.Column(db.Integer)
     employerId = db.Column(db.Integer)
@@ -193,6 +193,7 @@ class Order(db.Model):
     onTime = db.Column(db.Integer, default=0)
     employerScore = db.Column(db.Integer, default=0)
     status = db.Column(db.String(10), default='进行中')
+    evaluate = db.Column(db.String(200), nullable=True)  # todo 评价
 
     def __init__(self, apply_id, employer_id, employee_id, release_id, deadline_time):
         self.applyId = apply_id
@@ -202,4 +203,4 @@ class Order(db.Model):
         self.deadlineTime = deadline_time
 
     def __repr__(self):
-        return '<Order %r>' % self.id
+        return '<ProOrder %r>' % self.id

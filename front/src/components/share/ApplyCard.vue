@@ -44,7 +44,7 @@
         <span>email：</span><span>{{item.email}}</span>
       </div>
     </router-link>
-    <span class="agree" @click="agree">同意申请</span>
+    <slot name="agree"></slot>
   </div>
 </template>
 <script>
@@ -56,11 +56,6 @@
         baseUrl: baseUrl
       }
     },
-    props: ['item'],
-    methods: {
-      agree (e) {
-        console.log('dsffs')
-      }
-    }
+    props: ['item']
   }
 </script>
