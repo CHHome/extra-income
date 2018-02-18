@@ -19,6 +19,11 @@ from .resources.addApply import AddApply
 from .resources.applyListShow import ApplyListShow
 from .resources.applyUserList import ApplyUserList
 from .resources.generatingOrder import GeneratingOrder
+from .resources.haveInHandListShow import HaveInHandListShow
+from .resources.showOrderData import ShowOrderData
+
+
+
 
 
 
@@ -43,6 +48,9 @@ api.add_resource(AddApply, '/addApply')
 api.add_resource(ApplyListShow, '/applyListShow')
 api.add_resource(ApplyUserList, '/applyUserList')
 api.add_resource(GeneratingOrder, '/generatingOrder')
+api.add_resource(HaveInHandListShow, '/haveInHandListShow')
+api.add_resource(ShowOrderData, '/showOrderData')
+
 
 
 

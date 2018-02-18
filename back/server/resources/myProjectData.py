@@ -1,4 +1,4 @@
-# todo 我的项目中发布中和已完成项目api，获取这两个类型的项目信息
+# todo 我的项目中发布中项目api，获取这两个类型的项目信息
 from flask.ext import restful
 from flask_restful import reqparse
 from flask.ext.restful import fields, marshal_with, marshal

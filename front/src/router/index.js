@@ -17,6 +17,7 @@ import ShowUserInfo from '@/pages/ShowUserInfo'
 import ReleasePro from '@/pages/ReleasePro'
 import ShowReleasePro from '@/pages/ShowReleasePro'
 import ShowMoreRelease from '@/pages/ShowMoreRelease'
+import ProjectOrder from '@/pages/ProjectOrder'
 
 
 
@@ -68,6 +69,12 @@ export default new Router({
       path: '/showMoreRelease',
       name: 'showMoreRelease',
       component: ShowMoreRelease
+    },
+    {
+      path: '/projectOrder/:id',
+      name: 'projectOrder',
+      component: ProjectOrder,
+      props: true,
     }
   ]
 })

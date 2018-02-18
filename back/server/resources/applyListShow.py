@@ -8,9 +8,10 @@ from .. import db
 class ApplyListShow(restful.Resource):
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('applyUserId', type=int, required=True, help='id is required')
+        parser.add_argument('id', type=int, required=True, help='id is required')  #applyId
+        parser.add_argument('type', type=str, required=True, help='type is required')
         args = parser.parse_args()
-        applyList = ApplyPro.query.filter_by(applyUserId=args['applyUserId'], status='申请中').all()
+        applyList = ApplyPro.query.filter_by(applyUserId=args['id'], status=args['type']).all()
         resultList = list()
         for item in applyList:
             project = item.releasePro

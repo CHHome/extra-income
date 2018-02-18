@@ -35,13 +35,13 @@
       <header @click="selectType">
         <span data-type="releasing" class="clicked">发布中</span>
         <span data-type="applying">申请中</span>
-        <span>进行中</span>
+        <span data-type="haveInHand">进行中</span>
         <span>已完成</span>
       </header>
       <div class="projects-container row">
         <router-link
           v-for="item in showList"
-          :to="{name: 'showReleasePro', params: {id: item.id}}"
+          :to="{name: linkTo, params: {id: item.id}}"
           :key="item.id">
           <project-card :item="item"></project-card>
         </router-link>
@@ -55,7 +55,8 @@
   export default {
     data () {
       return {
-        showList: []
+        showList: [],
+        linkTo: 'showReleasePro'
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -64,7 +65,7 @@
           alert('请先登录')
           vm.$router.push({name: 'index'})
         }
-        vm.getTypeData('releasing')
+        vm.getTypeData('myProjectData', 'releasing')
         window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
@@ -75,30 +76,23 @@
           switch(e.target.getAttribute('data-type'))
           {
             case 'releasing':
-              this.getTypeData('releasing')
+              this.linkTo = 'showReleasePro'
+              this.getTypeData('myProjectData', 'releasing')
               break;
             case 'applying':
-              this.getApplyList()
+              this.linkTo = 'showReleasePro'
+              this.getTypeData('applyListShow', '申请中')
               break
-
+            case 'haveInHand':
+              this.linkTo = 'projectOrder'
+              this.getTypeData('haveInHandListShow', '进行中')
+              break
           }
         }
     },
-      getApplyList () {
-        this.$ajax.get(baseUrl + 'applyListShow', {
-          params: {
-            applyUserId: this.$store.state.loginId,
-          }
-        }).then(res => {
-          this.showList = res.data
-        }, res => {
-          alert('获取数据失败,请检查网络')
-        })
-      },
-      getTypeData (type) {
-        let store = window.localStorage
-        if (store['token']) {
-          this.$ajax.get(baseUrl + 'myProjectData', {
+      getTypeData (url, type) {
+        if (this.$store.state.loginId) {
+          this.$ajax.get(baseUrl + url, {
             params: {
               id: this.$store.state.loginId,
               type: type
