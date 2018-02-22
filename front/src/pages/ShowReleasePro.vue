@@ -14,6 +14,13 @@
       background-color: #fff;
       border-radius: 4px;
       padding-bottom: 30px;
+      .apply-card{
+        padding-bottom: 10px;
+        border: 1px solid #ccc;
+        position: relative;
+        cursor: pointer;
+        margin-top: 20px;
+      }
       header{
         padding: 10px 15px;
         border-bottom: 1px solid #ccc;
@@ -52,12 +59,14 @@
     <div class="release-apply-list" v-if="modifyIcon">
       <header>申请列表</header>
       <div class="row">
-        <apply-card :item="item" v-for="item in applyUserList"
-                    :key="item.id">
+        <div class="col-md-3 col-sm-4 apply-card" v-for="item in applyUserList">
+          <apply-card :item="item"
+                      :key="item.id">
           <span class="agree"
                 @click="agree(item.id, item.applyUserId)"
-          slot="agree">同意申请</span>
-        </apply-card>
+                slot="agree">同意申请</span>
+          </apply-card>
+        </div>
       </div>
     </div>
   </div>

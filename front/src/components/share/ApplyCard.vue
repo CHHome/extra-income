@@ -1,11 +1,6 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import '../../css/theme';
-  .apply-card{
-    padding-bottom: 10px;
-    border: 1px solid #ccc;
-    position: relative;
-    cursor: pointer;
-    margin-top: 20px;
+  .apply-card-container{
     text-align: center;
     a{
       color: #000;
@@ -34,11 +29,12 @@
   }
 </style>
 <template>
-  <div class="col-md-3 col-sm-4 apply-card">
+  <div class="apply-card-container">
     <router-link
-      :to="{name: 'showUserInfo', params: {id: item.id}}">
+      :to="{name: 'showUserInfo', params: {id: item.userId}}">
       <img alt="chengenhong" :src="baseUrl + 'static/imgs/' + item.headImg">
       <div class="apply-user-info">
+        <span>姓名：</span><span>{{item.userName}}</span><br>
         <span>职业：</span><span>{{item.profession}}</span><br>
         <span>phone：</span><span>{{item.phone}}</span><br>
         <span>email：</span><span>{{item.email}}</span>

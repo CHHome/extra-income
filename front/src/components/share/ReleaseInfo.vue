@@ -24,12 +24,17 @@
       margin: 20px 0;
       min-width: 320px;
       padding: 0 10%;
-      .title i{
-        color: @secondColor;
-        cursor: pointer;
-        float: right;
-        margin-right: 30px;
-        font-size: 20px;
+      .title {
+        i{
+          color: @secondColor;
+          cursor: pointer;
+          float: right;
+          margin-right: 30px;
+          font-size: 20px;
+        }
+        span{
+          display: inline-block;
+        }
       }
       & > div{
         margin-bottom: 30px;
@@ -65,7 +70,7 @@
     }
     .container-left{
       background-color: @secondColor;
-      min-width: 300px;
+      /*min-width: 300px;*/
       margin-top: -8%;
       color: #fff;
       & > div{

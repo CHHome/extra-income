@@ -21,6 +21,10 @@ from .resources.applyUserList import ApplyUserList
 from .resources.generatingOrder import GeneratingOrder
 from .resources.haveInHandListShow import HaveInHandListShow
 from .resources.showOrderData import ShowOrderData
+from .resources.participantInfo import ParticipantInfo
+from .resources.updateProgress import UpdateProgress
+
+
 
 
 
@@ -50,6 +54,10 @@ api.add_resource(ApplyUserList, '/applyUserList')
 api.add_resource(GeneratingOrder, '/generatingOrder')
 api.add_resource(HaveInHandListShow, '/haveInHandListShow')
 api.add_resource(ShowOrderData, '/showOrderData')
+api.add_resource(ParticipantInfo, '/participantInfo')
+api.add_resource(UpdateProgress, '/updateProgress')
+
+
 
 
 

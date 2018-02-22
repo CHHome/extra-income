@@ -13,14 +13,14 @@ class HaveInHandListShow(restful.Resource):
         parser.add_argument('id', type=int, required=True) # todo  用户id
         parser.add_argument('type', type=str, required=True, help='type is required')
         args = parser.parse_args()
-        proOrderList = ProOrder.query.filter_by(employerId=args['id'], status=args['type']).all()
-        proOrderList.extend(ProOrder.query.filter_by(employeeId=args['id'], status=args['type']).all())
+        proOrderList = ProOrder.query.filter_by(employerId=args['id']).filter(ProOrder.status.endswith('中')).all()
+        proOrderList.extend(ProOrder.query.filter_by(employeeId=args['id']).filter(ProOrder.status.endswith('中')).all())
         proOrderList = sorted(proOrderList, key=lambda e: e.beginTime)
         releaseList = list()
-        resultList = list()
-        for item in proOrderList:
-            releaseList.append(ReleasePro.query.filter_by(id=item.releaseId, status=args['type']).first())
-        for item in releaseList:
+        for orderItem in proOrderList:
+            item = ReleasePro.query.filter_by(id=orderItem.releaseId, status=args['type']).first()
             item.releaseTime = item.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
-            resultList.append(item.trans_to_dict())
-        return resultList
+            item = item.trans_to_dict()
+            item['orderId'] = orderItem.id
+            releaseList.append(item)
+        return releaseList

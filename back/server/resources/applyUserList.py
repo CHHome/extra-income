@@ -16,6 +16,8 @@ class ApplyUserList(restful.Resource):
             user = User.query.filter_by(id=applyItem.applyUserId).first()
             applyItem.applyTime = applyItem.applyTime.strftime("%Y-%m-%d %H:%M:%S")
             applyItem = applyItem.trans_to_dict()
+            applyItem['userId'] = user.id
+            applyItem['userName'] = user.userName
             applyItem['profession'] = user.profession
             applyItem['phone'] = user.phone
             applyItem['email'] = user.email

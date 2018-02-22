@@ -9,10 +9,11 @@
     margin-bottom: 15px;
   }
   .pro-container{
+    overflow: hidden;
     border-radius: 4px;
     height:7px;
     background-color: rgba(0,0,0,0.49);
-    width: 70%;
+    width: 80%;
     margin-left: 8px;
     opacity: 0.65;
   }
