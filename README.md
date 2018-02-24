@@ -27,3 +27,6 @@
 
 > 以上开启前端pro环境，**pro环境下忽略3**
 
+
+### V0.0.1 腾讯云发布
+  项目第一个版本已经在腾讯云上线，地址为：[http://193.112.9.242:3390/static/index.html](http://193.112.9.242:3390/static/index.html) inline link.
