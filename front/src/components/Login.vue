@@ -1,7 +1,8 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import '../css/theme.less';
   #login-dialog{
-    .my-dialog(35%)
+    .my-dialog(35%);
+    padding-top: 30px;
   }
   .loginBtn div > div,.loginBtn div >input{
     .btnTheme
@@ -20,15 +21,6 @@
         <label for="psw" class="col-sm-2 control-label">密码:</label>
         <div class="col-sm-8">
           <input v-model="password" type="password" id="psw" class="form-control" placeholder="请输入密码" name="password">
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <div class="checkbox">
-            <label>
-              <input type="checkbox"> 记住密码
-            </label>
-          </div>
         </div>
       </div>
       <div class="form-group loginBtn">

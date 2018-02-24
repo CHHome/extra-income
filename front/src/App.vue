@@ -6,6 +6,7 @@
     <keep-alive>
       <router-view/>
     </keep-alive>
+    <my-footer></my-footer>
   </div>
 </template>
 <style scoped>
@@ -23,13 +24,16 @@
 </style>
 <script>
   import MyHeader from '@/components/MyHeader'
+  import MyFooter from '@/components/MyFooter'
+
   export default {
     name: 'app',
     data () {
       return {}
     },
     components: {
-      MyHeader
+      MyHeader,
+      MyFooter
     }
   }
 </script>

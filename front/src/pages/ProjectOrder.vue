@@ -42,6 +42,20 @@
 </style>
 <template>
   <div class="project-order">
+    <div v-if="employerDialog">
+      <my-dialog :title="'给雇主评分'">
+        <employer-score
+          @showDialog="showDialog"
+        @submit="submitProgress"></employer-score>
+      </my-dialog>
+    </div>
+    <div v-if="employeeDialog">
+      <my-dialog :title="'给专家评分'">
+        <employee-score
+          @showDialog="showDialog"
+          @submit="submitComplete"></employee-score>
+      </my-dialog>
+    </div>
     <img src="../assets/releaseBanner.jpg" alt="banner">
     <release-info
       :data="releaseProData"
@@ -52,13 +66,6 @@
          title="修改"
          @click="modify"
          v-if="modifyIcon"></i>
-
-      <div class="container-apply"
-           v-if="!modifyIcon"
-           @click="sendApply"
-           slot="applyBtn">
-        发送申请
-      </div>
     </release-info>
     <release-form
       :type="'showReleasePro'"
@@ -83,13 +90,13 @@
         <div v-if="!modifyIcon">
           输入最新进度：<input type="text" v-model="orderData.progress"><br>
           <span v-if="orderData.status=='进行中'" @click="updateProgress">更新进度</span>
-          <span v-if="orderData.status=='进行中'" @click="submitProgress">交付项目</span>
+          <span v-if="orderData.status=='进行中'" @click="showDialog('employerDialog')">交付项目</span>
           <span v-if="orderData.status=='交付中'">交付中</span>
         </div>
         <div v-if="modifyIcon">
           <span v-if="orderData.status=='进行中'">进行中</span>
-          <span v-if="orderData.status=='交付中'">验收通过</span>
-          <span v-if="orderData.status=='交付中'">验收不通过</span>
+          <span v-if="orderData.status=='交付中'" @click="showDialog('employeeDialog')">验收通过</span>
+          <span v-if="orderData.status=='交付中'" @click="unCheck">验收不通过</span>
         </div>
         <span v-if="orderData.status=='已完成'">已完成</span>
       </div>
@@ -102,6 +109,11 @@
   import ReleaseInfo from '@/components/share/ReleaseInfo'
   import ApplyCard from '@/components/share/ApplyCard'
   import MyProgress from '@/components/share/MyProgress'
+  import EmployerScore from '@/components/EmployerScore'
+  import EmployeeScore from '@/components/EmployeeScore'
+  import MyDialog from '@/components/share/MyDialog'
+
+
 
   export default {
     props: ['id'],   //todo 订单id
@@ -112,14 +124,19 @@
         showModify: false,
         modifyIcon: false,
         releaseProData: {},
-        participantInfo: {}
+        participantInfo: {},
+        employerDialog: false,
+        employeeDialog: false
       }
     },
     components: {
       ReleaseForm,
       ReleaseInfo,
       ApplyCard,
-      MyProgress
+      MyProgress,
+      EmployerScore,
+      EmployeeScore,
+      MyDialog
     },
     methods: {
       getData () {
@@ -199,15 +216,22 @@
           alert('更新失败，请检查网络')
         })
       },
-      submitProgress () {
+      showDialog (dialogName) {
+        this[dialogName] = !this[dialogName]
+        this.$store.commit('changeSinger', 'curtain')
+      },
+      submitProgress (score, employerEvaluate) {
         this.$ajax.get(baseUrl + 'updateProgress' ,{
           params: {
             orderId: this.orderData.id,
             value: 100,
-            type: '交付项目'
+            type: '交付项目',
+            score: score,
+            employerEvaluate: employerEvaluate
           }
         }).then(res => {
           if (res.data === 10004) {
+            this.showDialog('employerDialog')
             this.getData()
             alert('交付成功')
           } else {
@@ -215,7 +239,43 @@
           }
         }, res => {
           alert('交付失败，请检查网络')
-        })      }
+        })
+      },
+      unCheck () {
+        this.$ajax.get(baseUrl + 'checkProject', {
+          params: {
+            orderId: this.orderData.id,
+            type: 'no'
+          }
+        }).then(res => {
+          if (res.data === 10005) {
+            this.getData()
+          }
+        }, res => {
+          alert('操作失败，请检查网络')
+        })
+      },
+      submitComplete (credit, quality, onTime, employeeEvaluate) {
+        console.log(credit, quality, onTime, employeeEvaluate)
+        this.$ajax.get(baseUrl + 'checkProject', {
+          params: {
+            orderId: this.orderData.id,
+            type: 'yes',
+            credit: credit,
+            quality: quality,
+            onTime: onTime,
+            employeeEvaluate: employeeEvaluate
+          }
+        }).then(res => {
+          if (res.data === 10006) {
+            alert('项目已完成')
+            this.showDialog('employeeDialog')
+            this.getData()
+          }
+        }, res => {
+          alert('操作失败，请检查网络')
+        })
+      }
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {

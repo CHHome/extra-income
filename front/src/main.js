@@ -16,6 +16,7 @@ Vue.prototype.$ajax = axios
 window.$ = $
 
 router.beforeEach((to, from, next) => {
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
   let webStore = window.localStorage
   if (!store.state.hasLogin && 'token' in webStore) {
     new Promise(function (resolve, reject) {

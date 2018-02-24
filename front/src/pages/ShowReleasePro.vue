@@ -29,6 +29,10 @@
         margin: auto;
       }
     }
+    .release-apply-list-tip{
+      text-align: center;
+      color: @secondColor;
+    }
   }
 </style>
 <template>
@@ -67,6 +71,7 @@
                 slot="agree">同意申请</span>
           </apply-card>
         </div>
+        <div v-if="applyUserList.length === 0" class="release-apply-list-tip">还没有专家申请呢，请稍后刷新查看</div>
       </div>
     </div>
   </div>
@@ -124,6 +129,7 @@
       },
       sendApply () {
         if (this.$store.state.loginId){
+          this.increase('applyAmount')
           this.$ajax.get(baseUrl + 'addApply', {
             params: {
               ReleaseProId: this.id,
@@ -148,9 +154,29 @@
           employerId: this.data.employerId,
           cycle: this.data.cycle
         }).then(res => {
-
+          if (res.data = 10008) {
+            alert('已生成订单，请在我的项目中查看项目进度等信息')
+          } else {
+            alert('操作异常')
+          }
         }, res => {
-
+          alert('操作失败，请检查网络')
+        })
+      },
+      increase (type) {
+        this.$ajax.get(baseUrl+ 'increase', {
+          params: {
+            releaseId: this.id,
+            type: type
+          }
+        }).then(res => {
+          if (res.data === 10007) {
+            return
+          }else {
+            alert('不好了，服务器好像出现了问题')
+          }
+        }, res => {
+          alert('请检查网络连接')
         })
       }
     },
@@ -158,6 +184,9 @@
     beforeRouteEnter (to, from, next) {
       next(vm => {
         vm.getData()
+        if (vm.id !== parseInt(vm.$store.state.loginId)) {
+          vm.increase('browse')
+        }
         window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })

@@ -100,7 +100,9 @@
     <register v-if="showRegister" @next="next"></register>
     <header>
       <div>
-        <span>外快网</span>
+        <router-link :to="{name:'index'}">
+          <span>外快网</span>
+        </router-link>
         <router-link :to="{name:'index'}">
           <span>首页</span>
         </router-link>
@@ -120,7 +122,7 @@
             <ul :class="{headerDropdown:$store.state.myHeader}">
               <li>通知</li>
               <li><router-link :to="{name: 'userInfo'}">个人信息</router-link></li>
-              <li>我的项目</li>
+              <li><router-link :to="{name: 'projects'}">我的项目</router-link></li>
               <li @click="Cancellation">退出登录</li>
             </ul>
           </div>

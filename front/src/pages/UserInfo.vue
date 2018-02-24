@@ -304,7 +304,7 @@
     </div>
     <div class="submit-banner">
       <span @click="submit">保存</span>
-      <span><router-link :to="{name:'showUserInfo', params: {id: id}}">预览</router-link></span>
+      <router-link :to="{name:'showUserInfo', params: {id: id}}"><span>预览</span></router-link>
     </div>
   </div>
 </template>

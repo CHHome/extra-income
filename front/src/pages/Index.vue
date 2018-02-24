@@ -39,6 +39,7 @@
       padding-bottom: 10px;
       font-size: 14px;
       background-color: #fff;
+      color: #000;
       span:nth-child(1){
         font-size: 20px;
         font-weight: 600;

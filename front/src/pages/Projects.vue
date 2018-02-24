@@ -28,15 +28,19 @@
   .clicked{
     border-bottom: 2px solid @secondColor;
   }
+  .projects-container-tip{
+    text-align: center;
+    color: @secondColor;
+  }
 </style>
 <template>
   <div class="projects-page">
     <div>
-      <header @click="selectType">
+      <header @click="selectType" class="projects-page-title">
         <span data-type="releasing" class="clicked">发布中</span>
         <span data-type="applying">申请中</span>
         <span data-type="haveInHand">进行中</span>
-        <span>已完成</span>
+        <span data-type="completed">已完成</span>
       </header>
       <div class="projects-container row">
         <router-link
@@ -45,6 +49,7 @@
           :key="item.id">
           <project-card :item="item"></project-card>
         </router-link>
+        <div  v-if="showList.length === 0" class="projects-container-tip">没有满足条件的项目，快去创造吧...</div>
       </div>
     </div>
   </div>
@@ -59,19 +64,27 @@
         linkTo: 'showReleasePro'
       }
     },
+    mounted () {
+      this.getTypeData('myProjectData', 'releasing')
+    },
     beforeRouteEnter (to, from, next) {
       next(vm => {
         if (!vm.$store.state.hasLogin) {
           alert('请先登录')
           vm.$router.push({name: 'index'})
         }
-        vm.getTypeData('myProjectData', 'releasing')
         window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
     },
     methods: {
+      reInit (e) {
+        $('.projects-page-title span').removeClass('clicked')
+        e.target.classList.add('clicked')
+        this.showAll = this.showDesign = this.showDeveloper = this.showMarket = this.showProject = false
+      },
       selectType (e) {
+        this.reInit(e)
         if (e.target.nodeName === 'SPAN') {
           switch(e.target.getAttribute('data-type'))
           {
@@ -86,6 +99,10 @@
             case 'haveInHand':
               this.linkTo = 'projectOrder'
               this.getTypeData('haveInHandListShow', '进行中')
+              break
+            case 'completed':
+              this.linkTo = 'projectOrder'
+              this.getTypeData('haveInHandListShow', '已完成')
               break
           }
         }

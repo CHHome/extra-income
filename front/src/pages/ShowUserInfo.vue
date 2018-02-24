@@ -191,7 +191,7 @@
         </div>
         <div class="about-expert">
           <label >报价</label>
-          <span></span><br>
+          <span>{{mainInfo.price}}</span><br>
           <label>成交量</label>
           <span>{{mainInfo.hasFinish}}</span>
         </div>
