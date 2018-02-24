@@ -1,23 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// const Index = () => import('@/pages/Index')
-// const Projects = () => import('@/pages/Projects')
-// const Expert = () => import('@/pages/Expert')
-// const UserInfo = () => import('@/pages/UserInfo')
-// const ShowUserInfo = () => import('@/pages/ShowUserInfo')
-// const ReleasePro = () => import('@/pages/ReleasePro')
-// const ShowReleasePro = () => import('@/pages/ShowReleasePro')
-// const ShowMoreRelease = () => import('@/pages/ShowMoreRelease')
+const Index = () => import('@/pages/Index')
+const Projects = () => import('@/pages/Projects')
+const Expert = () => import('@/pages/Expert')
+const UserInfo = () => import('@/pages/UserInfo')
+const ShowUserInfo = () => import('@/pages/ShowUserInfo')
+const ReleasePro = () => import('@/pages/ReleasePro')
+const ShowReleasePro = () => import('@/pages/ShowReleasePro')
+const ShowMoreRelease = () => import('@/pages/ShowMoreRelease')
+const ProjectOrder = () => import('@/pages/ProjectOrder')
 
-import Index from '@/pages/Index'
-import Projects from '@/pages/Projects'
-import Expert from '@/pages/Expert'
-import UserInfo from '@/pages/UserInfo'
-import ShowUserInfo from '@/pages/ShowUserInfo'
-import ReleasePro from '@/pages/ReleasePro'
-import ShowReleasePro from '@/pages/ShowReleasePro'
-import ShowMoreRelease from '@/pages/ShowMoreRelease'
-import ProjectOrder from '@/pages/ProjectOrder'
 
 
 

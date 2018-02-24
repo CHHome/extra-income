@@ -23,6 +23,9 @@ from .resources.haveInHandListShow import HaveInHandListShow
 from .resources.showOrderData import ShowOrderData
 from .resources.participantInfo import ParticipantInfo
 from .resources.updateProgress import UpdateProgress
+from .resources.checkProject import CheckProject
+from .resources.increase import Increase
+
 
 
 
@@ -56,6 +59,10 @@ api.add_resource(HaveInHandListShow, '/haveInHandListShow')
 api.add_resource(ShowOrderData, '/showOrderData')
 api.add_resource(ParticipantInfo, '/participantInfo')
 api.add_resource(UpdateProgress, '/updateProgress')
+api.add_resource(CheckProject, '/checkProject')
+api.add_resource(Increase, '/increase')
+
+
 
 
 

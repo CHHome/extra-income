@@ -16,18 +16,18 @@
       width:65%;
       margin: 30px auto;
       .userImg{
-        &:hover{
-          &:before{
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,.5) url(//static.lagou.com/www/static/account-c/modules/userinfo/img/camera_8d64bc7.png) center center no-repeat;
-            cursor: pointer;
-          }
-        }
+        /*&:hover{*/
+          /*&:before{*/
+            /*content: "";*/
+            /*position: absolute;*/
+            /*left: 0;*/
+            /*top: 0;*/
+            /*width: 100%;*/
+            /*height: 100%;*/
+            /*background: rgba(0,0,0,.5) url(//static.lagou.com/www/static/account-c/modules/userinfo/img/camera_8d64bc7.png) center center no-repeat;*/
+            /*cursor: pointer;*/
+          /*}*/
+        /*}*/
         & > input{
           display: none;
         }

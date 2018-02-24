@@ -24,7 +24,7 @@ class User(db.Model):
     onTime = db.Column(db.Integer, default=100)
     credit = db.Column(db.Integer, default=100)
     quality = db.Column(db.Integer, default=100)
-    totalScore =  db.Column(db.Integer, default=100)
+    totalScore =  db.Column(db.Integer, default=300)
     price = db.Column(db.Integer, nullable=True)
     hasFinish = db.Column(db.Integer, nullable=False)
     oldProject = db.relationship('OldProject', backref='user', lazy='dynamic')
@@ -36,13 +36,14 @@ class User(db.Model):
     employeeNum = db.Column(db.Integer, default=0)   # todo 当雇主次数
     notAppraised = db.Column(db.Integer, default=0)   # todo 未评价订单数
     status = db.Column(db.String(10), default='正常')   # todo 帐号状态
+    BreachOfContract = db.Column(db.Integer, default=0)  # todo 违约次数
+    employerScore = db.Column(db.Integer, default=100)
 
-    def __init__(self, phone, user_name, password, total_score=0, has_finish=0):
+    def __init__(self, phone, user_name, password, has_finish=0):
         self.userName = user_name
         self.password = password
         self.phone = phone
         self.hasFinish = has_finish
-        self.totalScore = total_score
 
     def __repr__(self):
         return '<Users %r>' % self.userName
@@ -194,6 +195,7 @@ class ProOrder(db.Model):
     employerScore = db.Column(db.Integer, default=0)
     status = db.Column(db.String(10), default='进行中')
     evaluate = db.Column(db.String(200), nullable=True)  # todo 评价
+    employerEvaluate = db.Column(db.String(200), nullable=True)  # todo 评价
 
     def __init__(self, apply_id, employer_id, employee_id, release_id, deadline_time):
         self.applyId = apply_id

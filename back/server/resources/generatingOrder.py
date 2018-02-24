@@ -2,7 +2,7 @@
 from flask.ext import restful
 from flask_restful import reqparse
 from flask.ext.restful import fields, marshal_with, marshal
-from ..models import ProOrder, ApplyPro, ReleasePro
+from ..models import ProOrder, User, ReleasePro
 from .. import db
 import datetime
 
@@ -20,10 +20,13 @@ class GeneratingOrder(restful.Resource):
         proOrder = ProOrder(args['applyId'],  args['employerId'], args['employeeId'],  args['releaseId'], datetime.datetime.now() + datetime.timedelta(days=60))
         db.session.add(proOrder)
         db.session.commit()
+        return 10008
 
     def changeStatus(self, release_id, apply_id):
         releasePro = ReleasePro.query.filter_by(id=release_id, status='招募中').first()
         releasePro.status = '进行中'
+        enployer = User.query.filter_by(id=releasePro.employerId).first()
+        enployer.employeeNum += 1
         applyList = releasePro.apply.all()
         print(applyList)
         for item in applyList:

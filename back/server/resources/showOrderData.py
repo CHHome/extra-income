@@ -14,4 +14,6 @@ class ShowOrderData(restful.Resource):
         if proOrder is not None:
             proOrder.beginTime = proOrder.beginTime.strftime("%Y-%m-%d %H:%M:%S")
             proOrder.deadlineTime = proOrder.deadlineTime.strftime("%Y-%m-%d %H:%M:%S")
+            if proOrder.completionTime is not None:
+                proOrder.completionTime = proOrder.completionTime.strftime("%Y-%m-%d %H:%M:%S")
             return proOrder.trans_to_dict()

@@ -24,7 +24,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,.5) url(//static.lagou.com/www/static/account-c/modules/userinfo/img/camera_8d64bc7.png) center center no-repeat;
+            background: rgba(0,0,0,.5) url(../assets/camera.png) center center no-repeat;
             cursor: pointer;
           }
         }
