@@ -29,4 +29,4 @@
 
 
 ### V0.0.1 腾讯云发布
-  项目第一个版本已经在腾讯云上线，地址为：[http://193.112.9.242:3390/static/index.html](http://193.112.9.242:3390/static/index.html) inline link.
+  ####项目第一个版本已经在腾讯云上线，地址为：[http://193.112.9.242:3390/static/index.html](http://193.112.9.242:3390/static/index.html)，由于是第一版，可能会有一些意想不到的bug，欢迎把我服务器搞蹦。
