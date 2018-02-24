@@ -14,6 +14,12 @@
       margin: 0 auto;
       height: 60px;
       line-height: 60px;
+      & > div{
+        a{
+          text-decoration: none;
+          color: #fff;
+        }
+      }
       /*左边*/
       & > div:nth-child(1){
         float: left;
@@ -75,6 +81,7 @@
         padding: 5px 15px;
         & > a{
           color: #000;
+          text-decoration: none;
         }
       }
     }

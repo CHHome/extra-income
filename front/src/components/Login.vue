@@ -14,7 +14,7 @@
       <div class="form-group">
         <label for="accout" class="col-sm-2 control-label">帐号:</label>
         <div class="col-sm-8">
-          <input v-model="userName" type="text" id="accout" class="form-control" placeholder="请输入手机号/邮箱" name="username">
+          <input v-model="userName" type="text" id="accout" class="form-control" placeholder="请输入用户名" name="username">
         </div>
       </div>
       <div class="form-group">

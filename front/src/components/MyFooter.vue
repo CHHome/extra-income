@@ -1,6 +1,7 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import '../css/theme.less';
   .my-footer{
+    margin-top: 30px;
     border-top: 1px solid #e0dfdf;
     background-color: black;
     padding: 15px;

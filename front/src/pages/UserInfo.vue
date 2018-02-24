@@ -439,6 +439,13 @@
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
     },
+    beforeRouteLeave (to, from, next) {
+      console.log('sfsf')
+      this.mainInfo.headImg = 'default_head.jpg'
+      this.selected = []
+      this.projectList = []
+      next()
+    },
     components: {
       MyProgress,
       Portrait,
