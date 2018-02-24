@@ -14,7 +14,7 @@
       margin: 0 auto;
       height: 60px;
       line-height: 60px;
-      & > div{
+      .header-left{
         a{
           text-decoration: none;
           color: #fff;
@@ -106,7 +106,7 @@
     <login v-if="showLogin" @next="next"></login>
     <register v-if="showRegister" @next="next"></register>
     <header>
-      <div>
+      <div class="header-left">
         <router-link :to="{name:'index'}">
           <span>外快网</span>
         </router-link>
