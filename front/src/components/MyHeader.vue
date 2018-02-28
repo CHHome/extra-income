@@ -173,6 +173,7 @@
         targer.slideToggle(function () {
           document.onclick = function () {
             targer.slideUp()
+            a = "<iframe id='"+id+"'></iframe>"
           }
         })
       },

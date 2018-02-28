@@ -21,7 +21,6 @@
   <div class="release">
     <img src="../assets/releaseBanner.jpg" alt="banner">
     <release-form :type="'releasePro'" :key="viewId"></release-form>
-    <router-link :to="{name: 'showReleasePro', params: {id: 2}}">test</router-link>
   </div>
 </template>
 <script>
