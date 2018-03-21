@@ -154,17 +154,17 @@
       next(vm => {
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: false})
         vm.getRecommend()
-        window.onscroll = () => {
-          if (document.documentElement.scrollTop >= 540) {
+        $(window).bind('scroll', () => {
+          if ($(document).scrollTop() >= 540) {
             vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
           } else {
             vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: false})
           }
-        }
+        })
       })
     },
     beforeRouteLeave (to, from, next) {
-      window.onscroll = function () {}
+      $(window).unbind('scroll')
       this.$store.commit('changeSingerState', {state: 'myHeader', value: true})
       next()
     },

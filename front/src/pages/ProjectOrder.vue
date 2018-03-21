@@ -284,7 +284,6 @@
           vm.$router.push({name: 'index'})
         }
         vm.getData()
-        window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
     },

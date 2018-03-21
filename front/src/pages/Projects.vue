@@ -73,7 +73,6 @@
           alert('请先登录')
           vm.$router.push({name: 'index'})
         }
-        window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
     },

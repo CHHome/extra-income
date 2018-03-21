@@ -153,7 +153,6 @@
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
-        window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
     },

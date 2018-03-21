@@ -187,7 +187,6 @@
         if (vm.id !== parseInt(vm.$store.state.loginId)) {
           vm.increase('browse')
         }
-        window.onscroll = function () {}
         vm.$store.commit('changeSingerState', {stateName: 'myHeader', value: true})
       })
     },
