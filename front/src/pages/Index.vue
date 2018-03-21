@@ -40,6 +40,7 @@
       font-size: 14px;
       background-color: #fff;
       color: #000;
+      min-height: 70px;
       span:nth-child(1){
         font-size: 20px;
         font-weight: 600;
