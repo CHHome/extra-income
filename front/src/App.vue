@@ -20,6 +20,9 @@
     opacity: 0.40;
     z-index: 1000;
   }
+  #app div:nth-last-child(2){
+    min-height: calc(100vh - 61px - 226px);
+  }
 
 </style>
 <script>

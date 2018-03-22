@@ -1,11 +1,15 @@
 <style lang="less" rel="stylesheet/less" scoped>
   @import '../css/theme.less';
   .my-footer{
+    height: 226px;
     margin-top: 30px;
     border-top: 1px solid #e0dfdf;
     background-color: black;
     padding: 15px;
     text-align: center;
+    .row{
+      margin: 0;
+    }
     & > div{
       color: #fff;
       text-align: center;
