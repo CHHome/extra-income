@@ -21,7 +21,7 @@
     z-index: 1000;
   }
   #app div:nth-last-child(2){
-    min-height: calc(100vh - 61px - 226px);
+    min-height: calc(100vh - 226px);
   }
 
 </style>

@@ -7,9 +7,6 @@
     background-color: black;
     padding: 15px;
     text-align: center;
-    .row{
-      margin: 0;
-    }
     & > div{
       color: #fff;
       text-align: center;
@@ -25,6 +22,9 @@
         color: #fff;
       }
     }
+  }
+  .row{
+    margin: 0;
   }
 </style>
 <template>
