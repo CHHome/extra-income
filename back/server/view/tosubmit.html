@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>充值跳转</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<style>
+@media (max-width: 768px) {
+    .navbar-header {
+        text-align: center;
+        width: 100%;
+    }
+    .navbar-brand {
+        float: none;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0;
+    }
+}
+</style>
+
+<body>
+    <h1>创建支付中 ~~~</h1>
+    <form action="https://pay.paysapi.com/" method="POST" id="postform">
+        <input type="hidden" name="uid" value="<%-order.uid%>">
+        <input type="hidden" name="price" value="<%-order.price%>">
+        <input type="hidden" name="istype" value="<%-order.istype%>">
+        <input type="hidden" name="notify_url" value="<%-order.notify_url%>">
+        <input type="hidden" name="return_url" value="<%-order.return_url%>">
+        <input type="hidden" name="orderid" value="<%-order.orderid%>">
+        <input type="hidden" name="orderuid" value="<%-order.orderuid%>">
+        <input type="hidden" name="key" value="<%-order.api_key%>">
+        <input type="hidden" name="goodsname" value="<%-order.goodsname%>">
+    </form>
+       <script src="https://code.jquery.com/jquery-2.1.1.min.js" integrity="sha256-h0cGsrExGgcZtSZ/fRz4AwV+Nn6Urh/3v3jFRQ0w9dQ=" crossorigin="anonymous"></script>
+    <script>
+    function postpay() {
+        $("#postform").submit()
+    }
+    postpay();
+    </script>
+ 
+</body>
+
+</html>

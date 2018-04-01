@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>充值</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<style>
+@media (max-width: 768px) {
+    .navbar-header {
+        text-align: center;
+        width: 100%;
+    }
+    .navbar-brand {
+        float: none;
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0;
+    }
+}
+</style>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+    充值
+      </a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>价格</h2>
+        <div class="table-responsive table-condensed table-border">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>月账号</th>
+                        <th>季账号</th>
+                        <th>半年账号</th>
+                        <th>年账号</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>30 天</td>
+                        <td>90 天</td>
+                        <td>180 天</td>
+                        <td>360 天</td>
+                    </tr>
+                    <tr>
+                        <td>30 元</td>
+                        <td><strong>60</strong> 元</td>
+                        <td><strong>120</strong> 元</td>
+                        <td><strong>240</strong> 元</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <form action="/payqrcode" method="post" id="payqrcodeForm">
+                <h2>支付宝/微信<small>扫码自动购买账号</small></h2>
+                <ol>
+                    <li>
+                        <p>选择下面的套餐价格</p>
+                    </li>
+                    <p>
+                        <input type="radio" name="price" value="30" checked="checked">30 元</p>
+                    <p>
+                        <input type="radio" name="price" value="60">60 元</p>
+                    <p>
+                        <input type="radio" name="price" value="120">120 元</p>
+                    <p>
+                        <input type="radio" name="price" value="240">240 元</p>
+                    <li>
+                        <p>选择支付方式</p>
+                    </li>
+                    <p>
+                        <input type="radio" name="pay" value="2" checked="checked">微信</p>
+                        <p>
+                        <input type="radio" name="pay" value="1" >支付宝</p>
+                    <p>
+                    <li>
+                        <p>输入手机号，然后点击 <strong>支付</strong> 扫码付款自动购买</p>
+                    </li>
+                    <input type="number" class="form-control" maxlength="11" name="phone" id="phone" placeholder="请输入手机号">
+                    </p>
+                    <button class="btn btn-default" type="button" onclick="postpay()">支付</button>
+                </ol>
+            </form>
+        </div>
+    </div>
+    <script>
+
+        function postpay() {
+            var phone = $("#phone").val()
+            if (phone == "" || phone==null) {
+                    alert("请输入手机号")
+            }else{
+                $("#payqrcodeForm").submit()
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js" integrity="sha256-h0cGsrExGgcZtSZ/fRz4AwV+Nn6Urh/3v3jFRQ0w9dQ=" crossorigin="anonymous"></script>
+</body>
+
+</html>

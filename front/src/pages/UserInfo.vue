@@ -440,7 +440,6 @@
       })
     },
     beforeRouteLeave (to, from, next) {
-      console.log('sfsf')
       this.mainInfo.headImg = 'default_head.jpg'
       this.selected = []
       this.projectList = []

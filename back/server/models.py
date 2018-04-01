@@ -182,6 +182,7 @@ class ProOrder(db.Model):
     __tablename__ = 'proorder'
     id = db.Column(db.Integer, primary_key=True)
     applyId = db.Column(db.Integer)
+    updateList = db.relationship('UpdateList', backref='proOrder', lazy='dynamic')
     employerId = db.Column(db.Integer)
     employeeId = db.Column(db.Integer)
     releaseId = db.Column(db.Integer)
@@ -206,3 +207,25 @@ class ProOrder(db.Model):
 
     def __repr__(self):
         return '<ProOrder %r>' % self.id
+
+
+class UpdateList(db.Model):
+    __tablename__ = 'updatelist'
+    id = db.Column(db.Integer, primary_key=True)
+    orderId = db.Column(db.Integer, db.ForeignKey('proorder.id'))
+    title = db.Column(db.String(12), nullable=False)
+    desc = db.Column(db.String(30), nullable=False)
+    fileDir = db.Column(db.String(200), default='')
+    progress = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String(10), default='pending')
+    updateTime = db.Column(db.DateTime, default=datetime.datetime.now())
+    rejectReason = db.Column(db.String(200), default='')
+
+    def __init__(self, title, desc, progress, order_id):
+        self.title = title
+        self.desc = desc
+        self.progress = progress
+        self.orderId = order_id
+
+    def __repr__(self):
+        return '<updatelist %r>' % self.id

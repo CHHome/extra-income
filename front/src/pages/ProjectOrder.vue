@@ -32,12 +32,33 @@
       & > div{
         display: inline-block;
         width: 100%;
+        div {
+          margin-top: 30px;
+        }
       }
-      span{
+      & > span{
         .btnTheme;
         margin-top: 25px;
       }
     }
+  }
+  .el-dialog__wrapper .el-upload {
+    display: none;
+  }
+  .upload-demo {
+    text-align: left;
+    input[type="file"]{
+      display: none;
+    }
+  }
+  .el-table .pending {
+    background: oldlace;
+  }
+  .el-table .accept {
+    background: #f0f9eb;
+  }
+  .el-table .reject {
+    background: rgba(173,44,42,0.94);
   }
 </style>
 <template>
@@ -83,18 +104,126 @@
     <div class="order-progress">
       <header>项目进度</header>
       <div>
-        <my-progress
-          :label="'进度条'"
-          :value="orderData.progress"
-        ></my-progress>
+        <el-progress type="circle" :percentage="50" color="#8e71c7" width="180" stroke-width="7"></el-progress>
+        <div>
+          <el-popover
+            ref="updatePopover"
+            title="提交记录"
+            placement="top"
+            width="1082"
+            trigger="click">
+            <el-table
+              v-loading="updateLoading"
+              :data="fileList"
+              :row-class-name="tableRowClassName"
+              style="width: 100%">
+              <el-table-column
+                fixed
+                prop="updateTime"
+                label="日期"
+                width="100">
+              </el-table-column>
+              <el-table-column
+                prop="title"
+                label="标题"
+                width="120">
+              </el-table-column>
+              <el-table-column
+                prop="desc"
+                label="内容描述"
+                width="350">
+              </el-table-column>
+              <el-table-column
+                prop="currentProgress"
+                label="当前进度"
+                width="100">
+              </el-table-column>
+              <el-table-column
+                prop="progress"
+                label="目标进度"
+                width="100">
+              </el-table-column>
+              <el-table-column
+                label="提交文件"
+                width="180">
+                <template slot-scope="scope">
+                  <a :href="baseUrl +'static/' + scope.row.fileDir">{{scope.row.fileName}}</a>
+                </template>
+              </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="操作"
+                width="100">
+                <template slot-scope="scope">
+                  <div v-if="modifyIcon && scope.row.status === 'pending'">
+                    <el-button @click="handleClick(scope.row)" type="text" size="small">通过</el-button>
+                    <el-button type="text" size="small">拒收</el-button>
+                  </div>
+                  <div v-if="!modifyIcon && scope.row.status === 'pending'">
+                    <span>等待验收</span>
+                  </div>
+                  <div v-if="scope.row.status === 'accept'">
+                    <span>已通过</span>
+                  </div>
+                  <div v-if="scope.row.status === 'reject'">
+                    <span>已拒收</span>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-popover>
+          <el-button type="primary" round v-popover:updatePopover @click="showFiles">提交记录</el-button>
+        </div>
         <div v-if="!modifyIcon">
-          输入最新进度：<input type="text" v-model="orderData.progress"><br>
-          <span v-if="orderData.status=='进行中'" @click="updateProgress">更新进度</span>
-          <span v-if="orderData.status=='进行中'" @click="showDialog('employerDialog')">交付项目</span>
+          <el-dialog
+            title="更新进度"
+            :visible.sync="dialogVisible"
+            width="500"
+            :before-close="handleClose">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="更新主题" prop="title">
+                <el-input v-model="ruleForm.title"></el-input>
+              </el-form-item>
+              <el-form-item label="更新描述" prop="desc">
+                <el-input v-model="ruleForm.desc" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
+                  type="textarea"
+                  :autosize="{ minRows: 2, maxRows: 4}"
+                  placeholder="请输入本次更新内容描述">
+                </el-input>
+              </el-form-item>
+              <el-form-item label="更新进度" prop="progress">
+                <el-input v-model.number="ruleForm.progress" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"
+                          placeholder="请输入本次更新内容描述">
+                </el-input>
+              </el-form-item>
+              <el-form-item label="附件" >
+                <el-upload
+                  class="upload-demo"
+                  drag
+                  action="#"
+                  :auto-upload="false"
+                  accept=".rar,.zip"
+                  :on-change="saveFile"
+                  :show-file-list="false"
+                  >
+                  <i class="el-icon-upload"></i>
+                  <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                  <div class="el-upload__tip" slot="tip">只能上传zip/rar文件</div>
+                </el-upload>
+              </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+             <el-button @click="dialogVisible = false">取 消</el-button>
+             <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+            </span>
+          </el-dialog>
+
+
+          <el-button type="primary" round v-if="orderData.status=='进行中'" @click="dialogVisible = true" >更新进度</el-button>
+          <!--<span v-if="orderData.status=='进行中'" @click="showDialog('employerDialog')">交付项目</span>-->
           <span v-if="orderData.status=='交付中'">交付中</span>
         </div>
         <div v-if="modifyIcon">
-          <span v-if="orderData.status=='进行中'">进行中</span>
           <span v-if="orderData.status=='交付中'" @click="showDialog('employeeDialog')">验收通过</span>
           <span v-if="orderData.status=='交付中'" @click="unCheck">验收不通过</span>
         </div>
@@ -104,7 +233,7 @@
   </div>
 </template>
 <script>
-  import {baseUrl} from '@/config/config'
+  import {baseUrl, updateRules} from '@/config/config'
   import ReleaseForm from '@/components/share/ReleaseForm'
   import ReleaseInfo from '@/components/share/ReleaseInfo'
   import ApplyCard from '@/components/share/ApplyCard'
@@ -116,17 +245,30 @@
 
 
   export default {
-    props: ['id'],   //todo 订单id
+    props: ['id'],   //todo releaseId
     data () {
       return{
+        baseUrl: baseUrl,
         releaseData: {}, //todo 项目信息
         orderData: {},
+        dialogVisible: false,
         showModify: false,
         modifyIcon: false,
         releaseProData: {},
         participantInfo: {},
         employerDialog: false,
-        employeeDialog: false
+        employeeDialog: false,
+        rules: updateRules,
+        updateLoading: false,
+        ruleForm: {
+          title: '',
+          desc: '',
+          progress: null,
+          file: null
+
+        },
+
+        fileList: []
       }
     },
     components: {
@@ -139,6 +281,57 @@
       MyDialog
     },
     methods: {
+      tableRowClassName ({row, index}) {
+        console.log(row.status)
+        return row.status
+      },
+      saveFile (file) {
+        this.ruleForm.file = file
+        console.log(this.ruleForm.file )
+      },
+      submitForm (ruleForm) {
+        this.$refs[ruleForm].validate((valid) => {
+          if (valid) {
+            console.log(this.ruleForm)
+            if (!this.ruleForm.file) {
+              this.alertTip('请上传文件')
+              return
+            }
+            if (this.ruleForm.progress > 100 || this.ruleForm.progress < 0) {
+              this.alertTip('进度必须在0-100之内')
+              return
+            } else {
+              if (this.ruleForm.progress < this.orderData.progress) {
+                this.alertTip('进度必须大于等于当前进度')
+                return
+              }
+            }
+            let formData = new FormData()
+            formData.append('title', this.ruleForm.title)
+            formData.append('releaseId', this.id)
+            formData.append('desc', this.ruleForm.desc)
+            formData.append('file', this.ruleForm.file.raw)
+            formData.append('progress', this.ruleForm.progress)
+            this.$ajax.post(baseUrl + 'updateProgress', formData)
+              .then((res) => {
+              console.log(res.data)
+              }, res =>{
+              console.log(res.data)
+              })
+            this.dialogVisible = false
+          } else {
+            return false;
+          }
+        });
+      },
+      alertTip (content) {
+        this.$confirm(content)
+          .then(() => {})
+          .catch(_ => {})
+      },
+      handleClose (done) {
+        this.alertTip('确认关闭', done)
+      },
       getData () {
         this.$ajax.get(baseUrl + 'showOrderData', {
           params: {
@@ -150,7 +343,12 @@
               this.orderData = res.data
               return this.orderData
             }, res => {
-              alert('获取数据失败，请检查网络')
+              this.$notify.error({
+                title: '错误',
+                message: '获取数据失败， 请检查网络链接',
+                offset: 75
+              })
+              return
             }
           )
           .then(
@@ -170,14 +368,18 @@
           .then(
             res => {
               this.releaseProData = res.data
-              console.log(this.releaseProData)
               if (parseInt(this.$store.state.loginId) === res.data.employerId) {
                 this.modifyIcon = true
               } else {
                 this.modifyIcon = false
               }
             }, res => {
-              alert('获取数据失败，请检查网络')
+              this.$notify.error({
+                title: '错误',
+                message: '获取数据失败， 请检查网络链接',
+                offset: 75
+              })
+              return
             }
           )
           .then(() => {
@@ -192,7 +394,35 @@
           .then(res => {
             this.participantInfo = res.data
           }, res => {
-            alert('获取数据失败，请检查网络')
+            this.$notify.error({
+              title: '错误',
+              message: '获取数据失败， 请检查网络链接',
+              offset: 75
+            })
+            return
+          })
+          .catch((ex) =>{})
+      },
+      showFiles () {
+        this.updateLoading = true;
+        this.$ajax.get(baseUrl + 'showUpdateList', {
+          params: {
+            releaseId: this.id
+          }
+        })
+          .then(res => {
+            this.updateLoading = false
+            this.fileList = res.data.map((item, index) => {
+              item.currentProgress = this.orderData.progress
+              item.fileName = item.fileDir.split(/\/\d+-/)[1]
+              return item
+            })
+          }, res => {
+            this.$notify.error({
+              title: '错误',
+              message: '获取数据失败， 请检查网络链接',
+              offset: 75
+            })
           })
       },
       modify () {
@@ -213,7 +443,11 @@
             alert('更新失败')
           }
         }, res => {
-          alert('更新失败，请检查网络')
+          this.$notify.error({
+            title: '错误',
+            message: '获取数据失败， 请检查网络链接',
+            offset: 75
+          })
         })
       },
       showDialog (dialogName) {
@@ -235,10 +469,18 @@
             this.getData()
             alert('交付成功')
           } else {
-            alert('交付失败')
+            this.$notify.error({
+              title: '错误',
+              message: '交付失败',
+              offset: 75
+            })
           }
         }, res => {
-          alert('交付失败，请检查网络')
+          this.$notify.error({
+            title: '错误',
+            message: '获取数据失败， 请检查网络链接',
+            offset: 75
+          })
         })
       },
       unCheck () {
@@ -252,8 +494,15 @@
             this.getData()
           }
         }, res => {
-          alert('操作失败，请检查网络')
+          this.$notify.error({
+            title: '错误',
+            message: '获取数据失败， 请检查网络链接',
+            offset: 75
+          })
         })
+      },
+      handleClick(row) {
+        console.log(row);
       },
       submitComplete (credit, quality, onTime, employeeEvaluate) {
         console.log(credit, quality, onTime, employeeEvaluate)
@@ -273,7 +522,11 @@
             this.getData()
           }
         }, res => {
-          alert('操作失败，请检查网络')
+          this.$notify.error({
+            title: '错误',
+            message: '获取数据失败， 请检查网络链接',
+            offset: 75
+          })
         })
       }
     },

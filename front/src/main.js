@@ -10,8 +10,24 @@ import $ from 'jquery'
 import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import {baseUrl} from "./config/config";
+import {Table, TableColumn, Loading, Popover, Button, MessageBox, Dialog, Form, Input, FormItem,
+Upload, Notification, Progress
+} from 'element-ui'
 
+Vue.use(Loading.directive)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Popover)
+Vue.use(Button)
+Vue.use(Form)
+Vue.use(Dialog)
+Vue.use(Input)
+Vue.use(FormItem)
+Vue.use(Upload)
+Vue.use(Progress)
 Vue.prototype.$ajax = axios
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$notify = Notification;
 
 window.$ = $
 

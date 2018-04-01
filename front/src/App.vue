@@ -24,6 +24,7 @@
     min-height: calc(100vh - 226px);
   }
 
+
 </style>
 <script>
   import MyHeader from '@/components/MyHeader'
