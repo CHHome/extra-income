@@ -25,7 +25,7 @@ from .resources.tokenCheck import TokenCheck
 from .resources.user import Add
 from .resources.userInfoSave import UserInfoSave
 from .resources.userInfoShow import UserInfoShow
-from .resources.update import Update, ShowList
+from .resources.update import Update, ShowList, Hangdle
 
 api.add_resource(Hello, '/')
 api.add_resource(Add, '/user')
@@ -49,6 +49,7 @@ api.add_resource(ShowOrderData, '/showOrderData')
 api.add_resource(ParticipantInfo, '/participantInfo')
 api.add_resource(Update, '/updateProgress')
 api.add_resource(ShowList, '/showUpdateList')
+api.add_resource(Hangdle, '/updateHandle')
 api.add_resource(CheckProject, '/checkProject')
 api.add_resource(Increase, '/increase')
 

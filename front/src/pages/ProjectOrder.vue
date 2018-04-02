@@ -104,7 +104,7 @@
     <div class="order-progress">
       <header>项目进度</header>
       <div>
-        <el-progress type="circle" :percentage="50" color="#8e71c7" width="180" stroke-width="7"></el-progress>
+        <el-progress type="circle" :percentage="orderData.progress" color="#8e71c7" :width="180" ></el-progress>
         <div>
           <el-popover
             ref="updatePopover"
@@ -151,22 +151,46 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="拒收理由"
+                prop="rejectReason"
+                width="180"
+                v-if="!modifyIcon">
+              </el-table-column>
+              <el-table-column
                 fixed="right"
-                label="操作"
+                :label="modifyIcon ? '操作' : '状态'"
                 width="100">
                 <template slot-scope="scope">
                   <div v-if="modifyIcon && scope.row.status === 'pending'">
-                    <el-button @click="handleClick(scope.row)" type="text" size="small">通过</el-button>
-                    <el-button type="text" size="small">拒收</el-button>
+                    <el-button @click="handleClick(scope.row, 1)" type="text" size="small">通过</el-button>
+                    <el-dialog
+                      title="提示"
+                      :visible.sync="rejectDialog"
+                      width="30%"
+                      :modal="false"
+                      :before-close="handleClose">
+                      <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 2, maxRows: 4}"
+                        placeholder="请输入拒绝理由"
+                        v-model="rejectReason">
+                      </el-input>
+                          <span slot="footer" class="dialog-footer">
+                          <el-button @click="rejectDialog = false">取 消</el-button>
+                          <el-button type="primary" @click="handleClick(scope.row, 0, {reason: rejectReason})">确 定</el-button>
+                          </span>
+                    </el-dialog>
+                    <el-button  @click="rejectDialog = true" type="text">拒收</el-button>
                   </div>
                   <div v-if="!modifyIcon && scope.row.status === 'pending'">
-                    <span>等待验收</span>
+                    <el-button type="warning" size="mini">等待验收</el-button>
                   </div>
                   <div v-if="scope.row.status === 'accept'">
-                    <span>已通过</span>
+
+                    <el-button type="success" size="mini">已通过</el-button>
                   </div>
                   <div v-if="scope.row.status === 'reject'">
-                    <span>已拒收</span>
+                    <el-button type="danger" size="mini">已拒收</el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -260,6 +284,8 @@
         employeeDialog: false,
         rules: updateRules,
         updateLoading: false,
+        rejectDialog: false,
+        rejectReason: '',
         ruleForm: {
           title: '',
           desc: '',
@@ -501,8 +527,30 @@
           })
         })
       },
-      handleClick(row) {
+      handleClick(row, agress, params = {}) {
         console.log(row);
+        this.$ajax.get(baseUrl + 'updateHandle',{
+          params: $.extend(true, {}, {
+            updateId: row.id,
+            agress: agress
+        }, params)})
+          .then( res => {
+            this.$notify({
+              title: '操作成功',
+              message: '进度更新',
+              type: 'success',
+              offset: 75
+            });
+            this.getData()
+            this.showFiles()
+
+          }, res => {
+            this.$notify.error({
+              title: '错误',
+              message: '获取数据失败， 请检查网络链接',
+              offset: 75
+            })
+          })
       },
       submitComplete (credit, quality, onTime, employeeEvaluate) {
         console.log(credit, quality, onTime, employeeEvaluate)

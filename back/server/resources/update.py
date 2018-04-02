@@ -27,15 +27,12 @@ class Update(restful.Resource):
             db.session.add(updateList)
             db.session.commit()
             self.saveFile(args['file'], updateList, 'updateFile/', args['file'].filename)
-        print(args['title'], args['desc'], args['progress'], args['file'].filename)
         # file = open(upLoad_file + args['file'].filename,  'wb')
         # args['file'].save(upLoad_file + args['file'].filename)
         # updateList = UpdateList(args['title'], args['desc'], args['progress'])
 
     def saveFile(self, fileStorage, model, folder, filename):
-        print(model)
         dir = upLoad_file + folder + str(model.id) + '-' + filename
-        print(dir)
         open(dir, 'wb')
         fileStorage.save(dir)
         model.fileDir = folder + str(model.id) + '-' + filename
@@ -55,6 +52,27 @@ class ShowList(restful.Resource):
             item = item.trans_to_dict()
             resultList.append(item)
         return resultList
+
+
+class Hangdle(restful.Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('updateId', type=int, required=True)
+        parser.add_argument('agress', type=int, required=True)
+        parser.add_argument('reason', type=str, required=False)
+        args = parser.parse_args()
+        updateList = UpdateList.query.filter_by(id=args['updateId'], status='pending').first()
+        proOrder = updateList.proOrder
+        if args['agress'] == 1:
+            updateList.status = 'accept'
+            proOrder.progress = updateList.progress
+            if proOrder.progress == 100:
+                proOrder.status = '已完成'
+        else:
+            updateList.status = 'reject'
+            updateList.rejectReason = args['reason']
+
+        db.session.commit()
 
 
 
