@@ -65,7 +65,7 @@
 </style>
 
 <template>
-  <div class="release-form">
+  <div class="release-form" v-loading="loading">
     <div>
       <span>请选择项目一级类型<i>*</i></span>
       <div @click="selectFirst" class="select-first" :class="{error:$v.firstType.$error }">
@@ -152,7 +152,8 @@
         describe: '',
         budget: '',
         cycle: '',
-        company: ''
+        company: '',
+        loading: false
       }
     },
     watch: {
@@ -187,6 +188,7 @@
           this.$v.company.$touch()
           return
         }
+        this.loading = true
         let store = window.localStorage
         let userId = store['token'].split('-')[0]
         this.$http.post(baseUrl + 'releaseSave', {
@@ -201,10 +203,19 @@
           company: this.company
         })
           .then(res => {
+            this.loading = false
             if (this.type === 'showReleasePro') {
               location.reload();
             } else {
-              this.$router.push('/showReleasePro/' + res.data)
+              if (res.data !== -1) {
+                this.$router.push('/showReleasePro/' + res.data)
+              } else {
+                this.$notify.error({
+                  title: '发布失败',
+                  message: '您当前的余额不足以缴纳押金， 请前往充值',
+                  offset: 75
+                })
+              }
             }
           }, res => {
             alert('发布失败，请检查网络')

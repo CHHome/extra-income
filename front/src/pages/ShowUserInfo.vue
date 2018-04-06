@@ -244,8 +244,6 @@
     },
     methods: {
       getInfo () {
-        let store = window.localStorage
-        console.log('get')
         this.$http.get(baseUrl + 'userInfoShow', {params: {id: this.id, type: 'onlyShow'}})
           .then(res => {
             this.mainInfo = res.data

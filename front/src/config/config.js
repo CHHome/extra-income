@@ -1,6 +1,6 @@
 let baseUrl = 'http://127.0.0.1:5000/'
 let tokenKey = 'JD98Dskw=23njQndW9D'
-export {baseUrl, tokenKey, updateRules}
+export {baseUrl, tokenKey, updateRules, commonRules}
 
 
 const updateRules = {
@@ -16,4 +16,13 @@ const updateRules = {
     { required: true, message: '进度不能为空'},
     { type: 'number', message: '进度必须为数字值'},
   ]
+}
+
+const commonRules = {
+  number (message) {
+    return [
+      { required: true, message: message + '不能为空'},
+      { type: 'number', message: message + '必须为数字值'},
+    ]
+  }
 }

@@ -1,6 +1,6 @@
 from flask.ext import restful
 from flask_restful import reqparse
-from server.models import UpdateList,  ProOrder
+from server.models import UpdateList,  ProOrder, Turnover, User, ReleasePro
 from server import db
 import os, base64
 import json
@@ -65,6 +65,23 @@ class Hangdle(restful.Resource):
         proOrder = updateList.proOrder
         if args['agress'] == 1:
             updateList.status = 'accept'
+            employer = User.query.filter_by(id=proOrder.employerId).first()
+            employee = User.query.filter_by(id=proOrder.employeeId).first()
+            releasePro = ReleasePro.query.filter_by(id=proOrder.releaseId).first()
+            size = (updateList.progress - proOrder.progress) * releasePro.budget/100
+
+            proOrder.employerDep -= size
+            employer.deposit -= size
+            employerTurnover = Turnover(employer.id, '支付薪酬(-押金)', -size, employer.balance, employer.deposit)
+
+            proOrder.employeeDep -= size
+            employee.deposit -= size
+            employee.balance += 2 * size * 0.9
+            employeeTurnover = Turnover(employee.id, '项目薪酬(+余额)', 2 * size * 0.9, employee.balance, employee.deposit)
+
+            db.session.add(employerTurnover)
+            db.session.add(employeeTurnover)
+            db.session.commit()
             proOrder.progress = updateList.progress
             if proOrder.progress == 100:
                 proOrder.status = '已完成'

@@ -26,6 +26,7 @@ from .resources.user import Add
 from .resources.userInfoSave import UserInfoSave
 from .resources.userInfoShow import UserInfoShow
 from .resources.update import Update, ShowList, Hangdle
+from .resources.account import ShowAccountInfo, Recharge
 
 api.add_resource(Hello, '/')
 api.add_resource(Add, '/user')
@@ -52,6 +53,8 @@ api.add_resource(ShowList, '/showUpdateList')
 api.add_resource(Hangdle, '/updateHandle')
 api.add_resource(CheckProject, '/checkProject')
 api.add_resource(Increase, '/increase')
+api.add_resource(ShowAccountInfo, '/showAccountInfo')
+api.add_resource(Recharge, '/recharge')
 
 
 

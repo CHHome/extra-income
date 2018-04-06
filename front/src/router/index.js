@@ -9,6 +9,8 @@ const ReleasePro = () => import('@/pages/ReleasePro')
 const ShowReleasePro = () => import('@/pages/ShowReleasePro')
 const ShowMoreRelease = () => import('@/pages/ShowMoreRelease')
 const ProjectOrder = () => import('@/pages/ProjectOrder')
+const Account = () => import('@/pages/Account')
+
 
 
 
@@ -67,6 +69,11 @@ export default new Router({
       name: 'projectOrder',
       component: ProjectOrder,
       props: true,
+    },
+    {
+      path: '/account',
+      name: 'account',
+      component: Account,
     }
   ]
 })

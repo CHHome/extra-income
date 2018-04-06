@@ -30,6 +30,7 @@ class User(db.Model):
     oldProject = db.relationship('OldProject', backref='user', lazy='dynamic')
     release = db.relationship('ReleasePro', backref='employer', lazy='dynamic')
     apply = db.relationship('ApplyPro', backref='applyUser', lazy='dynamic')
+    turnover = db.relationship('Turnover', backref='user', lazy='dynamic')
     headImg = db.Column(db.String(120), unique=False, default='default_head.jpg')
     profession = db.Column(db.String(10), unique=False, default='')
     synopsis = db.Column(db.String(15), unique=False, default='')
@@ -38,6 +39,8 @@ class User(db.Model):
     status = db.Column(db.String(10), default='正常')   # todo 帐号状态
     BreachOfContract = db.Column(db.Integer, default=0)  # todo 违约次数
     employerScore = db.Column(db.Integer, default=100)
+    balance = db.Column(db.Integer, default=0)
+    deposit = db.Column(db.Integer, default=0)
 
     def __init__(self, phone, user_name, password, has_finish=0):
         self.userName = user_name
@@ -197,6 +200,8 @@ class ProOrder(db.Model):
     status = db.Column(db.String(10), default='进行中')
     evaluate = db.Column(db.String(200), nullable=True)  # todo 评价
     employerEvaluate = db.Column(db.String(200), nullable=True)  # todo 评价
+    employerDep = db.Column(db.Integer, nullable=False)
+    employeeDep = db.Column(db.Integer, nullable=False)
 
     def __init__(self, apply_id, employer_id, employee_id, release_id, deadline_time):
         self.applyId = apply_id
@@ -229,3 +234,47 @@ class UpdateList(db.Model):
 
     def __repr__(self):
         return '<updatelist %r>' % self.id
+
+
+class Turnover(db.Model):
+    __tablename__ = 'turnover'
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    time = db.Column(db.DateTime, default=datetime.datetime.now())
+    type = db.Column(db.String(10), nullable=False)
+    quota = db.Column(db.Integer, nullable=False)
+    balance = db.Column(db.Integer, nullable=False)
+    deposit = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, user_id, type, quota, balance, deposit):
+        self.userId = user_id
+        self.type = type
+        self.quota = quota
+        self.balance = balance
+        self.deposit = deposit
+        self.time = datetime.datetime.now()
+
+    def __repr__(self):
+        return '<turnover %r>' % self.type
+
+
+class Appeal(db.Model):
+    __tablename__ = 'appeal'
+    id = db.Column(db.Integer, primary_key=True)
+    complainantId = db.Column(db.Integer, nullable=False)
+    defendanterId = db.Column(db.Integer, nullable=False)
+    orderId = db.Column(db.Integer, nullable=False)
+    reason = db.Column(db.String(200), nullable=False)
+    status = db.Column(db.String(10), default='处理中')
+    Damages = db.Column(db.Integer, nullable=True)
+    beginTime = db.Column(db.DateTime, default=datetime.datetime.now())
+    endTime = db.Column(db.DateTime, nullable=True)
+
+    def __init__(self, Complainant_id, defendanter_id, order_id, reason):
+        self.complainantId = Complainant_id
+        self.defendanterId = defendanter_id
+        self.orderId = order_id
+        self.reason = reason
+
+    def __repr__(self):
+        return '<appeal %r>' % self.id

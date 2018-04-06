@@ -11,7 +11,7 @@ import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import {baseUrl} from "./config/config";
 import {Table, TableColumn, Loading, Popover, Button, MessageBox, Dialog, Form, Input, FormItem,
-Upload, Notification, Progress
+Upload, Notification, Progress, Tag
 } from 'element-ui'
 
 Vue.use(Loading.directive)
@@ -25,6 +25,7 @@ Vue.use(Input)
 Vue.use(FormItem)
 Vue.use(Upload)
 Vue.use(Progress)
+Vue.use(Tag)
 Vue.prototype.$ajax = axios
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$notify = Notification;

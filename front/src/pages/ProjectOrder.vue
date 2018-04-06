@@ -40,6 +40,11 @@
         .btnTheme;
         margin-top: 25px;
       }
+      .progress-block {
+        display: inline-block;
+        width: 40%;
+        box-sizing: border-box;
+      }
     }
   }
   .el-dialog__wrapper .el-upload {
@@ -104,7 +109,14 @@
     <div class="order-progress">
       <header>项目进度</header>
       <div>
-        <el-progress type="circle" :percentage="orderData.progress" color="#8e71c7" :width="180" ></el-progress>
+        <div class="progress-block">
+          <el-progress type="circle" :percentage="orderData.progress" color="#8e71c7" :width="180" ></el-progress>
+          <div>提交进度</div>
+        </div>
+        <div class="progress-block">
+          <el-progress type="circle" :percentage="orderData.hasComplete" :color="progressColor" :width="180" ></el-progress>
+          <div>时间进度</div>
+        </div>
         <div>
           <el-popover
             ref="updatePopover"
@@ -274,7 +286,9 @@
       return{
         baseUrl: baseUrl,
         releaseData: {}, //todo 项目信息
-        orderData: {},
+        orderData: {
+          hasComplete: 0
+        },
         dialogVisible: false,
         showModify: false,
         modifyIcon: false,
@@ -286,6 +300,7 @@
         updateLoading: false,
         rejectDialog: false,
         rejectReason: '',
+        progressColor: '',
         ruleForm: {
           title: '',
           desc: '',
@@ -358,6 +373,34 @@
       handleClose (done) {
         this.alertTip('确认关闭', done)
       },
+      parseData (data) {
+        this.orderData = data
+        let beginTime = new Date(this.orderData.beginTime.replace(/-/g,'/')).getTime()
+        let deadlineTime = new Date(this.orderData.deadlineTime.replace(/-/g,'/')).getTime()
+        this.orderData.hasComplete = 100
+        if (this.orderData.hasComplete >= 100) {
+          this.orderData.hasComplete = parseInt((new Date().getTime() - beginTime)/(deadlineTime - beginTime) * 100);
+        } else {
+          this.orderData.hasComplete = this.orderData.hasComplete.toFixed(2)
+        }
+        switch (this.orderData.status) {
+          case '进行中':
+            this.progressColor = '#8e71c7'
+            break
+
+          case '已完成':
+            this.progressColor = '#0AAD38'
+            break
+
+          case '已逾期':
+            this.progressColor = '#AD120F'
+            break
+
+          default:
+            this.progressColor = '#8e71c7'
+
+        }
+      },
       getData () {
         this.$ajax.get(baseUrl + 'showOrderData', {
           params: {
@@ -366,7 +409,7 @@
         })
           .then(
             res => {
-              this.orderData = res.data
+              this.parseData(res.data)
               return this.orderData
             }, res => {
               this.$notify.error({

@@ -37,6 +37,17 @@
 </style>
 <template>
   <div class="show-release">
+    <el-dialog
+      title="提示"
+      :visible.sync="applyConfirm"
+      width="30%"
+      :before-close="handleClose">
+      <span>确定申请本项目吗？申请成功后，您余额中的{{data.budget}}元将作为押金，暂时不能动用!</span>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="applyConfirm = false">取 消</el-button>
+    <el-button type="primary" @click="sendApply">确 定</el-button>
+  </span>
+    </el-dialog>
     <img src="../assets/releaseBanner.jpg" alt="banner">
     <release-info
       :data="data"
@@ -50,7 +61,7 @@
 
       <div class="container-apply"
            v-if="!modifyIcon"
-           @click="sendApply"
+           @click="applyConfirm = true"
       slot="applyBtn">
         发送申请
       </div>
@@ -88,10 +99,18 @@
         data: {},
         showModify: false,
         modifyIcon: false,
-        applyUserList: []
+        applyUserList: [],
+        applyConfirm: false
       }
     },
     methods: {
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
       getData () {
         this.data = {}
         this.$ajax.get(baseUrl + 'showReleasePro',
@@ -129,7 +148,7 @@
       },
       sendApply () {
         if (this.$store.state.loginId){
-          this.increase('applyAmount')
+          this.applyConfirm = false
           this.$ajax.get(baseUrl + 'addApply', {
             params: {
               ReleaseProId: this.id,
@@ -137,9 +156,26 @@
             }
           }).then(res => {
             if (res.data === 100001) {
-              confirm('已发送申请')
+              this.$notify.error({
+                title: '申请成功',
+                message: '申请消息已经发送给雇主，请耐心等待',
+                offset: 75
+              })
+              this.increase('applyAmount')
             } else {
-              alert('您已经申请过该项目')
+              if (res.data === 100002) {
+                this.$notify.error({
+                  title: '错误',
+                  message: '您的余额不足以作为此项目的押金, 请前往充值',
+                  offset: 75
+                })
+              } else {
+                this.$notify.error({
+                  title: '错误',
+                  message: '您已经申请过本项目',
+                  offset: 75
+                })
+              }
             }
           })
         } else {

@@ -129,6 +129,7 @@
             <ul :class="{headerDropdown:$store.state.myHeader}">
               <li>通知</li>
               <li><router-link :to="{name: 'userInfo'}">个人信息</router-link></li>
+              <li><router-link :to="{name: 'account'}">个人账户</router-link></li>
               <li><router-link :to="{name: 'projects'}">我的项目</router-link></li>
               <li @click="Cancellation">退出登录</li>
             </ul>
