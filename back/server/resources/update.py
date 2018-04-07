@@ -83,8 +83,8 @@ class Hangdle(restful.Resource):
             db.session.add(employeeTurnover)
             db.session.commit()
             proOrder.progress = updateList.progress
-            if proOrder.progress == 100:
-                proOrder.status = '已完成'
+            # if proOrder.progress == 100:
+            #     proOrder.status = '已完成'
         else:
             updateList.status = 'reject'
             updateList.rejectReason = args['reason']

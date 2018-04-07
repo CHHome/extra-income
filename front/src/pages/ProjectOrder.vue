@@ -118,6 +118,18 @@
           <div>时间进度</div>
         </div>
         <div>
+          <el-dialog
+            title="提示"
+            :visible.sync="employerSubmit"
+            width="30%"
+            :before-close="handleClose"
+            append-to-body>
+            <span>进度已达100%，通过将结束项目， 确定验收通过?</span>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="employerSubmit = false">取 消</el-button>
+            <el-button type="primary" @click="employerConfirm">确 定</el-button>
+            </span>
+          </el-dialog>
           <el-popover
             ref="updatePopover"
             title="提交记录"
@@ -211,11 +223,25 @@
           <el-button type="primary" round v-popover:updatePopover @click="showFiles">提交记录</el-button>
         </div>
         <div v-if="!modifyIcon">
+
           <el-dialog
             title="更新进度"
             :visible.sync="dialogVisible"
             width="500"
             :before-close="handleClose">
+
+            <el-dialog
+              title="提示"
+              :visible.sync="employeeSubmit"
+              width="30%"
+              :before-close="handleClose"
+              append-to-body>
+              <span>期望进度已达100%，将进入验收阶段，确定提交?</span>
+              <span slot="footer" class="dialog-footer">
+            <el-button @click="employeeSubmit = false">取 消</el-button>
+            <el-button type="primary" @click="employeeConfirm">确 定</el-button>
+            </span>
+            </el-dialog>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="更新主题" prop="title">
                 <el-input v-model="ruleForm.title"></el-input>
@@ -259,10 +285,10 @@
           <!--<span v-if="orderData.status=='进行中'" @click="showDialog('employerDialog')">交付项目</span>-->
           <span v-if="orderData.status=='交付中'">交付中</span>
         </div>
-        <div v-if="modifyIcon">
-          <span v-if="orderData.status=='交付中'" @click="showDialog('employeeDialog')">验收通过</span>
-          <span v-if="orderData.status=='交付中'" @click="unCheck">验收不通过</span>
-        </div>
+        <!--<div v-if="modifyIcon">-->
+          <!--<span v-if="orderData.status=='交付中'" @click="showDialog('employeeDialog')">验收通过</span>-->
+          <!--<span v-if="orderData.status=='交付中'" @click="unCheck">验收不通过</span>-->
+        <!--</div>-->
         <span v-if="orderData.status=='已完成'">已完成</span>
       </div>
     </div>
@@ -301,6 +327,8 @@
         rejectDialog: false,
         rejectReason: '',
         progressColor: '',
+        employeeSubmit: false,
+        employerSubmit: false,
         ruleForm: {
           title: '',
           desc: '',
@@ -322,18 +350,25 @@
       MyDialog
     },
     methods: {
+      employerConfirm () {
+        this.employerSubmit = false
+        this.employeeDialog = true
+      },
+      employeeConfirm () {
+        this.employeeSubmit = false
+        this.sendProgress();
+        this.employerDialog = true
+      },
       tableRowClassName ({row, index}) {
         console.log(row.status)
         return row.status
       },
       saveFile (file) {
         this.ruleForm.file = file
-        console.log(this.ruleForm.file )
       },
       submitForm (ruleForm) {
         this.$refs[ruleForm].validate((valid) => {
           if (valid) {
-            console.log(this.ruleForm)
             if (!this.ruleForm.file) {
               this.alertTip('请上传文件')
               return
@@ -347,23 +382,31 @@
                 return
               }
             }
-            let formData = new FormData()
-            formData.append('title', this.ruleForm.title)
-            formData.append('releaseId', this.id)
-            formData.append('desc', this.ruleForm.desc)
-            formData.append('file', this.ruleForm.file.raw)
-            formData.append('progress', this.ruleForm.progress)
-            this.$ajax.post(baseUrl + 'updateProgress', formData)
-              .then((res) => {
-              console.log(res.data)
-              }, res =>{
-              console.log(res.data)
-              })
-            this.dialogVisible = false
+
+            if (this.ruleForm.progress === 100) {
+              this.employeeSubmit = true
+              return;
+            }
+            this.sendProgress()
           } else {
             return false;
           }
-        });
+        })
+      },
+      sendProgress () {
+        let formData = new FormData()
+        formData.append('title', this.ruleForm.title)
+        formData.append('releaseId', this.id)
+        formData.append('desc', this.ruleForm.desc)
+        formData.append('file', this.ruleForm.file.raw)
+        formData.append('progress', this.ruleForm.progress)
+        this.$ajax.post(baseUrl + 'updateProgress', formData)
+          .then((res) => {
+            console.log(res.data)
+          }, res =>{
+            console.log(res.data)
+          })
+        this.dialogVisible = false
       },
       alertTip (content) {
         this.$confirm(content)
@@ -524,7 +567,7 @@
         this.$store.commit('changeSinger', 'curtain')
       },
       submitProgress (score, employerEvaluate) {
-        this.$ajax.get(baseUrl + 'updateProgress' ,{
+        this.$ajax.get(baseUrl + 'employeeEvaluate' ,{
           params: {
             orderId: this.orderData.id,
             value: 100,
@@ -536,7 +579,12 @@
           if (res.data === 10004) {
             this.showDialog('employerDialog')
             this.getData()
-            alert('交付成功')
+            this.$notify({
+              title: '成功',
+              message: '交付成功，请等待最后的验证收',
+              offset: 75,
+              type: 'success'
+            })
           } else {
             this.$notify.error({
               title: '错误',
@@ -570,13 +618,12 @@
           })
         })
       },
-      handleClick(row, agress, params = {}) {
-        console.log(row);
+      sendAgree (row, agress, params = {}) {
         this.$ajax.get(baseUrl + 'updateHandle',{
           params: $.extend(true, {}, {
             updateId: row.id,
             agress: agress
-        }, params)})
+          }, params)})
           .then( res => {
             this.$notify({
               title: '操作成功',
@@ -595,8 +642,21 @@
             })
           })
       },
+      handleClick(row, agress, params = {}) {
+        this.row = row
+        this.agress = agress
+        this.params = params
+        if (row.progress === 100 && agress ) {
+          this.employerSubmit = true
+          return;
+        }
+        if (row.progress === 100 && !agress ) {
+          this.unCheck()
+        }
+        this.sendAgree(row, agress, params)
+      },
       submitComplete (credit, quality, onTime, employeeEvaluate) {
-        console.log(credit, quality, onTime, employeeEvaluate)
+        this.sendAgree(this.row, this.agress, this.params)
         this.$ajax.get(baseUrl + 'checkProject', {
           params: {
             orderId: this.orderData.id,

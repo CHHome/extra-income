@@ -16,7 +16,6 @@ class UpdateProgress(restful.Resource):
         parser.add_argument('employerEvaluate', type=str, required=False)
         args = parser.parse_args()
         order = ProOrder.query.filter_by(id=args['orderId'], status='进行中').first()
-        order.progress = args['value']
         db.session.commit()
         if args.type is None:
             return 10003

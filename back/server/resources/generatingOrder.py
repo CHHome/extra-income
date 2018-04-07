@@ -18,7 +18,7 @@ class GeneratingOrder(restful.Resource):
         args = parser.parse_args()
         releasePro = ReleasePro.query.filter_by(id=args['releaseId'], status='招募中').first()
         self.changeStatus(args['applyId'], releasePro, args['employeeId'])
-        proOrder = ProOrder(args['applyId'],  args['employerId'], args['employeeId'],  args['releaseId'], datetime.datetime.now() + datetime.timedelta(days=60))
+        proOrder = ProOrder(args['applyId'],  args['employerId'], args['employeeId'],  args['releaseId'], datetime.datetime.now() + datetime.timedelta(days=args['cycle']))
         proOrder.employerDep = releasePro.budget
         proOrder.employeeDep = releasePro.budget
         db.session.add(proOrder)

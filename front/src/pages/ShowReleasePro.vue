@@ -156,10 +156,11 @@
             }
           }).then(res => {
             if (res.data === 100001) {
-              this.$notify.error({
+              this.$notify({
                 title: '申请成功',
                 message: '申请消息已经发送给雇主，请耐心等待',
-                offset: 75
+                offset: 75,
+                type: 'success'
               })
               this.increase('applyAmount')
             } else {

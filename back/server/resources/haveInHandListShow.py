@@ -21,10 +21,12 @@ class HaveInHandListShow(restful.Resource):
             proOrderList.extend(ProOrder.query.filter_by(employeeId=args['id']).filter(ProOrder.status.endswith('已完成')).all())
         proOrderList = sorted(proOrderList, key=lambda e: e.beginTime)
         releaseList = list()
+        print(proOrderList)
         for orderItem in proOrderList:
             item = ReleasePro.query.filter_by(id=orderItem.releaseId, status=args['type']).first()
-            item.releaseTime = item.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
-            item = item.trans_to_dict()
-            item['orderId'] = orderItem.id
-            releaseList.append(item)
+            if item is not None:
+                item.releaseTime = item.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
+                item = item.trans_to_dict()
+                item['orderId'] = orderItem.id
+                releaseList.append(item)
         return releaseList
