@@ -25,7 +25,7 @@ from .resources.tokenCheck import TokenCheck
 from .resources.user import Add
 from .resources.userInfoSave import UserInfoSave
 from .resources.userInfoShow import UserInfoShow
-from .resources.update import Update, ShowList, Hangdle
+from .resources.update import Update, ShowList, Hangdle, CreateAppeal
 from .resources.account import ShowAccountInfo, Recharge
 from .resources.updateProgress import UpdateProgress
 
@@ -57,6 +57,7 @@ api.add_resource(Increase, '/increase')
 api.add_resource(ShowAccountInfo, '/showAccountInfo')
 api.add_resource(Recharge, '/recharge')
 api.add_resource(UpdateProgress, '/employeeEvaluate')
+api.add_resource(CreateAppeal, '/sendAppeal')
 
 
 

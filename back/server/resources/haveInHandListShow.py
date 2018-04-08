@@ -16,9 +16,12 @@ class HaveInHandListShow(restful.Resource):
         if args['type'] == '进行中':
             proOrderList = ProOrder.query.filter_by(employerId=args['id']).filter(ProOrder.status.endswith('中')).all()
             proOrderList.extend(ProOrder.query.filter_by(employeeId=args['id']).filter(ProOrder.status.endswith('中')).all())
-        else:
+        elif args['type'] == '已完成':
             proOrderList = ProOrder.query.filter_by(employerId=args['id']).filter(ProOrder.status.endswith('已完成')).all()
             proOrderList.extend(ProOrder.query.filter_by(employeeId=args['id']).filter(ProOrder.status.endswith('已完成')).all())
+        elif args['type'] == '已冻结':
+            proOrderList = ProOrder.query.filter_by(employerId=args['id']).filter(ProOrder.status.endswith('已冻结')).all()
+            proOrderList.extend(ProOrder.query.filter_by(employeeId=args['id']).filter(ProOrder.status.endswith('已冻结')).all())
         proOrderList = sorted(proOrderList, key=lambda e: e.beginTime)
         releaseList = list()
         print(proOrderList)

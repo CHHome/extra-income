@@ -1,6 +1,6 @@
 from flask.ext import restful
 from flask_restful import reqparse
-from server.models import UpdateList,  ProOrder, Turnover, User, ReleasePro
+from server.models import UpdateList,  ProOrder, Turnover, User, ReleasePro, Appeal
 from server import db
 import os, base64
 import json
@@ -90,6 +90,26 @@ class Hangdle(restful.Resource):
             updateList.rejectReason = args['reason']
 
         db.session.commit()
+
+
+class CreateAppeal(restful.Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('orderId', type=int, required=True)
+        parser.add_argument('complainantId', type=int, required=True)
+        parser.add_argument('reason', type=str, required=True)
+        args = parser.parse_args()
+        proOrder = ProOrder.query.filter_by(id=args['orderId']).first()
+        defendanterId = proOrder.employeeId if ProOrder.employerId == args['complainantId'] else proOrder.employerId
+        proOrder.status = '已冻结'
+        releasePro = ReleasePro.query.filter_by(id=proOrder.releaseId).first()
+        releasePro.status = '已冻结'
+        appeal = Appeal(args['complainantId'], defendanterId, args['orderId'], args['reason'])
+        db.session.add(appeal)
+        db.session.commit()
+        return 100001
+
+
 
 
 

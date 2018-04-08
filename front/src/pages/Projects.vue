@@ -41,6 +41,7 @@
         <span data-type="applying">申请中</span>
         <span data-type="haveInHand">进行中</span>
         <span data-type="completed">已完成</span>
+        <span data-type="appealing">申诉中</span>
       </header>
       <div class="projects-container row">
         <router-link
@@ -102,6 +103,10 @@
             case 'completed':
               this.linkTo = 'projectOrder'
               this.getTypeData('haveInHandListShow', '已完成')
+              break
+            case 'appealing':
+              this.linkTo = 'projectOrder'
+              this.getTypeData('haveInHandListShow', '已冻结')
               break
           }
         }

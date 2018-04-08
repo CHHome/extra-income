@@ -130,6 +130,29 @@
             <el-button type="primary" @click="employerConfirm">确 定</el-button>
             </span>
           </el-dialog>
+          <el-dialog
+            title="发起申诉"
+            :visible.sync="appealDialog"
+            width="45%"
+            :before-close="handleClose">
+            <el-alert
+              center
+              title="警告"
+              type="warning"
+              description="申诉的项目将被冻结，且不可恢复，详情请阅读服务指南"
+              show-icon>
+            </el-alert>
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 4, maxRows: 8}"
+              placeholder="请输入申诉理由"
+              v-model="appealReason">
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="appealDialog = false">取 消</el-button>
+            <el-button type="primary" @click="sendAppeal">确 定</el-button>
+            </span>
+          </el-dialog>
           <el-popover
             ref="updatePopover"
             title="提交记录"
@@ -221,6 +244,9 @@
             </el-table>
           </el-popover>
           <el-button type="primary" round v-popover:updatePopover @click="showFiles">提交记录</el-button>
+          <el-button type="primary" round v-if="orderData.status=='进行中' && !modifyIcon" @click="dialogVisible = true" >更新进度</el-button>
+          <el-button  type="danger" round v-if="orderData.status=='进行中' || orderData.status=='交付中'" @click="confirmAppeal" >发起申诉</el-button>
+          <el-button  type="danger" round v-if="orderData.status=='已冻结'">申诉中</el-button>
         </div>
         <div v-if="!modifyIcon">
 
@@ -281,9 +307,11 @@
           </el-dialog>
 
 
-          <el-button type="primary" round v-if="orderData.status=='进行中'" @click="dialogVisible = true" >更新进度</el-button>
+          <!--<el-button type="primary" round v-if="orderData.status=='进行中'" @click="dialogVisible = true" >更新进度</el-button>-->
+          <!--<el-button  type="danger" round v-if="orderData.status=='进行中' || orderData.status=='交付中'" >发起申诉</el-button>-->
           <!--<span v-if="orderData.status=='进行中'" @click="showDialog('employerDialog')">交付项目</span>-->
           <span v-if="orderData.status=='交付中'">交付中</span>
+
         </div>
         <!--<div v-if="modifyIcon">-->
           <!--<span v-if="orderData.status=='交付中'" @click="showDialog('employeeDialog')">验收通过</span>-->
@@ -329,6 +357,8 @@
         progressColor: '',
         employeeSubmit: false,
         employerSubmit: false,
+        appealDialog: false,
+        appealReason: '',
         ruleForm: {
           title: '',
           desc: '',
@@ -350,6 +380,56 @@
       MyDialog
     },
     methods: {
+      confirmAppeal () {
+//        if (this.orderData.hasComplete < 30) {
+//          this.$notify.error({
+//            title: '错误',
+//            message: '项目时间还未过30%，不能发起申诉！',
+//            offset: 75
+//          })
+//          return
+//        }
+          this.appealDialog = true
+      },
+      sendAppeal () {
+        if (this.appealReason) {
+          if (this.appealReason.length > 200) {
+          this.$notify.error({
+            title: '错误',
+            message: '理由过长，请限制在200字以内.',
+            offset: 75
+          })
+          return
+          }
+          this.$ajax.get(baseUrl + 'sendAppeal', {
+            params: {
+              orderId: this.orderData.id,
+              complainantId: this.$store.state.loginId,
+              reason: this.appealReason
+            }
+          })
+            .then(res => {
+              this.$notify({
+                title: '成功',
+                message: '提交申诉成功，系统将在五天内审核，请耐心等待.',
+                offset: 75
+              })
+              this.appealDialog = false
+            }, res => {
+              this.$notify.error({
+                title: '错误',
+                message: '获取数据失败， 请检查网络链接',
+                offset: 75
+              })
+            })
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: '请填写申诉理由.',
+            offset: 75
+          })
+        }
+      },
       employerConfirm () {
         this.employerSubmit = false
         this.employeeDialog = true

@@ -11,7 +11,7 @@ import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import {baseUrl} from "./config/config";
 import {Table, TableColumn, Loading, Popover, Button, MessageBox, Dialog, Form, Input, FormItem,
-Upload, Notification, Progress, Tag
+Upload, Notification, Progress, Tag, Alert
 } from 'element-ui'
 
 Vue.use(Loading.directive)
@@ -20,6 +20,7 @@ Vue.use(TableColumn)
 Vue.use(Popover)
 Vue.use(Button)
 Vue.use(Form)
+Vue.use(Alert)
 Vue.use(Dialog)
 Vue.use(Input)
 Vue.use(FormItem)
