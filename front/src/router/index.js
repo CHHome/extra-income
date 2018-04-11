@@ -10,6 +10,11 @@ const ShowReleasePro = () => import('@/pages/ShowReleasePro')
 const ShowMoreRelease = () => import('@/pages/ShowMoreRelease')
 const ProjectOrder = () => import('@/pages/ProjectOrder')
 const Account = () => import('@/pages/Account')
+const Admin = () => import('@/pages/Admin')
+const AdminLogin = () => import('@/pages/AdminLogin')
+const AdminIndex = () => import('@/pages/AdminIndex')
+
+
 
 
 
@@ -74,6 +79,24 @@ export default new Router({
       path: '/account',
       name: 'account',
       component: Account,
+    },
+    {
+      path: '/admin/',
+      name: 'admin',
+      component: Admin,
+      redirect: '/admin/login',
+      children: [
+        {
+          path: 'login',
+          name: 'adminLogin',
+          component:AdminLogin
+        },
+        {
+          path: 'dashboard',
+          name: 'dashboard',
+          component: AdminIndex
+        }
+      ]
     }
   ]
 })

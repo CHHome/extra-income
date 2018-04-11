@@ -278,3 +278,19 @@ class Appeal(db.Model):
 
     def __repr__(self):
         return '<appeal %r>' % self.id
+
+
+
+class Admin(db.Model):
+    __tablename__ = 'admin'
+    id = db.Column(db.Integer, primary_key=True)
+    adminName = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(520), nullable=False)
+
+    def __init__(self, admin_Name, password):
+        self.adminName = admin_Name
+        self.password = password
+
+
+    def __repr__(self):
+        return '<admin %r>' % self.id

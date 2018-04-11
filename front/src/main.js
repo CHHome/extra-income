@@ -11,12 +11,19 @@ import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import {baseUrl} from "./config/config";
 import {Table, TableColumn, Loading, Popover, Button, MessageBox, Dialog, Form, Input, FormItem,
-Upload, Notification, Progress, Tag, Alert
+Upload, Notification, Progress, Tag, Alert, Row, Col, Menu, MenuItem, Submenu,Pagination, Radio
 } from 'element-ui'
 
 Vue.use(Loading.directive)
 Vue.use(Table)
 Vue.use(TableColumn)
+Vue.use(Submenu)
+Vue.use(Radio)
+Vue.use(Row)
+Vue.use(Pagination)
+Vue.use(Col)
+Vue.use(MenuItem)
+Vue.use(Menu)
 Vue.use(Popover)
 Vue.use(Button)
 Vue.use(Form)
@@ -92,7 +99,9 @@ const store = new Vuex.Store({
     myHeader: false,
     hasLogin: false,
     headPic: 'default_head.jpg',
-    loginId: null
+    loginId: null,
+    adminLogin: false,
+    adminName: null
   },
   mutations: {
     changeSingerState (state, obj) {
@@ -106,6 +115,7 @@ const store = new Vuex.Store({
     },
     changeLoginId (state, value) {
       state.loginId = value
+      state.hasLogin = !state.hasLogin
     }
   }
 })

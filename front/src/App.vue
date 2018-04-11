@@ -2,11 +2,11 @@
   <div id="app">
     <register v-if="$store.state.showRegister"></register>
     <div class="curtain" v-if="$store.state.curtain"></div>
-    <my-header></my-header>
+    <my-header v-if="!$store.state.adminLogin"></my-header>
     <keep-alive>
       <router-view/>
     </keep-alive>
-    <my-footer></my-footer>
+    <my-footer v-if="!$store.state.adminLogin"></my-footer>
   </div>
 </template>
 <style scoped>
