@@ -245,7 +245,7 @@
           </el-popover>
           <el-button type="primary" round v-popover:updatePopover @click="showFiles">提交记录</el-button>
           <el-button type="primary" round v-if="orderData.status=='进行中' && !modifyIcon" @click="dialogVisible = true" >更新进度</el-button>
-          <el-button  type="danger" round v-if="orderData.status=='进行中' || orderData.status=='交付中'" @click="confirmAppeal" >发起申诉</el-button>
+          <el-button  type="danger" round v-if="orderData.status=='已逾期'|| orderData.status=='进行中' || orderData.status=='交付中'" @click="confirmAppeal" >发起申诉</el-button>
           <el-button  type="danger" round v-if="orderData.status=='已冻结'">申诉中</el-button>
         </div>
         <div v-if="!modifyIcon">

@@ -1,6 +1,6 @@
 from flask.ext import restful
 from flask_restful import reqparse
-from ..models import Admin, User
+from ..models import Admin, User, Appeal, ProOrder, ReleasePro ,UpdateList
 from .. import db
 
 
@@ -54,3 +54,52 @@ class HandleUser(restful.Resource):
             user.status = '正常'
         db.session.commit()
         return 100001
+
+
+class ShowAppeals(restful.Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('page', type=int, required=True, help='page is required')
+        parser.add_argument('type', type=str, required=True, help='type is required')
+        args = parser.parse_args()
+        appealList = Appeal.query.filter_by(status=args['type']).order_by(db.asc(Appeal.id)).limit(3).offset((args['page']-1)*3).all()
+        totalPage = len(Appeal.query.filter_by(status=args['type']).all())
+        resultList = list()
+        for item in appealList:
+            item = item.trans_to_dict()
+            print(item['complainantId'])
+            complainant = User.query.filter_by(id=item['complainantId']).first()
+            complainant = complainant.trans_to_dict()
+            complainant['registerTime'] = complainant['registerTime'].strftime("%Y-%m-%d %H:%M:%S")
+            defendanter = User.query.filter_by(id=item['defendanterId']).first()
+            defendanter = defendanter.trans_to_dict()
+            defendanter['registerTime'] = defendanter['registerTime'].strftime("%Y-%m-%d %H:%M:%S")
+            item['beginTime'] = item['beginTime'].strftime("%Y-%m-%d %H:%M:%S")
+            proOrder = ProOrder.query.filter_by(id=item['orderId']).first()
+            proOrder.beginTime = proOrder.beginTime.strftime("%Y-%m-%d %H:%M:%S")
+            proOrder.deadlineTime = proOrder.deadlineTime.strftime("%Y-%m-%d %H:%M:%S")
+            if proOrder.completionTime is not None:
+                proOrder.completionTime = proOrder.completionTime.strftime("%Y-%m-%d %H:%M:%S")
+            releasePro = ReleasePro.query.filter_by(id=proOrder.releaseId).first()
+            releasePro.releaseTime = releasePro.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
+            releasePro = releasePro.trans_to_dict()
+            updateLists = proOrder.updateList.all()
+            resultUpdateList = list()
+            for value in updateLists:
+                value.updateTime = value.updateTime.strftime("%Y-%m-%d %H:%M:%S")
+                value = value.trans_to_dict()
+                resultUpdateList.append(value)
+            proOrder = proOrder.trans_to_dict()
+            item['complainant'] = complainant
+            item['defendanter'] = defendanter
+            item['proOrder'] = proOrder
+            item['releasePro'] = releasePro
+            item['updateLists'] = resultUpdateList
+            if item['endTime'] is not None:
+                item['endTime'] = item['endTime'].strftime("%Y-%m-%d %H:%M:%S")
+            resultList.append(item)
+        result = dict()
+        result['resultList'] = resultList
+        result['totalPage'] = totalPage
+        return result
+

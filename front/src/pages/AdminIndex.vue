@@ -43,7 +43,7 @@
           </el-menu-item>
           <el-menu-item index="3">
             <i class="el-icon-setting"></i>
-            <span slot="title">申诉系统</span>
+            <span slot="title" @click="changeTab('appealManage')">申诉系统</span>
           </el-menu-item>
         </el-menu>
       </el-col>
@@ -55,6 +55,8 @@
 </template>
 <script>
   import UserManage from '@/components/UserManage'
+  import AppealManage from '@/components/AppealManage'
+
 
   export default {
     data () {
@@ -68,7 +70,8 @@
       }
     },
     components: {
-      UserManage
+      UserManage,
+      AppealManage
     }
   }
 </script>

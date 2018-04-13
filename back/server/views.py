@@ -28,7 +28,7 @@ from .resources.userInfoShow import UserInfoShow
 from .resources.update import Update, ShowList, Hangdle, CreateAppeal
 from .resources.account import ShowAccountInfo, Recharge
 from .resources.updateProgress import UpdateProgress
-from .resources.admin import AdminLogin, ShowUsers, HandleUser
+from .resources.admin import AdminLogin, ShowUsers, HandleUser, ShowAppeals
 
 api.add_resource(Hello, '/')
 api.add_resource(Add, '/user')
@@ -62,6 +62,8 @@ api.add_resource(CreateAppeal, '/sendAppeal')
 api.add_resource(AdminLogin, '/adminLogin')
 api.add_resource(ShowUsers, '/showUsers')
 api.add_resource(HandleUser, '/handleUser')
+api.add_resource(ShowAppeals, '/showAppeals')
+
 
 
 
