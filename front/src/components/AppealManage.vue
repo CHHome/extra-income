@@ -4,6 +4,7 @@
     font-weight: 600;
     font-size: 14px;
     padding: 30px;
+    text-align: center;
   }
   .user-manage{
     min-height: calc(100vh - 63px);
@@ -39,9 +40,31 @@
         box-sizing: border-box;
       }
     }
-    .submit-record header{
-      text-align: center;
+    .appeal-result{
+      color: #AD120F;
     }
+    .damages-input{
+      width: 520px;
+      display: inline-block;
+      margin-top: 15px;
+      .el-input{
+        width: 350px;
+      }
+      span{
+        vertical-align: top;
+      }
+      & > div{
+        width: 350px;
+        display: inline-block;
+      }
+    }
+    .validator-error{
+      color: red;
+    }
+    .error{
+      border: 1px solid red;
+    }
+
   }
 </style>
 <template>
@@ -52,7 +75,7 @@
       :fullscreen="true"
       :before-close="handleClose">
       <div class="content">
-        <release-info :data="currentDialogData"></release-info>
+        <release-info :data="currentDialogData.releasePro"></release-info>
         <div class="order-progress">
           <header>项目进度</header>
           <div>
@@ -69,7 +92,7 @@
         <div class="submit-record">
           <header>提交记录</header>
           <el-table
-            :data="updateLists"
+            :data="currentDialogData.updateLists"
             style="width: 100%">
             <el-table-column
               fixed
@@ -101,10 +124,32 @@
             </el-table-column>
           </el-table>
         </div>
+        <div>
+          <header class="appeal-result">申诉裁决</header>
+          <div>
+            <el-radio-group v-model="winner">
+              <el-radio :label="currentDialogData.complainantId">原告胜({{currentDialogData.complainantRole}})</el-radio>
+              <el-radio :label="currentDialogData.defendanterId">被告胜({{currentDialogData.defendanterRole}})</el-radio>
+            </el-radio-group>
+            <br>
+            <div class="damages-input" :class="{error:$v.Damages.$error }">
+              <span>赔偿金：</span>
+              <div>
+                <el-input v-model="Damages"  @input="$v.Damages.$touch()" placeholder="请输入内容"></el-input>
+                <el-tag type="warning">押金所剩:{{orderData.employeeDep}}</el-tag>
+                <span v-if="$v.Damages.$error && !$v.Damages.required" class="validator-error">赔偿金是必须的</span>
+                <span v-if="!$v.Damages.numeric" class="validator-error">赔偿金必须位数字</span>
+                <span v-if="Damages > orderData.employeeDep" class="validator-error">赔偿金不得大于押金</span>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
     <el-button @click="desideDialog = false">取 消</el-button>
-    <el-button type="primary" @click="desideDialog = false">确 定</el-button>
+    <el-button type="danger" :disabled="isSelect" @click="desideDialog = false">确 定</el-button>
     </span>
     </el-dialog>
 
@@ -121,8 +166,16 @@
         label="原告">
       </el-table-column>
       <el-table-column
+        prop="complainantRole"
+        label="原告角色">
+      </el-table-column>
+      <el-table-column
         prop="defendanter.userName"
         label="被告">
+      </el-table-column>
+      <el-table-column
+        prop="defendanterRole"
+        label="被告角色">
       </el-table-column>
       <el-table-column
         prop="orderId"
@@ -154,6 +207,7 @@
 <script>
   import {baseUrl} from '@/config/config'
   import ReleaseInfo from '@/components/share/ReleaseInfo'
+  import {required, maxLength, numeric, between} from 'vuelidate/lib/validators'
 
   export default {
     data () {
@@ -163,11 +217,13 @@
         tableData: [],
         totalPage: 1,
         desideDialog: false,
-        currentDialogData: {}, //todo 项目信息
+        currentDialogData: {},
         orderData: {},  // 订单信息
-        updateLists: [],
         baseUrl: baseUrl,
-        progressColor: ''
+        progressColor: '',
+        winner: '',
+        isSelect: true,
+        Damages: 0
 
       }
     },
@@ -175,8 +231,25 @@
       ReleaseInfo
     },
 
+    watch: {
+
+      Damages () {
+        if (this.Damages <= this.orderData.employeeDep && !this.$v.Damages.$error && this.winner) {
+          this.isSelect = false
+        } else {
+          this.isSelect = true
+        }
+      }
+    },
+
     mounted () {
       this.getData();
+    },
+    validations: {
+      Damages: {
+        required,
+        numeric
+      }
     },
 
     methods : {
@@ -221,9 +294,9 @@
       },
       handleAppeal (row) {
         this.desideDialog = true;
-        this.currentDialogData = row.releasePro
-        this.updateLists = row.updateLists
-        console.log( this.updateLists)
+        this.currentDialogData = row
+
+
         this.parseOrderData(row.proOrder)
       },
       getData () {

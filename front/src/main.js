@@ -11,7 +11,8 @@ import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import {baseUrl} from "./config/config";
 import {Table, TableColumn, Loading, Popover, Button, MessageBox, Dialog, Form, Input, FormItem,
-Upload, Notification, Progress, Tag, Alert, Row, Col, Menu, MenuItem, Submenu,Pagination, Radio
+Upload, Notification, Progress, Tag, Alert, Row, Col, Menu, MenuItem, Submenu,Pagination, Radio,
+  RadioGroup
 } from 'element-ui'
 
 Vue.use(Loading.directive)
@@ -19,6 +20,7 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Submenu)
 Vue.use(Radio)
+Vue.use(RadioGroup)
 Vue.use(Row)
 Vue.use(Pagination)
 Vue.use(Col)

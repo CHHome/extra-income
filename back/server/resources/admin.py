@@ -67,7 +67,6 @@ class ShowAppeals(restful.Resource):
         resultList = list()
         for item in appealList:
             item = item.trans_to_dict()
-            print(item['complainantId'])
             complainant = User.query.filter_by(id=item['complainantId']).first()
             complainant = complainant.trans_to_dict()
             complainant['registerTime'] = complainant['registerTime'].strftime("%Y-%m-%d %H:%M:%S")
@@ -76,6 +75,12 @@ class ShowAppeals(restful.Resource):
             defendanter['registerTime'] = defendanter['registerTime'].strftime("%Y-%m-%d %H:%M:%S")
             item['beginTime'] = item['beginTime'].strftime("%Y-%m-%d %H:%M:%S")
             proOrder = ProOrder.query.filter_by(id=item['orderId']).first()
+            if item['complainantId'] == proOrder.employerId:
+                item['complainantRole'] = '雇主'
+                item['defendanterRole'] = '专家'
+            else:
+                item['defendanterRole'] = '雇主'
+                item['complainantRole'] = '专家'
             proOrder.beginTime = proOrder.beginTime.strftime("%Y-%m-%d %H:%M:%S")
             proOrder.deadlineTime = proOrder.deadlineTime.strftime("%Y-%m-%d %H:%M:%S")
             if proOrder.completionTime is not None:
