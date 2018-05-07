@@ -266,9 +266,10 @@ class Appeal(db.Model):
     orderId = db.Column(db.Integer, nullable=False)
     reason = db.Column(db.String(200), nullable=False)
     status = db.Column(db.String(10), default='处理中')
-    Damages = db.Column(db.Integer, nullable=True)
+    damages = db.Column(db.Integer, nullable=True)
     beginTime = db.Column(db.DateTime, default=datetime.datetime.now())
     endTime = db.Column(db.DateTime, nullable=True)
+    winner = db.Column(db.Integer, nullable=True)
 
     def __init__(self, Complainant_id, defendanter_id, order_id, reason):
         self.complainantId = Complainant_id
