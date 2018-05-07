@@ -247,6 +247,7 @@
           <el-button type="primary" round v-if="orderData.status=='已逾期'|| orderData.status=='进行中' && !modifyIcon" @click="dialogVisible = true" >更新进度</el-button>
           <el-button  type="danger" round v-if="orderData.status=='已逾期'|| orderData.status=='进行中' || orderData.status=='交付中'" @click="confirmAppeal" >发起申诉</el-button>
           <el-button  type="danger" round v-if="orderData.status=='已冻结'">申诉中</el-button>
+          <el-button  type="danger" round v-if="orderData.status=='申诉完成'">申诉已处理</el-button>
         </div>
         <div v-if="!modifyIcon">
 
@@ -500,11 +501,12 @@
         this.orderData = data
         let beginTime = new Date(this.orderData.beginTime.replace(/-/g,'/')).getTime()
         let deadlineTime = new Date(this.orderData.deadlineTime.replace(/-/g,'/')).getTime()
-        this.orderData.hasComplete = 100
-        if (this.orderData.hasComplete >= 100) {
-          this.orderData.hasComplete = parseInt((new Date().getTime() - beginTime)/(deadlineTime - beginTime) * 100);
-        } else {
-          this.orderData.hasComplete = this.orderData.hasComplete.toFixed(2)
+
+        this.orderData.hasComplete = parseInt((new Date().getTime() - beginTime)/(deadlineTime - beginTime) * 100);
+        this.orderData.hasComplete = this.orderData.hasComplete.toFixed(2)
+//        this.orderData.hasComplete = 102
+        if (this.orderData.hasComplete >= 100.00) {
+          this.orderData.hasComplete = 100.00
         }
         switch (this.orderData.status) {
           case '进行中':

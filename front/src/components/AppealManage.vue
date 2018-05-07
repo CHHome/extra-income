@@ -149,7 +149,17 @@
       </div>
       <span slot="footer" class="dialog-footer">
     <el-button @click="desideDialog = false">取 消</el-button>
-    <el-button type="danger" :disabled="isSelect" @click="desideDialog = false">确 定</el-button>
+    <el-button type="danger" :disabled="isSelect" @click="confirm">确 定</el-button>
+    <el-dialog
+      title="确定提交？"
+      :visible.sync="submitDialog"
+      :before-close="handleClose"
+      append-to-body>
+       <span slot="footer" class="dialog-footer">
+         <el-button @click="submitDialog = false">取 消</el-button>
+         <el-button type="primary" @click="submitForm">确 定</el-button>
+       </span>
+    </el-dialog>
     </span>
     </el-dialog>
 
@@ -223,7 +233,8 @@
         progressColor: '',
         winner: '',
         isSelect: true,
-        Damages: 0
+        Damages: 0,
+        submitDialog: false
 
       }
     },
@@ -252,7 +263,23 @@
       }
     },
 
-    methods : {
+    methods: {
+      submitForm () {
+        this.$ajax.post(baseUrl + 'handleAppeal', {
+          id: this.currentDialogData.id,
+          winner: this.winner,
+          damages: this.Damages
+        })
+          .then(res => {
+
+          }, res => {
+
+          })
+      },
+      confirm () {
+        this.submitDialog = true;
+
+      },
       parseOrderData (data) {
         this.orderData = data
         let beginTime = new Date(data.beginTime.replace(/-/g,'/')).getTime()

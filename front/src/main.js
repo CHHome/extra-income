@@ -69,7 +69,6 @@ router.beforeEach((to, from, next) => {
     }).then((result) => {
       result = parseInt(result)
       if (result === 10000) {
-        store.commit('changeSingerState', {stateName: 'hasLogin', value: true})
         store.commit('changeLoginId', webStore['token'].split('-')[0])
       } else {
         webStore.removeItem('token')
