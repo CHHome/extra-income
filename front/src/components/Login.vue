@@ -3,6 +3,7 @@
   #login-dialog{
     .my-dialog(35%);
     padding-top: 30px;
+    color: black;
   }
   .loginBtn div > div,.loginBtn div >input{
     .btnTheme
@@ -28,6 +29,12 @@
           <span v-if="$v.password.$error && !$v.password.required" class="validator-error">密码是必须的</span>
         </div>
       </div>
+      <el-alert
+        v-if="fail"
+        title="用户名或者密码错误，请重新输入。"
+        type="error"
+        show-icon>
+      </el-alert>
       <div class="form-group loginBtn">
         <div class="col-sm-offset-2 col-sm-10">
           <input type="button" value="登录" @click="submit">
@@ -49,7 +56,8 @@
     data () {
       return {
         userName: '',
-        password: ''
+        password: '',
+        fail: false
       }
     },
   validations: {
@@ -89,14 +97,16 @@
             })
           } else {
 //            todo
-            console.log('登录失败，请检查用户名和密码是否正确')
+            this.fail = true;
           }
         }, res => {
 //          todo
           console.log('登陆失败，请检查网络')
         }).then(
           res => {
-            this.$store.commit('changeHead', res.data.headImg)
+            if (res && res.data) {
+              this.$store.commit('changeHead', res.data.headImg)
+            }
           }, res => {
             alert('登录成功但获取您的相关基础信息失败')
           }

@@ -31,7 +31,7 @@
     更多<i class="glyphicon glyphicon-plus"></i>
     </div>
     <div class="show-next-page" v-if="noneTip">
-      客官，我是有底线的
+      空数据!
     </div>
   </div>
 </template>
@@ -48,20 +48,33 @@
       }
     },
     mounted () {
-      this.getPageData(this.type, this.page)
+      this.getPageData()
     },
     methods: {
-      getPageData (type, index) {
+      search (keyWord) {
+        this.getPageData(keyWord)
+      },
+
+      getPageData (keyWork = '') {
         this.$ajax.get(baseUrl + 'proPageQuery', {
           params: {
-            index: index,
-            type: type
+            index: this.page,
+            type: this.type,
+            keyWord: keyWork
           }
         }).then(res => {
-          if (res.data.length !== 0) {
-            this.showList = [...this.showList, ...res.data]
-          } else {
+          if (this.showList.length  >= res.data.length) {
+            this.$notify.success({
+              title: '提示',
+              message: '没有更多了哦',
+              offset: 75
+            })
+          }
+          this.showList = [...res.data]
+          if (!this.showList.length) {
             this.noneTip = true
+          } else {
+            this.noneTip = false
           }
         }, res => {
           alert('获取数据失败,请检查网络')
@@ -69,7 +82,7 @@
       },
       nextPage () {
         this.page++
-        this.getPageData(this.type, this.page)
+        this.getPageData()
       }
     },
     components: {

@@ -19,7 +19,7 @@ class Login(restful.Resource):
         args = parser.parse_args()
         expires = str(time.time() + maxAge)
         user = User.query.filter_by(userName=args['userName']).first()
-        if user.password == args['password']:
+        if user is not None and user.password == args['password']:
             s = '%s-%s-%s-%s' % (user.id, user.password, expires, secretKey)
             print(s)
             tokenArr = [str(user.id), expires, hashlib.sha1(s.encode('utf-8')).hexdigest()]

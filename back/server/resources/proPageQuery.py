@@ -10,14 +10,31 @@ class ProPageQuery(restful.Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('index', type=int, required=True, help='id is required')
         parser.add_argument('type', type=str, required=True, help='type is required')
+        parser.add_argument('keyWord', type=str, required=False)
         args = parser.parse_args()
-        print(args['index'], args['type'])
+        print(args['index'], args['type'], args['keyWord'])
         resultList = list()
         if args['type'] == '全部':
-            queryResult = ReleasePro.query.filter_by(status='招募中').order_by(db.desc(ReleasePro.budget)).limit(2).offset((args['index']-1)*2)
+            if args['keyWord'] is None:
+                queryResult = ReleasePro.query.filter(ReleasePro.status == '招募中') \
+                    .order_by(db.desc(ReleasePro.budget)).limit(args['index'] * 2)
+            else:
+                queryResult = ReleasePro.query.filter(ReleasePro.status == '招募中') \
+                    .filter(ReleasePro.projectName.like('%' + args['keyWord'] + '%')) \
+                    .order_by(db.desc(ReleasePro.budget)).limit(args['index'] * 2)
 
         else:
-            queryResult = ReleasePro.query.filter_by(firstType=args['type'], status='招募中').order_by(db.desc(ReleasePro.budget)).limit(2).offset((args['index']-1)*2)
+            if args['keyWord'] is None:
+                queryResult = ReleasePro.query\
+                    .filter(ReleasePro.firstType == args['type']) \
+                    .filter(ReleasePro.status == '招募中') \
+                    .order_by(db.desc(ReleasePro.budget)).limit(args['index'] * 2)
+            else:
+                queryResult = ReleasePro.query \
+                    .filter(ReleasePro.firstType == args['type']) \
+                    .filter(ReleasePro.status == '招募中') \
+                    .filter(ReleasePro.projectName.like('%' + args['keyWord'] + '%')) \
+                    .order_by(db.desc(ReleasePro.budget)).limit(args['index'] * 2)
         for item in queryResult:
             item.releaseTime = item.releaseTime.strftime("%Y-%m-%d %H:%M:%S")
             resultList.append(item.trans_to_dict())
