@@ -6,7 +6,7 @@
     padding-top: 30px;
     margin-left: 30px;
     img {
-      width: 60px;
+      width: 90px;
     }
   }
   .adv-img {
@@ -27,10 +27,12 @@
         <el-table-column
           prop="num"
           label="广告序号"
+          sortable
           width="180">
         </el-table-column>
         <el-table-column
           prop="price"
+          sortable
           label="广告价格">
         </el-table-column>
         <el-table-column

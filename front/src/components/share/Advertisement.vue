@@ -29,7 +29,7 @@
   }
 </style>
 <template>
-  <div class="advertisement">
+  <div class="advertisement" v-if="show">
     <span class="el-icon-close" @click="show = false"></span>
     <span class="adv-text">广告</span>
     <img :src="baseUrl + 'static/' + 'imgs/adv/' + currentAdv + '.jpeg'" alt="广告" v-if="show">

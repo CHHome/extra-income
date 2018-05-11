@@ -43,6 +43,25 @@ class ShowUsers(restful.Resource):
         return result
 
 
+class ShowPro(restful.Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('page', type=int, required=True, help='page is required')
+        parser.add_argument('status', type=str, required=True, help='page is required')
+        args = parser.parse_args()
+        totalPage = len(ReleasePro.query.order_by(db.asc(ReleasePro.id)).all())
+        proList = ReleasePro.query.filter(ReleasePro.status == args['status']).order_by(db.asc(ReleasePro.id)).limit(3).offset((args['page']-1)*3).all()
+        resultList = list()
+        for item in proList:
+            item = item.trans_to_dict()
+            item['releaseTime'] = item['releaseTime'].strftime("%Y-%m-%d %H:%M:%S")
+            resultList.append(item)
+        result = dict()
+        result['totalPage'] = totalPage
+        result['resultList'] = resultList
+        return result
+
+
 class HandleUser(restful.Resource):
     def get(self):
         parser = reqparse.RequestParser()
@@ -168,4 +187,18 @@ class changeAdv(restful.Resource):
         file.write(imgData)
         file.close()
 
+
+class HandlePro(restful.Resource):
+    def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('releaseId', type=int, required=True)
+        parser.add_argument('type', type=str, required=True)
+        args = parser.parse_args()
+        releasePro = ReleasePro.query.filter_by(id=args['releaseId']).first()
+        if args['type'] == 'lock':
+            releasePro.status = '已冻结'
+        else:
+            releasePro.status = '招募中'
+        db.session.commit()
+        return 100001
 

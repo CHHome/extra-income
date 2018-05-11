@@ -100,6 +100,7 @@
           :type="'全部'"
           v-if="showAll"
           ref="showAll"
+          :keyWord="keyWord"
         ></card-grounp>
       </transition>
       <transition name="type-fade">
@@ -107,6 +108,7 @@
           :type="'开发'"
           v-if="showDeveloper"
           ref="showDeveloper"
+          :keyWord="keyWord"
         ></card-grounp>
       </transition>
       <transition name="type-fade">
@@ -114,6 +116,7 @@
           :type="'设计'"
           v-if="showDesign"
           ref="showDesign"
+          :keyWord="keyWord"
         ></card-grounp>
       </transition>
       <transition name="type-fade">
@@ -121,6 +124,7 @@
           :type="'市场/运营'"
           v-if="showMarket"
           ref="showMarket"
+          :keyWord="keyWord"
         ></card-grounp>
       </transition>
       <transition name="type-fade">
@@ -128,6 +132,7 @@
           :type="'产品'"
           v-if="showProject"
           ref="showProject"
+          :keyWord="keyWord"
         ></card-grounp>
       </transition>
     </div>
@@ -182,7 +187,7 @@
         }
       },
       doSearch () {
-        this.$refs[this.type].search(this.keyWord);
+        this.$refs[this.type].search();
       },
       reInit (e) {
         $('.title-header span').removeClass('clicked')

@@ -39,7 +39,15 @@
   import {baseUrl} from '@/config/config'
   import ProjectCard from '@/components/share/ProjectCard'
   export default{
-    props: ['type'],
+    props: {
+      type: {
+        type: String
+      },
+      keyWord: {
+        type: String,
+        default: ''
+      }
+    },
     data () {
       return{
         page: 1,
@@ -55,12 +63,12 @@
         this.getPageData(keyWord)
       },
 
-      getPageData (keyWork = '') {
+      getPageData () {
         this.$ajax.get(baseUrl + 'proPageQuery', {
           params: {
             index: this.page,
             type: this.type,
-            keyWord: keyWork
+            keyWord: this.keyWord
           }
         }).then(res => {
           if (this.showList.length  >= res.data.length) {

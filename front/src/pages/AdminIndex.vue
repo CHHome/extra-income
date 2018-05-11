@@ -33,21 +33,21 @@
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b">
-          <el-menu-item index="1">
+          <el-menu-item index="1" @click="changeTab('userManage')">
             <i class="el-icon-menu"></i>
-            <span slot="title" @click="changeTab('userManage')">用户管理</span>
+            <span slot="title" >用户管理</span>
           </el-menu-item>
-          <el-menu-item index="2">
+          <el-menu-item index="2" @click="changeTab('proManage')">
             <i class="el-icon-setting"></i>
-            <span slot="title">订单管理</span>
+            <span slot="title">项目管理</span>
           </el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="3" @click="changeTab('appealManage')">
             <i class="el-icon-setting"></i>
-            <span slot="title" @click="changeTab('appealManage')">申诉系统</span>
+            <span slot="title" >申诉系统</span>
           </el-menu-item>
-          <el-menu-item index="4">
+          <el-menu-item index="4" @click="changeTab('advManage')">
             <i class="el-icon-setting"></i>
-            <span slot="title" @click="changeTab('advManage')">广告管理</span>
+            <span slot="title" >广告管理</span>
           </el-menu-item>
         </el-menu>
       </el-col>
@@ -61,6 +61,7 @@
   import UserManage from '@/components/UserManage'
   import AppealManage from '@/components/AppealManage'
   import AdvManage from '@/components/AdvManage'
+  import ProManage from '@/components/ProManage'
 
 
   export default {
@@ -77,7 +78,8 @@
     components: {
       UserManage,
       AppealManage,
-      AdvManage
+      AdvManage,
+      ProManage
     }
   }
 </script>
