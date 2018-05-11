@@ -425,7 +425,6 @@
       },
       next (dialogName) {
         this[dialogName] = !this[dialogName]
-        console.log(this.showPortrait)
         this.$store.commit('changeSinger', 'curtain')
       }
     },

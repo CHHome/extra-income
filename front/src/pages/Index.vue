@@ -81,6 +81,7 @@
 </style>
 <template>
   <div class="main-container">
+    <advertisement></advertisement>
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div class="swiper-slide"><img src="../assets/banner1.jpg" ></div>
@@ -130,6 +131,7 @@
   import 'swiper/dist/css/swiper.min.css'
   import Swiper from 'swiper/dist/js/swiper.min'
   import ProjectCard from '@/components/share/ProjectCard'
+  import Advertisement from '@/components/share/Advertisement'
 
   export default {
     data () {
@@ -184,7 +186,8 @@
       })
     },
     components: {
-      ProjectCard
+      ProjectCard,
+      Advertisement
     }
   }
 </script>

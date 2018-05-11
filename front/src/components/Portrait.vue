@@ -5,6 +5,7 @@
   }
   #dialog {
     .my-dialog(35%);
+    text-align: center;
     & > img {
       max-width: 200px;
       margin-bottom: 30px;

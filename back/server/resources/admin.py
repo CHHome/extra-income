@@ -2,7 +2,9 @@ from flask.ext import restful
 from flask_restful import reqparse
 from ..models import Admin, User, Appeal, ProOrder, ReleasePro ,UpdateList, Turnover
 from .. import db
+import os, base64
 
+upLoad_file = '/usr/code/extra-income/back/server/static/imgs/adv/'
 
 class AdminLogin(restful.Resource):
     def get(self):
@@ -150,5 +152,20 @@ class Submit(restful.Resource):
         db.session.commit()
 
 
+class changeAdv(restful.Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('index', type=str, required=True)
+        parser.add_argument('img', type=str, required=True)
+        args = parser.parse_args()
+        if args['img']:
+            self.saveFile(args['img'], args['index'])
+        return 100001
+
+    def saveFile(self, baseStr, index):
+        imgData = base64.b64decode(baseStr)
+        file = open(upLoad_file + index + '.jpeg', 'wb')
+        file.write(imgData)
+        file.close()
 
 

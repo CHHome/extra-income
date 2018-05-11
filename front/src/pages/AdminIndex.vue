@@ -45,6 +45,10 @@
             <i class="el-icon-setting"></i>
             <span slot="title" @click="changeTab('appealManage')">申诉系统</span>
           </el-menu-item>
+          <el-menu-item index="4">
+            <i class="el-icon-setting"></i>
+            <span slot="title" @click="changeTab('advManage')">广告管理</span>
+          </el-menu-item>
         </el-menu>
       </el-col>
       <el-col :span="20">
@@ -56,6 +60,7 @@
 <script>
   import UserManage from '@/components/UserManage'
   import AppealManage from '@/components/AppealManage'
+  import AdvManage from '@/components/AdvManage'
 
 
   export default {
@@ -71,7 +76,8 @@
     },
     components: {
       UserManage,
-      AppealManage
+      AppealManage,
+      AdvManage
     }
   }
 </script>
