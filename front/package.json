@@ -15,7 +15,7 @@
     "bootstrap": "^3.3.7",
     "element-ui": "^2.3.2",
     "express": "^4.16.2",
-    "jquery": "^2.2.4",
+    "jquery": "^3.5.0",
     "js-sha1": "^0.5.0",
     "less": "^2.7.3",
     "swiper": "^4.0.7",
