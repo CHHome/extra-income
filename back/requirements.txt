@@ -16,7 +16,7 @@ Flask-RESTful==0.3.6
 Flask-SQLAlchemy==2.3.2
 guacamole==0.9.2
 html5lib==0.999
-httplib2==0.9.1
+httplib2==0.18.0
 idna==2.0
 itsdangerous==0.24
 Jinja2==2.10
